@@ -59,13 +59,6 @@ class Sheet {
    * @throws {Error} - value is can't be converted to a string( null and undefined are allowed)
    */
   writeString(col, row, value) {
-    if (value === null || value === undefined) {
-      this.writeCell(col, row, value, 'string');
-    }
-    const type = typeof value;
-    if (type !== 'string' && type !== 'number') {
-      throw new Error('Value must be capable of being converted to a string');
-    }
     this.writeCell(col, row, value, 'string');
   }
 
@@ -80,12 +73,7 @@ class Sheet {
    * @throws {Error} - value is not a number (null and undefined are allowed)
    */
   writeNumber(col, row, value) {
-    if (value === null || value === undefined) {
-      this.writeCell(col, row, value, 'number');
-    }
-    if (typeof value !== 'number') {
-      throw new Error('Value must be a number');
-    }
+    this.writeCell(col, row, value, 'number');
   }
 
   /**
@@ -99,12 +87,6 @@ class Sheet {
    * @throws {Error} - value is not a string (null and undefined are allowed)
    */
   writeLink(col, row, value) {
-    if (value === null || value === undefined) {
-      this.writeCell(col, row, value, 'link');
-    }
-    if (typeof value !== 'string') {
-      throw new Error('Value must be a string');
-    }
     this.writeCell(col, row, value, 'link');
   }
 }
