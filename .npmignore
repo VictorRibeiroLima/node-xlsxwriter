@@ -1,0 +1,14 @@
+/temp
+/test
+/node_modules
+*.spec.mjs
+/target
+/.vscode
+/.github
+Cargo.lock
+Cargo.toml
+README.md
+/lib
+/target
+/rust
+*.rs

@@ -1,0 +1,16 @@
+[package]
+name = "node-rust-xlsxwriter"
+version = "0.1.0"
+license = "ISC"
+edition = "2021"
+exclude = ["index.node"]
+
+[lib]
+path = "rust/src/lib.rs"
+crate-type = ["cdylib"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+neon = "1"
+rust_xlsxwriter = "0.64.2"

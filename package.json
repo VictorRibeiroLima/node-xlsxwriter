@@ -1,0 +1,46 @@
+{
+  "name": "node-rust-xlsxwriter",
+  "version": "alpha-0.1.0",
+  "description": "",
+  "main": "./javascript/src/index.js",
+  "author": "Victor Ribeiro de Lima",
+  "license": "ISC",
+  "types": "./javascript/types/src/index.d.ts",
+  "scripts": {
+    "build": "cargo-cp-artifact -nc index.node -- cargo build --message-format=json-render-diagnostics",
+    "build:debug": "npm run build && rm -rf native && mkdir native && mv ./index.node ./native/node-rust-xlsxwriter.node",
+    "build:release": "npm run build -- --release && npx tsc",
+    "release:native": "npm run build:release && rm -rf native && mkdir native && mv ./index.node ./native/node-rust-xlsxwriter.node",
+    "test:rust": "cargo test",
+    "test:node": "node --test javascript/test"
+  },
+  "os": [
+    "darwin",
+    "linux",
+    "win32"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VictorRibeiroLima/node-rust-xlsxwriter.git"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "dependencies": {
+    "@mapbox/node-pre-gyp": "1.0.8"
+  },
+  "devDependencies": {
+    "cargo-cp-artifact": "^0.1",
+    "typescript": "5.4.5"
+  },
+  "binary": {
+    "module_name": "node-rust-xlsxwriter",
+    "module_path": "./native",
+    "host": "https://github.com/VictorRibeiroLima/node-rust-xlsxwriter/releases/download/",
+    "package_name": "{module_name}-v{version}-{node_abi}-{platform}-{arch}-{libc}.tar.gz",
+    "remote_path": "v{version}"
+  }
+}
