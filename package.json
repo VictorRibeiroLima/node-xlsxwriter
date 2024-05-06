@@ -1,6 +1,6 @@
 {
   "name": "node-rust-xlsxwriter",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "./javascript/src/index.js",
   "author": "Victor Ribeiro de Lima",

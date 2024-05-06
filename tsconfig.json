@@ -5,7 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "emitDeclarationOnly": true,
-    "removeComments": true,
+    "removeComments": false,
     "rootDir": "./javascript",
     "outDir": "./javascript/types",
   },
