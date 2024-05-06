@@ -1,5 +1,5 @@
 {
-  "name": "node-rust-xlsxwriter",
+  "name": "node-xlsxwriter",
   "version": "0.0.2",
   "description": "",
   "main": "./javascript/src/index.js",
