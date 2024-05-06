@@ -56,7 +56,7 @@ impl NodeXlsxWorkbook {
             let mut worksheet = Worksheet::new();
             worksheet.set_name(&sheet.name)?;
             for cell in sheet.cells {
-                match cell.cel_type {
+                match cell.cell_type {
                     NodeXlsxTypes::String => {
                         worksheet.write_string(cell.row, cell.col, &cell.value)?;
                     }
@@ -91,31 +91,31 @@ mod test {
                     col: 0,
                     row: 0,
                     value: "header 1".to_string(),
-                    cel_type: NodeXlsxTypes::String,
+                    cell_type: NodeXlsxTypes::String,
                 },
                 NodeXlsxCell {
                     col: 1,
                     row: 0,
                     value: "header 2".to_string(),
-                    cel_type: NodeXlsxTypes::String,
+                    cell_type: NodeXlsxTypes::String,
                 },
                 NodeXlsxCell {
                     col: 0,
                     row: 1,
                     value: "1".to_string(),
-                    cel_type: NodeXlsxTypes::Number,
+                    cell_type: NodeXlsxTypes::Number,
                 },
                 NodeXlsxCell {
                     col: 1,
                     row: 1,
                     value: "2".to_string(),
-                    cel_type: NodeXlsxTypes::Number,
+                    cell_type: NodeXlsxTypes::Number,
                 },
                 NodeXlsxCell {
                     col: 0,
                     row: 2,
                     value: "https://example.com".to_string(),
-                    cel_type: NodeXlsxTypes::Link,
+                    cell_type: NodeXlsxTypes::Link,
                 },
             ],
         };
@@ -139,31 +139,31 @@ mod test {
                     col: 0,
                     row: 0,
                     value: "header 1".to_string(),
-                    cel_type: NodeXlsxTypes::String,
+                    cell_type: NodeXlsxTypes::String,
                 },
                 NodeXlsxCell {
                     col: 1,
                     row: 0,
                     value: "header 2".to_string(),
-                    cel_type: NodeXlsxTypes::String,
+                    cell_type: NodeXlsxTypes::String,
                 },
                 NodeXlsxCell {
                     col: 0,
                     row: 1,
                     value: "1".to_string(),
-                    cel_type: NodeXlsxTypes::Number,
+                    cell_type: NodeXlsxTypes::Number,
                 },
                 NodeXlsxCell {
                     col: 1,
                     row: 1,
                     value: "2".to_string(),
-                    cel_type: NodeXlsxTypes::Number,
+                    cell_type: NodeXlsxTypes::Number,
                 },
                 NodeXlsxCell {
                     col: 0,
                     row: 2,
                     value: "https://example.com".to_string(),
-                    cel_type: NodeXlsxTypes::Link,
+                    cell_type: NodeXlsxTypes::Link,
                 },
             ],
         };

@@ -56,11 +56,15 @@ class Sheet {
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row >  4_294_967_295 or row < 0
-   * @throws {Error} - value is not a string
+   * @throws {Error} - value is can't be converted to a string( null and undefined are allowed)
    */
   writeString(col, row, value) {
-    if (typeof value !== 'string') {
-      throw new Error('Value must be a string');
+    if (value === null || value === undefined) {
+      this.writeCell(col, row, value, 'string');
+    }
+    const type = typeof value;
+    if (type !== 'string' && type !== 'number') {
+      throw new Error('Value must be capable of being converted to a string');
     }
     this.writeCell(col, row, value, 'string');
   }
@@ -73,13 +77,15 @@ class Sheet {
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row >  4_294_967_295 or row < 0
-   * @throws {Error} - value is not a number
+   * @throws {Error} - value is not a number (null and undefined are allowed)
    */
   writeNumber(col, row, value) {
+    if (value === null || value === undefined) {
+      this.writeCell(col, row, value, 'number');
+    }
     if (typeof value !== 'number') {
       throw new Error('Value must be a number');
     }
-    this.writeCell(col, row, value, 'number');
   }
 
   /**
@@ -90,9 +96,12 @@ class Sheet {
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row >  4_294_967_295 or row < 0
-   * @throws {Error} - value is not a string
+   * @throws {Error} - value is not a string (null and undefined are allowed)
    */
   writeLink(col, row, value) {
+    if (value === null || value === undefined) {
+      this.writeCell(col, row, value, 'link');
+    }
     if (typeof value !== 'string') {
       throw new Error('Value must be a string');
     }

@@ -41,7 +41,7 @@ declare class Sheet {
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row >  4_294_967_295 or row < 0
-     * @throws {Error} - value is not a string
+     * @throws {Error} - value is not a string( null and undefined are allowed)
      */
     writeString(col: number, row: number, value: string): void;
     /**
@@ -52,7 +52,7 @@ declare class Sheet {
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row >  4_294_967_295 or row < 0
-     * @throws {Error} - value is not a number
+     * @throws {Error} - value is not a number (null and undefined are allowed)
      */
     writeNumber(col: number, row: number, value: number): void;
     /**
@@ -63,7 +63,7 @@ declare class Sheet {
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row >  4_294_967_295 or row < 0
-     * @throws {Error} - value is not a string
+     * @throws {Error} - value is not a string (null and undefined are allowed)
      */
     writeLink(col: number, row: number, value: string): void;
 }

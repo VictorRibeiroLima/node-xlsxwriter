@@ -12,7 +12,7 @@ pub struct NodeXlsxCell {
     pub col: u16,
     pub row: u32,
     pub value: String,
-    pub cel_type: NodeXlsxTypes,
+    pub cell_type: NodeXlsxTypes,
 }
 
 impl NodeXlsxCell {
@@ -43,7 +43,7 @@ impl NodeXlsxCell {
         }
         let row = row as u32;
 
-        let cel_type: Handle<JsString> = obj.get(cx, "celType")?;
+        let cel_type: Handle<JsString> = obj.get(cx, "cellType")?;
         let cel_type = NodeXlsxTypes::from_js_string(cx, cel_type)?;
 
         let value: Handle<JsValue> = obj.get(cx, "value")?;
@@ -63,7 +63,7 @@ impl NodeXlsxCell {
             col,
             row,
             value,
-            cel_type,
+            cell_type: cel_type,
         })
     }
 }
