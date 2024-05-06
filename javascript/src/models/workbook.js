@@ -1,4 +1,4 @@
-const funcs = require('../../../native/node-rust-xlsxwriter.node');
+const funcs = require('../../../native/node-xlsxwriter.node');
 const saveToBuffer = funcs.saveToBuffer;
 const saveToBufferSync = funcs.saveToBufferSync;
 const saveToFileSync = funcs.saveToFileSync;

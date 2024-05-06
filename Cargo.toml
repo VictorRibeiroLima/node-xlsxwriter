@@ -1,5 +1,5 @@
 [package]
-name = "node-rust-xlsxwriter"
+name = "node-xlsxwriter"
 version = "0.1.0"
 license = "ISC"
 edition = "2021"
