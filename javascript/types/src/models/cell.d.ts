@@ -1,6 +1,6 @@
 export = Cell;
 /**
- * @typedef {(number|string)} CellValue
+ * @typedef {(number|string|Link)} CellValue
  * @typedef {("number"|"string"|"link")} CellType
  */
 /**
@@ -10,16 +10,18 @@ export = Cell;
  * @property {number} col - The column index of the cell
  * @property {number} row - The row index of the cell
  * @property {CellValue} value - The value of the cell
- * @property {CellType} celType - The type of the cell.
+ * @property {CellType} [celType] - The type of the cell.
+ * @property {Format} [format] - The format of the cell
  */
 declare class Cell {
     /**
      * @param {number} col - The column index of the cell
      * @param {number} row - The row index of the cell
-     * @param {string|number} value - The value of the cell
-     * @param {CellType} cellType - The type of the cell
+     * @param {string|number|Link} value - The value of the cell
+     * @param {CellType} [cellType] - The type of the cell
+     * @param {Format} [format] - The format of the cell
      */
-    constructor(col: number, row: number, value: string | number, cellType: CellType);
+    constructor(col: number, row: number, value: string | number | Link, cellType?: CellType, format?: Format);
     /**
      * The column index of the cell
      * @type {number}
@@ -40,10 +42,17 @@ declare class Cell {
      * @type {CellType}
      */
     cellType: CellType;
+    /**
+     * The format of the cell
+     * @type {Format}
+     */
+    format: Format;
 }
 declare namespace Cell {
     export { CellValue, CellType };
 }
-type CellValue = (number | string);
+type CellValue = (number | string | Link);
 type CellType = ("number" | "string" | "link");
+import Format = require("./format");
+import Link = require("./link");
 //# sourceMappingURL=cell.d.ts.map

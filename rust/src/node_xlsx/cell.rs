@@ -22,8 +22,9 @@ impl NodeXlsxCell {
     ) -> NeonResult<Self> {
         let col: Handle<JsNumber> = obj.get(cx, "col")?;
         let col = col.value(cx);
-        if col < 0.0 {
-            let js_string = cx.string("Column cannot be negative");
+        if col < 0.0 || col >= 16_384.0 {
+            let error = format!("Column with illegal number {}", col.to_string());
+            let js_string = cx.string(error);
             return cx.throw(js_string);
         }
         let col = u16::try_from(col as u64);
@@ -37,8 +38,9 @@ impl NodeXlsxCell {
 
         let row: Handle<JsNumber> = obj.get(cx, "row")?;
         let row = row.value(cx);
-        if row < 0.0 {
-            let js_string = cx.string("Row cannot be negative");
+        if row < 0.0 || row >= 1_048_577.0 {
+            let error = format!("Row with illegal number {}", row.to_string());
+            let js_string = cx.string(error);
             return cx.throw(js_string);
         }
         let row = row as u32;

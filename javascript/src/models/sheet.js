@@ -1,6 +1,8 @@
 // @ts-check
 
 const Cell = require('./cell');
+const Format = require('./format');
+const Link = require('./link');
 
 /**
  *
@@ -31,20 +33,21 @@ class Sheet {
    *
    * @param {number} col - The column index of the cell
    * @param {number} row - The row index of the cell
-   * @param {string|number} value - The value of the cell
-   * @param {("number"|"string"|"link")} cellType - The type of the cell
+   * @param {string|number|Link} value - The value of the cell
+   * @param {("number"|"string"|"link")} [cellType] - The type of the cell
+   * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
-   * @throws {Error} - row >  4_294_967_295 or row < 0
+   * @throws {Error} - row > 1_048_577 or row < 0
    */
-  writeCell(col, row, value, cellType) {
+  writeCell(col, row, value, cellType, format) {
     if (col > 65_535 || col < 0) {
       throw new Error('Invalid column index');
     }
-    if (row > 4_294_967_295 || row < 0) {
+    if (row > 1_048_577 || row < 0) {
       throw new Error('Invalid row index');
     }
-    const cell = new Cell(col, row, value, cellType);
+    const cell = new Cell(col, row, value, cellType, format);
     this.cells.push(cell);
   }
 
@@ -53,13 +56,14 @@ class Sheet {
    * @param {number} col - The column index of the cell
    * @param {number} row - The row index of the cell
    * @param {string} value - The value to write to the cell
+   * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
-   * @throws {Error} - row >  4_294_967_295 or row < 0
+   * @throws {Error} - row > 1_048_577 or row < 0
    * @throws {Error} - value is can't be converted to a string( null and undefined are allowed)
    */
-  writeString(col, row, value) {
-    this.writeCell(col, row, value, 'string');
+  writeString(col, row, value, format) {
+    this.writeCell(col, row, value, 'string', format);
   }
 
   /**
@@ -67,13 +71,14 @@ class Sheet {
    * @param {number} col - The column index of the cell
    * @param {number} row - The row index of the cell
    * @param {number} value - The value to write to the cell
+   * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
-   * @throws {Error} - row >  4_294_967_295 or row < 0
+   * @throws {Error} - row > 1_048_577 or row < 0
    * @throws {Error} - value is not a number (null and undefined are allowed)
    */
-  writeNumber(col, row, value) {
-    this.writeCell(col, row, value, 'number');
+  writeNumber(col, row, value, format) {
+    this.writeCell(col, row, value, 'number', format);
   }
 
   /**
@@ -81,13 +86,14 @@ class Sheet {
    * @param {number} col - The column index of the cell
    * @param {number} row - The row index of the cell
    * @param {string} value - The value to write to the cell
+   * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
-   * @throws {Error} - row >  4_294_967_295 or row < 0
+   * @throws {Error} - row > 1_048_577 or row < 0
    * @throws {Error} - value is not a string (null and undefined are allowed)
    */
-  writeLink(col, row, value) {
-    this.writeCell(col, row, value, 'link');
+  writeLink(col, row, value, format) {
+    this.writeCell(col, row, value, 'link', format);
   }
 }
 
