@@ -75,45 +75,115 @@ export = Format;
  * @property {number} [numFmtId] - The number format id
  * @property {FormatPattern} [pattern] - The pattern
  * @property {FormatUnderline} [underline] - The underline style
+ *
  */
 declare class Format {
     /**
-     * the id of the format
-     * @private
-     * @type {number}
+     *
+     * @param {Object} [options] - The options object
+     * @param {FormatAlign} [options.align] - The alignment of the cell
+     * @param {Color} [options.backgroundColor] - The background color of the cell
+     * @param {boolean} [options.bold] - If the font is bold
+     * @param {Border} [options.leftBorder] - The left border of the cell
+     * @param {Border} [options.rightBorder] - The right border of the cell
+     * @param {Border} [options.topBorder] - The top border of the cell
+     * @param {Border} [options.bottomBorder] - The bottom border of the cell
+     * @param {DiagonalBorder} [options.diagonalBorder] - The diagonal border of the cell
+     * @param {number} [options.charset] - The charset of the font
+     * @param {Color} [options.fontColor] - The color of the font
+     * @param {number} [options.fontFamily] - The family of the font
+     * @param {string} [options.fontName] - The name of the font
+     * @param {string} [options.fontScheme] - The font scheme
+     * @param {number} [options.fontSize] - The font size
+     * @param {boolean} [options.strikeThrough] - If the font is strike through
+     * @param {Color} [options.foregroundColor] - The foreground color
+     * @param {boolean} [options.hidden] - If the format is hidden
+     * @param {boolean} [options.hyperlink] - If the format is hyperlinked
+     * @param {number} [options.indent] - The indent level
+     * @param {boolean} [options.italic] - If the font is italic
+     * @param {boolean} [options.locked] - If the format is locked
+     * @param {string} [options.numFmt] - The number format
+     * @param {number} [options.numFmtId] - The number format id
+     * @param {FormatPattern} [options.pattern] - The pattern
+     * @param {FormatUnderline} [options.underline] - The underline style
      */
-    private id;
+    constructor({ align, backgroundColor, bold, leftBorder, rightBorder, topBorder, bottomBorder, diagonalBorder, charset, fontColor, fontFamily, fontName, fontScheme, fontSize, strikeThrough, foregroundColor, hidden, hyperlink, indent, italic, locked, numFmt, numFmtId, pattern, underline, }?: {
+        align?: FormatAlign;
+        backgroundColor?: Color;
+        bold?: boolean;
+        leftBorder?: Border;
+        rightBorder?: Border;
+        topBorder?: Border;
+        bottomBorder?: Border;
+        diagonalBorder?: DiagonalBorder;
+        charset?: number;
+        fontColor?: Color;
+        fontFamily?: number;
+        fontName?: string;
+        fontScheme?: string;
+        fontSize?: number;
+        strikeThrough?: boolean;
+        foregroundColor?: Color;
+        hidden?: boolean;
+        hyperlink?: boolean;
+        indent?: number;
+        italic?: boolean;
+        locked?: boolean;
+        numFmt?: string;
+        numFmtId?: number;
+        pattern?: FormatPattern;
+        underline?: FormatUnderline;
+    });
+    id: number;
+    align: FormatAlign;
+    backgroundColor: Color;
+    bold: boolean;
+    leftBorder: Border;
+    rightBorder: Border;
+    topBorder: Border;
+    bottomBorder: Border;
+    diagonalBorder: DiagonalBorder;
+    charset: number;
+    fontColor: Color;
+    fontFamily: number;
+    fontName: string;
+    fontScheme: string;
+    fontSize: number;
+    strikeThrough: boolean;
+    foregroundColor: Color;
+    hidden: boolean;
+    hyperlink: boolean;
+    indent: number;
+    italic: boolean;
+    locked: boolean;
+    numFmt: string;
+    numFmtId: number;
+    pattern: FormatPattern;
+    underline: FormatUnderline;
     /**
      * Sets alignment of the cell
      * @param {FormatAlign} align - The alignment of the cell
      * @returns {void}
      */
     setAlignment(align: FormatAlign): void;
-    align: FormatAlign;
     /**
      * Sets the font color
      * @param {Color} color - The color of the font
      * @returns {void}
      */
     setBackgroundColor(color: Color): void;
-    backgroundColor: Color;
     /**
      * Sets if the font is bold
      * @param {boolean} bold - If the font is bold
      * @returns {void}
      */
     setBold(bold: boolean): void;
-    bold: boolean;
     /**
-     * Sets the border of the cell
+     * Sets the border of the cell (left, right, top, bottom)
      * @param {Border} border - The border of the cell
      * @returns {void}
      */
     setBorder(border: Border): void;
-    leftBorder: Border;
-    rightBorder: Border;
-    topBorder: Border;
-    bottomBorder: Border;
     /**
      * Sets the bottom border of the cell
      * @param {Border} border - The bottom border of the cell
@@ -144,125 +214,107 @@ declare class Format {
      * @returns {void}
      */
     setBorderDiagonal(border: DiagonalBorder): void;
-    diagonalBorder: DiagonalBorder;
     /**
      * Sets the font charset
      * @param {number} charset - The charset of the font
      * @returns {void}
      */
     setFontCharset(charset: number): void;
-    charset: number;
     /**
      * Sets the font color
      * @param {Color} color - The color of the font
      * @returns {void}
      */
     setFontColor(color: Color): void;
-    fontColor: Color;
     /**
      * Sets the font family
      * @param {number} fontFamily - The family of the font
      * @returns {void}
      */
     setFontFamily(fontFamily: number): void;
-    fontFamily: number;
     /**
      * Sets the font name
      * @param {string} fontName - The name of the font
      * @returns {void}
      */
     setFontName(fontName: string): void;
-    fontName: string;
     /**
      * Set the Format font scheme property.
      * @param {string} fontScheme - The font scheme
      * @returns {void}
      */
     setFontScheme(fontScheme: string): void;
-    fontScheme: string;
     /**
      * Set the font size property
      * @param {number} fontSize - The font size
      * @returns {void}
      */
     setFontSize(fontSize: number): void;
-    fontSize: number;
     /**
      * Set the font strike through property
      * @returns {void}
      */
     setFontStrikeThrough(): void;
-    strikeThrough: boolean;
     /**
      * Set the foreground color property
      * @param {Color} color - The color
      * @returns {void}
      */
     setForegroundColor(color: Color): void;
-    foregroundColor: Color;
     /**
      * Set if the format is hidden
      * @param {boolean} hidden - If the format is hidden
      * @returns {void}
      */
     setHidden(hidden: boolean): void;
-    hidden: boolean;
     /**
      * Set if the format in hyperlinked
      * @param {boolean} hyperlink - If the format is hyperlinked
      * @returns {void}
      */
     setHyperlink(hyperlink: boolean): void;
-    hyperlink: boolean;
     /**
      * Set if the format is indented
      * @param {number} indent - The indent level
      * @returns {void}
      */
     setIndent(indent: number): void;
-    indent: number;
     /**
      * Set the italic property
      * @param {boolean} italic - If the format is italic
      * @returns {void}
      */
     setItalic(italic: boolean): void;
-    italic: boolean;
     /**
      * Set the lock property
      * @param {boolean} locked - If the format is locked
      * @returns {void}
      */
     setLocked(locked: boolean): void;
-    locked: boolean;
     /**
      * Set the number format property
      * @param {string} numFmt - The number format
      * @returns {void}
      */
     setNumFmt(numFmt: string): void;
-    numFmt: string;
     /**
      * Set the number format id property
      * @param {number} numFmtId - The number format id
      * @returns {void}
      */
     setNumFmtId(numFmtId: number): void;
-    numFmtId: number;
     /**
      * Set the format pattern
      * @param {FormatPattern} pattern - The pattern
      * @returns {void}
      */
     setPattern(pattern: FormatPattern): void;
-    pattern: FormatPattern;
     /**
      * Set the underline properties for a format.
      * @param {FormatUnderline} underline - The underline style
      * @returns {void}
      */
     setUnderline(underline: FormatUnderline): void;
-    underline: FormatUnderline;
 }
 declare namespace Format {
     export { FormatAlign, FormatPattern, FormatUnderline };

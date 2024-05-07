@@ -26,14 +26,14 @@ declare class Sheet {
      *
      * @param {number} col - The column index of the cell
      * @param {number} row - The row index of the cell
-     * @param {string|number|Link} value - The value of the cell
-     * @param {("number"|"string"|"link")} [cellType] - The type of the cell
+     * @param {string|number|Link|any} value - The value of the cell.
+     * @param {("number"|"string"|"link")} [cellType] - The type of the cell(if not provider .toString() will be used)
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeCell(col: number, row: number, value: string | number | Link, cellType?: ("number" | "string" | "link"), format?: Format): void;
+    writeCell(col: number, row: number, value: string | number | Link | any, cellType?: ("number" | "string" | "link"), format?: Format): void;
     /**
      * writes a string value to a cell
      * @param {number} col - The column index of the cell
@@ -62,14 +62,14 @@ declare class Sheet {
      * writes a link value to a cell
      * @param {number} col - The column index of the cell
      * @param {number} row - The row index of the cell
-     * @param {string} value - The value to write to the cell
+     * @param {Link} value - The value to write to the cell
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      * @throws {Error} - value is not a string (null and undefined are allowed)
      */
-    writeLink(col: number, row: number, value: string, format?: Format): void;
+    writeLink(col: number, row: number, value: Link, format?: Format): void;
 }
 import Cell = require("./cell");
 import Link = require("./link");

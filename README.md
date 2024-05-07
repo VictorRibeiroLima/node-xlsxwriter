@@ -13,15 +13,32 @@ npm install node-xlsxwriter
 
 ## Usage
 ```javascript
-const { Workbook, Sheet } = require('node-xlsxwriter');
+const { Workbook, Sheet, Format, Color, Border } = require('node-xlsxwriter');
+/*
+import * as xlsx from 'node-xlsxwriter';
+const { Workbook, Sheet, Format, Color, Border } = xlsx;
+for typescript/Es6
+*/
 
 const workbook = new Workbook();
 const sheet = new Sheet('SomeSheet');
+const format = new Format({
+   align: 'center',
+   bold: true,
+   backgroundColor: new Color(255, 0, 0),
+   fontSize: 16,
+   underline: 'double',
+   fontScheme: 'minor',
+   fontName: 'Arial',
+});
+
+format.setBorder(new Border('thin', new Color(0, 0, 0)));
 // const sheet = workbook.addSheet(); if you don't care about the name
 sheet.writeString(0, 0, 'Hello');
 sheet.writeNumber(0, 1, 123);
 sheet.writeLink(0, 2, 'https://github.com');
 sheet.writeCell(0, 3, 'World', 'string');
+sheet.writeString(1, 0, 'Hello', format);
 workbook.pushSheet(sheet); // not necessary if you use addSheet
 
 const buffer = workbook.saveToBufferSync();

@@ -195,7 +195,7 @@ class Format {
   }
 
   /**
-   * Sets the border of the cell
+   * Sets the border of the cell (left, right, top, bottom)
    * @param {Border} border - The border of the cell
    * @returns {void}
    */
