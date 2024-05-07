@@ -51,12 +51,24 @@ workbook.saveToFileSync(path);
 You also can use the `writeFromJson` method to create a sheet from a JSON object.
 
 ```javascript
+ const objects = [
+    {
+      name: 'John',
+      age: 30,
+      website: new Link('http://example.com', 'Example', 'tooltip'),
+      date: new Date(),
+    },
+    {
+      name: 'Jane',
+      age: 25,
+      website: new Link('http://example.com', 'Example', 'tooltip'),
+      date: new Date(),
+    },
+  ];
+
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
-  const link = new Link('http://example.com', 'Example', 'tooltip');
-  sheet.writeString(1, 1, 'Hello, World!');
-  sheet.writeNumber(2, 1, 42);
-  sheet.writeLink(3, 1, link);
-  const base64 = await workbook.saveToBase64();
-  console.log(base64);
+  sheet.writeFromJson(objects);
+
+  const buffer = await workbook.saveToBuffer();
 ```
