@@ -78,7 +78,11 @@ class Sheet {
    * @throws {Error} - value is not a number (null and undefined are allowed)
    */
   writeNumber(col, row, value, format) {
-    this.writeCell(col, row, value, 'number', format);
+    if (!isNaN(value)) {
+      this.writeCell(col, row, value, 'number', format);
+      return;
+    }
+    this.writeCell(col, row, value, 'string', format);
   }
 
   /**
@@ -94,6 +98,52 @@ class Sheet {
    */
   writeLink(col, row, value, format) {
     this.writeCell(col, row, value, 'link', format);
+  }
+
+  /**
+   * Writes the sheet based on the provided array of objects
+   * For performance reasons the headers will be generated based on the first object
+   * and those headers will be used for the rest of the objects,so if the objects have different keys
+   * the keys that are not in the first object will not be written to the sheet
+   * @param {Object[]} objects - The objects to write to the sheet
+   * @param {Format} [headerFormat] - The format of the header cells
+   * @param {Format} [cellFormat] - The format of the data cells
+   * @returns {void}
+   */
+  writeFromJson(objects, headerFormat, cellFormat) {
+    if (objects.length === 0) {
+      return;
+    }
+    const keys = Object.keys(objects[0]);
+    // write headers
+    for (let i = 0; i < keys.length; i++) {
+      this.writeString(i, 0, keys[i], headerFormat);
+    }
+
+    // write data
+    for (let i = 0; i < objects.length; i++) {
+      for (let j = 0; j < keys.length; j++) {
+        const type = typeof objects[i][keys[j]];
+        const value = objects[i][keys[j]];
+        switch (type) {
+          case 'string':
+            this.writeString(j, i + 1, value, cellFormat);
+            break;
+          case 'number':
+            this.writeNumber(j, i + 1, value, cellFormat);
+            break;
+          case 'object':
+            if (value instanceof Link) {
+              this.writeLink(j, i + 1, value, cellFormat);
+            } else {
+              this.writeCell(j, i + 1, value, null, cellFormat);
+            }
+            break;
+          default:
+            this.writeCell(j, i + 1, value, null, cellFormat);
+        }
+      }
+    }
   }
 }
 

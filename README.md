@@ -44,5 +44,19 @@ workbook.pushSheet(sheet); // not necessary if you use addSheet
 const buffer = workbook.saveToBufferSync();
 const asyncBuffer = await workbook.saveToBuffer();
 const path = 'path/to/file.xlsx';
+const base64 = workbook.saveToBase64Sync();
 workbook.saveToFileSync(path);
+```
+
+You also can use the `writeFromJson` method to create a sheet from a JSON object.
+
+```javascript
+  const workbook = new Workbook();
+  const sheet = workbook.addSheet();
+  const link = new Link('http://example.com', 'Example', 'tooltip');
+  sheet.writeString(1, 1, 'Hello, World!');
+  sheet.writeNumber(2, 1, 42);
+  sheet.writeLink(3, 1, link);
+  const base64 = await workbook.saveToBase64();
+  console.log(base64);
 ```

@@ -55,6 +55,25 @@ declare class Workbook {
      * @throws {Error}
      */
     saveToFileSync(path: string): void;
+    /**
+     * Writes a workbook to a file.(using a child process for the asynchronous operation)
+     * @param {string} path - The path of the file.
+     * @returns {Promise<void>}
+     * @throws {Error}
+     */
+    saveToFile(path: string): Promise<void>;
+    /**
+     * Writes a workbook to a base64 string.
+     * @returns {Promise<string>}
+     * @throws {Error}
+     */
+    saveToBase64(): Promise<string>;
+    /**
+     * Writes a workbook to a base64 string.
+     * @returns {string}
+     * @throws {Error}
+     */
+    saveToBase64Sync(): string;
 }
 import Sheet = require("./sheet");
 //# sourceMappingURL=workbook.d.ts.map

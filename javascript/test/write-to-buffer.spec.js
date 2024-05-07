@@ -68,3 +68,28 @@ test('save to buffer with multiple sheets', async (t) => {
   assert.ok(buffer instanceof Buffer);
   fs.writeFileSync('./temp/save_to_buffer_with_multiple_sheets.xlsx', buffer);
 });
+
+test('buffer from json', async (t) => {
+  const objects = [
+    {
+      name: 'John',
+      age: 30,
+      website: new Link('http://example.com', 'Example', 'tooltip'),
+      date: new Date(),
+    },
+    {
+      name: 'Jane',
+      age: 25,
+      website: new Link('http://example.com', 'Example', 'tooltip'),
+      date: new Date(),
+    },
+  ];
+
+  const workbook = new Workbook();
+  const sheet = workbook.addSheet();
+  sheet.writeFromJson(objects);
+
+  const buffer = await workbook.saveToBuffer();
+  assert.ok(buffer instanceof Buffer);
+  fs.writeFileSync('./temp/buffer_from_json.xlsx', buffer);
+});

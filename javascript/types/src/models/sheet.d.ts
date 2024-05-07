@@ -70,6 +70,17 @@ declare class Sheet {
      * @throws {Error} - value is not a string (null and undefined are allowed)
      */
     writeLink(col: number, row: number, value: Link, format?: Format): void;
+    /**
+     * Writes the sheet based on the provided array of objects
+     * For performance reasons the headers will be generated based on the first object
+     * and those headers will be used for the rest of the objects,so if the objects have different keys
+     * the keys that are not in the first object will not be written to the sheet
+     * @param {Object[]} objects - The objects to write to the sheet
+     * @param {Format} [headerFormat] - The format of the header cells
+     * @param {Format} [cellFormat] - The format of the data cells
+     * @returns {void}
+     */
+    writeFromJson(objects: any[], headerFormat?: Format, cellFormat?: Format): void;
 }
 import Cell = require("./cell");
 import Link = require("./link");

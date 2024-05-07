@@ -1,3 +1,4 @@
+use base64::{engine::general_purpose, Engine};
 use neon::{
     context::FunctionContext,
     handle::Handle,
@@ -52,6 +53,12 @@ impl NodeXlsxWorkbook {
         return Ok(());
     }
 
+    pub fn save_to_base64(self) -> Result<String, NodeXlsxError> {
+        let buffer = self.save_to_buffer()?;
+        let base64 = general_purpose::STANDARD.encode(buffer);
+        return Ok(base64);
+    }
+
     fn parse(self) -> Result<Workbook, NodeXlsxError> {
         let mut workbook = rust_xlsxwriter::Workbook::new();
         for sheet in self.sheets {
@@ -93,105 +100,3 @@ impl NodeXlsxWorkbook {
         return Ok(workbook);
     }
 }
-
-/*
-#[cfg(test)]
-mod test {
-    use crate::node_xlsx::{
-        cell::NodeXlsxCell, sheet::NodeXlsxSheet, types::NodeXlsxTypes, NodeXlsxWorkbook,
-    };
-
-    #[test]
-    fn test_save_to_buffer() {
-
-        let sheet = NodeXlsxSheet {
-            name: "test".to_string(),
-            cells: vec![
-                NodeXlsxCell {
-                    col: 0,
-                    row: 0,
-                    value: "header 1".to_string(),
-                    cell_type: NodeXlsxTypes::String,
-                },
-                NodeXlsxCell {
-                    col: 1,
-                    row: 0,
-                    value: "header 2".to_string(),
-                    cell_type: NodeXlsxTypes::String,
-                },
-                NodeXlsxCell {
-                    col: 0,
-                    row: 1,
-                    value: "1".to_string(),
-                    cell_type: NodeXlsxTypes::Number,
-                },
-                NodeXlsxCell {
-                    col: 1,
-                    row: 1,
-                    value: "2".to_string(),
-                    cell_type: NodeXlsxTypes::Number,
-                },
-                NodeXlsxCell {
-                    col: 0,
-                    row: 2,
-                    value: "https://example.com".to_string(),
-                    cell_type: NodeXlsxTypes::Link,
-                },
-            ],
-        };
-
-        let workbook = NodeXlsxWorkbook {
-            sheets: vec![sheet],
-        };
-        let buffer = workbook.save_to_buffer().unwrap();
-        assert!(buffer.len() > 0);
-
-        //write to file
-        std::fs::write("temp/test_buff.xlsx", &buffer).unwrap();
-    }
-
-    #[test]
-    fn test_save_to_file() {
-        let sheet = NodeXlsxSheet {
-            name: "test".to_string(),
-            cells: vec![
-                NodeXlsxCell {
-                    col: 0,
-                    row: 0,
-                    value: "header 1".to_string(),
-                    cell_type: NodeXlsxTypes::String,
-                },
-                NodeXlsxCell {
-                    col: 1,
-                    row: 0,
-                    value: "header 2".to_string(),
-                    cell_type: NodeXlsxTypes::String,
-                },
-                NodeXlsxCell {
-                    col: 0,
-                    row: 1,
-                    value: "1".to_string(),
-                    cell_type: NodeXlsxTypes::Number,
-                },
-                NodeXlsxCell {
-                    col: 1,
-                    row: 1,
-                    value: "2".to_string(),
-                    cell_type: NodeXlsxTypes::Number,
-                },
-                NodeXlsxCell {
-                    col: 0,
-                    row: 2,
-                    value: "https://example.com".to_string(),
-                    cell_type: NodeXlsxTypes::Link,
-                },
-            ],
-        };
-
-        let workbook = NodeXlsxWorkbook {
-            sheets: vec![sheet],
-        };
-        workbook.save_to_file("temp/test.xlsx").unwrap();
-    }
-}
-*/

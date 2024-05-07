@@ -2,6 +2,9 @@ const funcs = require('../../../native/node-xlsxwriter.node');
 const saveToBuffer = funcs.saveToBuffer;
 const saveToBufferSync = funcs.saveToBufferSync;
 const saveToFileSync = funcs.saveToFileSync;
+const saveToFile = funcs.saveToFile;
+const saveToBase64 = funcs.saveToBase64;
+const saveToBase64Sync = funcs.saveToBase64Sync;
 // @ts-check
 
 const Sheet = require('./sheet');
@@ -87,6 +90,34 @@ class Workbook {
    */
   saveToFileSync(path) {
     return saveToFileSync(this, path);
+  }
+
+  /**
+   * Writes a workbook to a file.(using a child process for the asynchronous operation)
+   * @param {string} path - The path of the file.
+   * @returns {Promise<void>}
+   * @throws {Error}
+   */
+  async saveToFile(path) {
+    return saveToFile(this, path);
+  }
+
+  /**
+   * Writes a workbook to a base64 string.
+   * @returns {Promise<string>}
+   * @throws {Error}
+   */
+  async saveToBase64() {
+    return saveToBase64(this);
+  }
+
+  /**
+   * Writes a workbook to a base64 string.
+   * @returns {string}
+   * @throws {Error}
+   */
+  saveToBase64Sync() {
+    return saveToBase64Sync(this);
   }
 }
 
