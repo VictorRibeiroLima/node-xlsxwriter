@@ -56,23 +56,22 @@ export class Border {
 /**
  * @class DiagonalBorder
  * @classdesc Represents a diagonal border
+ * @property {DiagonalBorderType} dStyle - The style of the border
+ * @property {BorderType} style - The style of the border
+ * @property {Color} color - The color of the border
  */
-export class DiagonalBorder {
+export class DiagonalBorder extends Border {
     /**
-     * @param {DiagonalBorderType} [style] - The style of the border
+     * @param {BorderType} [style] - The style of the border
      * @param {Color} [color] - The color of the border
+     * @param {DiagonalBorderType} [dStyle] - The style of the border
      */
-    constructor(style?: DiagonalBorderType, color?: Color);
+    constructor(style?: BorderType, color?: Color, dStyle?: DiagonalBorderType);
     /**
      * The style of the border
      * @type {DiagonalBorderType}
      */
-    style: DiagonalBorderType;
-    /**
-     * The color of the border
-     * @type {Color}
-     */
-    color: Color;
+    dStyle: DiagonalBorderType;
 }
 import Color = require("./color");
 //# sourceMappingURL=border.d.ts.map

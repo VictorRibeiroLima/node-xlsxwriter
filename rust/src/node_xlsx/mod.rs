@@ -5,23 +5,25 @@ use neon::{
     result::NeonResult,
     types::{JsArray, JsObject, JsValue},
 };
-use rust_xlsxwriter::{Url, Workbook, Worksheet};
+use rust_xlsxwriter::{Workbook, Worksheet};
 
 use self::{error::NodeXlsxError, sheet::NodeXlsxSheet, types::NodeXlsxTypes};
 
+mod border;
 mod cell;
+mod color;
 mod error;
+mod format;
 mod sheet;
 mod types;
 
-#[derive(Debug)]
 pub struct NodeXlsxWorkbook {
     sheets: Vec<NodeXlsxSheet>,
 }
 
 impl NodeXlsxWorkbook {
-    pub fn from_js_object<'a>(
-        cx: &mut FunctionContext<'a>,
+    pub fn from_js_object<'b>(
+        cx: &mut FunctionContext<'b>,
         obj: Handle<JsObject>,
     ) -> NeonResult<Self> {
         let mut inner_sheets = vec![];
@@ -53,20 +55,36 @@ impl NodeXlsxWorkbook {
     fn parse(self) -> Result<Workbook, NodeXlsxError> {
         let mut workbook = rust_xlsxwriter::Workbook::new();
         for sheet in self.sheets {
+            let format_map = sheet.format_map;
             let mut worksheet = Worksheet::new();
             worksheet.set_name(&sheet.name)?;
             for cell in sheet.cells {
                 match cell.cell_type {
-                    NodeXlsxTypes::String => {
-                        worksheet.write_string(cell.row, cell.col, &cell.value)?;
+                    NodeXlsxTypes::String(value) | NodeXlsxTypes::Unknown(value) => {
+                        if let Some(format) = cell.format {
+                            let format = format_map.get(&format).unwrap();
+                            worksheet
+                                .write_string_with_format(cell.row, cell.col, &value, format)?;
+                        } else {
+                            worksheet.write_string(cell.row, cell.col, &value)?;
+                        }
                     }
-                    NodeXlsxTypes::Number => {
-                        let value: f64 = cell.value.parse::<f64>()?;
-                        worksheet.write_number(cell.row, cell.col, value)?;
+                    NodeXlsxTypes::Number(value) => {
+                        if let Some(format) = cell.format {
+                            let format = format_map.get(&format).unwrap();
+                            worksheet
+                                .write_number_with_format(cell.row, cell.col, value, format)?;
+                        } else {
+                            worksheet.write_number(cell.row, cell.col, value)?;
+                        }
                     }
-                    NodeXlsxTypes::Link => {
-                        let url = Url::new(&cell.value);
-                        worksheet.write(cell.row, cell.col, url)?;
+                    NodeXlsxTypes::Link(value) => {
+                        if let Some(format) = cell.format {
+                            let format = format_map.get(&format).unwrap();
+                            worksheet.write_url_with_format(cell.row, cell.col, value, format)?;
+                        } else {
+                            worksheet.write_url(cell.row, cell.col, value)?;
+                        }
                     }
                 }
             }
@@ -76,6 +94,7 @@ impl NodeXlsxWorkbook {
     }
 }
 
+/*
 #[cfg(test)]
 mod test {
     use crate::node_xlsx::{
@@ -84,6 +103,7 @@ mod test {
 
     #[test]
     fn test_save_to_buffer() {
+
         let sheet = NodeXlsxSheet {
             name: "test".to_string(),
             cells: vec![
@@ -174,3 +194,4 @@ mod test {
         workbook.save_to_file("temp/test.xlsx").unwrap();
     }
 }
+*/

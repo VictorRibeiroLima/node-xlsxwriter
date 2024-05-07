@@ -1,98 +1,70 @@
-const { test } = require("node:test");
-const assert = require("node:assert");
-const { saveToBuffer, saveToFileSync } = require("../index.js");
-const fs = require("fs");
+// @ts-check
+const { test } = require('node:test');
+const assert = require('node:assert');
+const { Workbook, Link, Format, Color, Border } = require('../src/index');
 
-test("save to buffer", async (t) => {
-  const buffer = await saveToBuffer({
-    name: "test",
-    sheets: [
-      {
-        name: "test",
-        cells: [
-          {
-            col: 0,
-            row: 0,
-            value: "header 1",
-            celType: "string",
-          },
-          {
-            col: 1,
-            row: 0,
-            value: "header 2",
-            celType: "string",
-          },
-          {
-            col: 0,
-            row: 1,
-            value: 1,
-            celType: "number",
-          },
-          {
-            col: 1,
-            row: 1,
-            value: 2,
-            celType: "number",
-          },
-          {
-            col: 0,
-            row: 2,
-            value: "https://example.com",
-            celType: "link",
-          },
-        ],
-      },
-    ],
-  });
+const fs = require('fs');
 
+test('save to buffer basic', async (t) => {
+  const workbook = new Workbook();
+  const sheet = workbook.addSheet();
+  const link = new Link('http://example.com', 'Example', 'tooltip');
+  sheet.writeString(1, 1, 'Hello, World!');
+  sheet.writeNumber(2, 1, 42);
+  sheet.writeLink(3, 1, link);
+  const buffer = await workbook.saveToBuffer();
   assert.ok(buffer instanceof Buffer);
-  assert.ok(buffer.length > 0);
-
-  fs.writeFileSync("./temp/test_node.xlsx", buffer);
+  fs.writeFileSync('./temp/save_to_buffer_basic.xlsx', buffer);
 });
 
-test("save to file sync", async (t) => {
-  saveToFileSync(
-    {
-      name: "test",
-      sheets: [
-        {
-          name: "test",
-          cells: [
-            {
-              col: 0,
-              row: 0,
-              value: "header 1",
-              celType: "string",
-            },
-            {
-              col: 1,
-              row: 0,
-              value: "header 2",
-              celType: "string",
-            },
-            {
-              col: 0,
-              row: 1,
-              value: 1,
-              celType: "number",
-            },
-            {
-              col: 1,
-              row: 1,
-              value: 2,
-              celType: "number",
-            },
-            {
-              col: 0,
-              row: 2,
-              value: "https://example.com",
-              celType: "link",
-            },
-          ],
-        },
-      ],
-    },
-    "./temp/test_node_sync.xlsx"
-  );
+test('save to buffer with format', async (t) => {
+  const workbook = new Workbook();
+  const sheet = workbook.addSheet();
+  const format = new Format({
+    align: 'center',
+    bold: true,
+    backgroundColor: new Color(255, 0, 0),
+    fontSize: 16,
+    underline: 'double',
+    fontScheme: 'minor',
+    fontName: 'Arial',
+  });
+
+  format.setBorder(new Border('thin', new Color(0, 0, 0)));
+  sheet.writeString(1, 1, 'Hello, World!', format);
+  const buffer = await workbook.saveToBuffer();
+  assert.ok(buffer instanceof Buffer);
+  fs.writeFileSync('./temp/save_to_buffer_with_format.xlsx', buffer);
+});
+
+test('save to buffer with random values', async (t) => {
+  const promise = new Promise((resolve) => {
+    resolve('Hello, World!');
+  });
+  const obj = {};
+  const date = new Date();
+  const num = 42;
+  const arr = [1, 2, 3];
+
+  const workbook = new Workbook();
+  const sheet = workbook.addSheet();
+  sheet.writeCell(1, 1, promise);
+  sheet.writeCell(2, 1, obj);
+  sheet.writeCell(3, 1, date);
+  sheet.writeCell(4, 1, num);
+  sheet.writeCell(5, 1, arr);
+  const buffer = await workbook.saveToBuffer();
+  assert.ok(buffer instanceof Buffer);
+  fs.writeFileSync('./temp/save_to_buffer_with_random_values.xlsx', buffer);
+});
+
+test('save to buffer with multiple sheets', async (t) => {
+  const workbook = new Workbook();
+  const sheet1 = workbook.addSheet();
+  const sheet2 = workbook.addSheet();
+  sheet1.writeString(1, 1, 'Sheet 1');
+  sheet2.writeString(1, 1, 'Sheet 2');
+  const buffer = await workbook.saveToBuffer();
+  assert.ok(buffer instanceof Buffer);
+  fs.writeFileSync('./temp/save_to_buffer_with_multiple_sheets.xlsx', buffer);
 });

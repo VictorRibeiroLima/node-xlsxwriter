@@ -33,8 +33,8 @@ class Sheet {
    *
    * @param {number} col - The column index of the cell
    * @param {number} row - The row index of the cell
-   * @param {string|number|Link} value - The value of the cell
-   * @param {("number"|"string"|"link")} [cellType] - The type of the cell
+   * @param {string|number|Link|any} value - The value of the cell.
+   * @param {("number"|"string"|"link")} [cellType] - The type of the cell(if not provider .toString() will be used)
    * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
@@ -85,7 +85,7 @@ class Sheet {
    * writes a link value to a cell
    * @param {number} col - The column index of the cell
    * @param {number} row - The row index of the cell
-   * @param {string} value - The value to write to the cell
+   * @param {Link} value - The value to write to the cell
    * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0

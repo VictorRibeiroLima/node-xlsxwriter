@@ -55,7 +55,6 @@ const Color = require('./color');
  * @class Format
  * @classdesc Represents a format
  * @property {number} id - the id of the format (do not set this directly)
- * @property {boolean} default - If the format is the default format (do not set this directly)
  * @property {FormatAlign} [align] - The alignment of the cell
  * @property {Color} [backgroundColor] - The background color of the cell
  * @property {boolean} [bold] - If the font is bold
@@ -81,21 +80,91 @@ const Color = require('./color');
  * @property {number} [numFmtId] - The number format id
  * @property {FormatPattern} [pattern] - The pattern
  * @property {FormatUnderline} [underline] - The underline style
+ *
  */
 class Format {
-  constructor() {
-    /**
-     * the id of the format
-     * @private
-     * @type {number}
-     */
+  /**
+   *
+   * @param {Object} [options] - The options object
+   * @param {FormatAlign} [options.align] - The alignment of the cell
+   * @param {Color} [options.backgroundColor] - The background color of the cell
+   * @param {boolean} [options.bold] - If the font is bold
+   * @param {Border} [options.leftBorder] - The left border of the cell
+   * @param {Border} [options.rightBorder] - The right border of the cell
+   * @param {Border} [options.topBorder] - The top border of the cell
+   * @param {Border} [options.bottomBorder] - The bottom border of the cell
+   * @param {DiagonalBorder} [options.diagonalBorder] - The diagonal border of the cell
+   * @param {number} [options.charset] - The charset of the font
+   * @param {Color} [options.fontColor] - The color of the font
+   * @param {number} [options.fontFamily] - The family of the font
+   * @param {string} [options.fontName] - The name of the font
+   * @param {string} [options.fontScheme] - The font scheme
+   * @param {number} [options.fontSize] - The font size
+   * @param {boolean} [options.strikeThrough] - If the font is strike through
+   * @param {Color} [options.foregroundColor] - The foreground color
+   * @param {boolean} [options.hidden] - If the format is hidden
+   * @param {boolean} [options.hyperlink] - If the format is hyperlinked
+   * @param {number} [options.indent] - The indent level
+   * @param {boolean} [options.italic] - If the font is italic
+   * @param {boolean} [options.locked] - If the format is locked
+   * @param {string} [options.numFmt] - The number format
+   * @param {number} [options.numFmtId] - The number format id
+   * @param {FormatPattern} [options.pattern] - The pattern
+   * @param {FormatUnderline} [options.underline] - The underline style
+   */
+  constructor({
+    align,
+    backgroundColor,
+    bold,
+    leftBorder,
+    rightBorder,
+    topBorder,
+    bottomBorder,
+    diagonalBorder,
+    charset,
+    fontColor,
+    fontFamily,
+    fontName,
+    fontScheme,
+    fontSize,
+    strikeThrough,
+    foregroundColor,
+    hidden,
+    hyperlink,
+    indent,
+    italic,
+    locked,
+    numFmt,
+    numFmtId,
+    pattern,
+    underline,
+  } = {}) {
     this.id = Math.floor(Math.random() * 1_000_000);
-    /**
-     * if the format is the default format
-     * @private
-     * @type {boolean}
-     */
-    this.default = true;
+    this.align = align;
+    this.backgroundColor = backgroundColor;
+    this.bold = bold;
+    this.leftBorder = leftBorder;
+    this.rightBorder = rightBorder;
+    this.topBorder = topBorder;
+    this.bottomBorder = bottomBorder;
+    this.diagonalBorder = diagonalBorder;
+    this.charset = charset;
+    this.fontColor = fontColor;
+    this.fontFamily = fontFamily;
+    this.fontName = fontName;
+    this.fontScheme = fontScheme;
+    this.fontSize = fontSize;
+    this.strikeThrough = strikeThrough;
+    this.foregroundColor = foregroundColor;
+    this.hidden = hidden;
+    this.hyperlink = hyperlink;
+    this.indent = indent;
+    this.italic = italic;
+    this.locked = locked;
+    this.numFmt = numFmt;
+    this.numFmtId = numFmtId;
+    this.pattern = pattern;
+    this.underline = underline;
   }
 
   /**
@@ -104,7 +173,6 @@ class Format {
    * @returns {void}
    */
   setAlignment(align) {
-    this.default = false;
     this.align = align;
   }
 
@@ -114,7 +182,6 @@ class Format {
    * @returns {void}
    */
   setBackgroundColor(color) {
-    this.default = false;
     this.backgroundColor = color;
   }
 
@@ -124,7 +191,6 @@ class Format {
    * @returns {void}
    */
   setBold(bold) {
-    this.default = false;
     this.bold = bold;
   }
 
@@ -134,7 +200,6 @@ class Format {
    * @returns {void}
    */
   setBorder(border) {
-    this.default = false;
     this.leftBorder = border;
     this.rightBorder = border;
     this.topBorder = border;
@@ -147,7 +212,6 @@ class Format {
    * @returns {void}
    */
   setBorderBottom(border) {
-    this.default = false;
     this.bottomBorder = border;
   }
 
@@ -157,7 +221,6 @@ class Format {
    * @returns {void}
    */
   setBorderLeft(border) {
-    this.default = false;
     this.leftBorder = border;
   }
 
@@ -167,7 +230,6 @@ class Format {
    * @returns {void}
    */
   setBorderRight(border) {
-    this.default = false;
     this.rightBorder = border;
   }
 
@@ -177,7 +239,6 @@ class Format {
    * @returns {void}
    */
   setBorderTop(border) {
-    this.default = false;
     this.topBorder = border;
   }
 
@@ -187,7 +248,6 @@ class Format {
    * @returns {void}
    */
   setBorderDiagonal(border) {
-    this.default = false;
     this.diagonalBorder = border;
   }
 
@@ -197,7 +257,6 @@ class Format {
    * @returns {void}
    */
   setFontCharset(charset) {
-    this.default = false;
     this.charset = charset;
   }
 
@@ -207,7 +266,6 @@ class Format {
    * @returns {void}
    */
   setFontColor(color) {
-    this.default = false;
     this.fontColor = color;
   }
 
@@ -217,7 +275,6 @@ class Format {
    * @returns {void}
    */
   setFontFamily(fontFamily) {
-    this.default = false;
     this.fontFamily = fontFamily;
   }
 
@@ -227,7 +284,6 @@ class Format {
    * @returns {void}
    */
   setFontName(fontName) {
-    this.default = false;
     this.fontName = fontName;
   }
 
@@ -237,7 +293,6 @@ class Format {
    * @returns {void}
    */
   setFontScheme(fontScheme) {
-    this.default = false;
     this.fontScheme = fontScheme;
   }
 
@@ -247,7 +302,6 @@ class Format {
    * @returns {void}
    */
   setFontSize(fontSize) {
-    this.default = false;
     this.fontSize = fontSize;
   }
 
@@ -256,7 +310,6 @@ class Format {
    * @returns {void}
    */
   setFontStrikeThrough() {
-    this.default = false;
     this.strikeThrough = true;
   }
 
@@ -266,7 +319,6 @@ class Format {
    * @returns {void}
    */
   setForegroundColor(color) {
-    this.default = false;
     this.foregroundColor = color;
   }
 
@@ -276,7 +328,6 @@ class Format {
    * @returns {void}
    */
   setHidden(hidden) {
-    this.default = false;
     this.hidden = hidden;
   }
 
@@ -286,7 +337,6 @@ class Format {
    * @returns {void}
    */
   setHyperlink(hyperlink) {
-    this.default = false;
     this.hyperlink = hyperlink;
   }
 
@@ -296,7 +346,6 @@ class Format {
    * @returns {void}
    */
   setIndent(indent) {
-    this.default = false;
     this.indent = indent;
   }
 
@@ -306,7 +355,6 @@ class Format {
    * @returns {void}
    */
   setItalic(italic) {
-    this.default = false;
     this.italic = italic;
   }
 
@@ -316,7 +364,6 @@ class Format {
    * @returns {void}
    */
   setLocked(locked) {
-    this.default = false;
     this.locked = locked;
   }
 
@@ -326,7 +373,6 @@ class Format {
    * @returns {void}
    */
   setNumFmt(numFmt) {
-    this.default = false;
     this.numFmt = numFmt;
   }
 
@@ -336,7 +382,6 @@ class Format {
    * @returns {void}
    */
   setNumFmtId(numFmtId) {
-    this.default = false;
     this.numFmtId = numFmtId;
   }
 
@@ -346,7 +391,6 @@ class Format {
    * @returns {void}
    */
   setPattern(pattern) {
-    this.default = false;
     this.pattern = pattern;
   }
 
@@ -356,7 +400,6 @@ class Format {
    * @returns {void}
    */
   setUnderline(underline) {
-    this.default = false;
     this.underline = underline;
   }
 }

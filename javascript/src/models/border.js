@@ -60,29 +60,23 @@ class Border {
 /**
  * @class DiagonalBorder
  * @classdesc Represents a diagonal border
+ * @property {DiagonalBorderType} dStyle - The style of the border
+ * @property {BorderType} style - The style of the border
+ * @property {Color} color - The color of the border
  */
-class DiagonalBorder {
+class DiagonalBorder extends Border {
   /**
-   * @param {DiagonalBorderType} [style] - The style of the border
+   * @param {BorderType} [style] - The style of the border
    * @param {Color} [color] - The color of the border
+   * @param {DiagonalBorderType} [dStyle] - The style of the border
    */
-  constructor(style, color) {
-    if (!color) {
-      color = new Color(0, 0, 0);
-    }
-    if (!style) {
-      style = 'none';
-    }
+  constructor(style, color, dStyle) {
+    super(style, color);
     /**
      * The style of the border
      * @type {DiagonalBorderType}
      */
-    this.style = style;
-    /**
-     * The color of the border
-     * @type {Color}
-     */
-    this.color = color;
+    this.dStyle = dStyle;
   }
 }
 

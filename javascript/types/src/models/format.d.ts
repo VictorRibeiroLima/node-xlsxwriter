@@ -50,7 +50,6 @@ export = Format;
  * @class Format
  * @classdesc Represents a format
  * @property {number} id - the id of the format (do not set this directly)
- * @property {boolean} default - If the format is the default format (do not set this directly)
  * @property {FormatAlign} [align] - The alignment of the cell
  * @property {Color} [backgroundColor] - The background color of the cell
  * @property {boolean} [bold] - If the font is bold
@@ -84,12 +83,6 @@ declare class Format {
      * @type {number}
      */
     private id;
-    /**
-     * if the format is the default format
-     * @private
-     * @type {boolean}
-     */
-    private default;
     /**
      * Sets alignment of the cell
      * @param {FormatAlign} align - The alignment of the cell
