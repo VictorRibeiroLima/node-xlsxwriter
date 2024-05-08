@@ -3,6 +3,54 @@
 const Cell = require('./cell');
 const Format = require('./format');
 const Link = require('./link');
+const { ConditionalFormat } = require('./conditional_format');
+
+/**
+ * @class ConditionalFormatSheetValue
+ * @classdesc Represents the values of a conditional format sheet.
+ * @property {number} firstRow - The first row of the range
+ * @property {number} lastRow - The last row of the range
+ * @property {number} firstColumn - The first column of the range
+ * @property {number} lastColumn - The last column of the range
+ * @property {ConditionalFormat} format - The format of the range
+ *
+ */
+class ConditionalFormatSheetValue {
+  /**
+   * @param {number} firstRow - The first row of the range
+   * @param {number} lastRow - The last row of the range
+   * @param {number} firstColumn - The first column of the range
+   * @param {number} lastColumn - The last column of the range
+   * @param {ConditionalFormat} format - The format of the range
+   */
+  constructor(firstRow, lastRow, firstColumn, lastColumn, format) {
+    /**
+     * The first row of the range
+     * @type {number}
+     */
+    this.firstRow = firstRow;
+    /**
+     * The last row of the range
+     * @type {number}
+     */
+    this.lastRow = lastRow;
+    /**
+     * The first column of the range
+     * @type {number}
+     */
+    this.firstColumn = firstColumn;
+    /**
+     * The last column of the range
+     * @type {number}
+     */
+    this.lastColumn = lastColumn;
+    /**
+     * The format of the range
+     * @type {ConditionalFormat}
+     */
+    this.format = format;
+  }
+}
 
 /**
  *
@@ -10,6 +58,7 @@ const Link = require('./link');
  * @classdesc A sheet is a collection of cells.
  * @property {string} name - The name of the sheet
  * @property {Cell[]} cells - The cells in the sheet
+ * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
  */
 class Sheet {
   /**
@@ -26,6 +75,34 @@ class Sheet {
      * @type {Cell[]}
      */
     this.cells = [];
+
+    /**
+     * The conditional format values of the sheet
+     * @type {ConditionalFormatSheetValue[]}
+     */
+    this.conditionalFormats = [];
+  }
+
+  /**
+   * Adds a conditional format to the sheet
+   * @param {Object} opts - The options for the conditional format
+   * @param {number} opts.firstRow - The first row of the range
+   * @param {number} opts.lastRow - The last row of the range
+   * @param {number} opts.firstColumn - The first column of the range
+   * @param {number} opts.lastColumn - The last column of the range
+   * @param {ConditionalFormat} opts.format - The format of the range
+   * @returns {void}
+   */
+  addConditionalFormat(opts) {
+    const { firstRow, lastRow, firstColumn, lastColumn, format } = opts;
+    const conditionalSheetValue = new ConditionalFormatSheetValue(
+      firstRow,
+      lastRow,
+      firstColumn,
+      lastColumn,
+      format,
+    );
+    this.conditionalFormats.push(conditionalSheetValue);
   }
 
   /**

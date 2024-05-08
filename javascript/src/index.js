@@ -6,6 +6,9 @@ const Color = require('./models/color');
 const Format = require('./models/format');
 const Link = require('./models/link');
 const { Border, DiagonalBorder } = require('./models/border');
+const {
+  ConditionalFormatTwoColorScale,
+} = require('./models/conditional_format');
 
 module.exports = {
   Workbook,
@@ -15,4 +18,5 @@ module.exports = {
   Link,
   Border,
   DiagonalBorder,
+  ConditionalFormatTwoColorScale,
 };
