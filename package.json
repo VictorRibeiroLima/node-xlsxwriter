@@ -1,7 +1,7 @@
 {
   "name": "node-xlsxwriter",
-  "version": "0.0.6",
-  "description": "",
+  "version": "0.0.7",
+  "description": "node-xlsxwriter is a Node.js wrapper for the Rust library rust_xlsxwriter",
   "main": "./javascript/src/index.js",
   "author": "Victor Ribeiro de Lima",
   "license": "ISC",
@@ -14,6 +14,16 @@
     "test:rust": "cargo test",
     "test:node": "node --test javascript/test"
   },
+  "keywords": [
+    "xlsx",
+    "xlsxwriter",
+    "excel",
+    "node",
+    "nodejs",
+    "node.js",
+    "rust",
+    "wrapper"
+  ],
   "os": [
     "darwin",
     "linux",

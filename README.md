@@ -72,3 +72,52 @@ You also can use the `writeFromJson` method to create a sheet from a JSON object
 
   const buffer = await workbook.saveToBuffer();
 ```
+
+# Warnings
+
+## Binary
+The installation process will automatically download the `./native/node-xlsxwriter.node` binary for your system, but if you have any problems, you can download it manually from the [releases page](
+  https://github.com/VictorRibeiroLima/node-xlsxwriter/releases
+).
+
+## Work in progress 
+Remember that this project is still in development, so some features may not work as expected.
+
+Also, the API may change in the future.
+
+Any help is welcome.
+
+## Format ⚠️
+Formats you can and should reuse them, because they are cached internally, so you can save memory and improve performance.
+
+Example:
+
+`don't do this`
+```javascript
+for (let i = 0; i < 100; i++) {
+  const format = new Format();
+  sheet.writeString(0, i, 'Hello', format);
+}
+```
+
+`do this`
+```javascript
+const format = new Format();
+for (let i = 0; i < 100; i++) {
+  sheet.writeString(0, i, 'Hello', format);
+}
+```
+
+The impact is not noticeable in small files, but it can be significant in large files.
+
+# Building from source
+If you want to build the project from source, you need to have Rust [installed](https://www.rust-lang.org) on your machine.
+
+```bash
+git clone git@github.com:VictorRibeiroLima/node-xlsxwriter.git
+cd node-xlsxwriter
+npm install
+npm run release:native
+```
+
+This will generate the `./native/node-xlsxwriter.node` binary for your system.
