@@ -1,7 +1,7 @@
 export = Cell;
 /**
  * @typedef {(number|string|Link)} CellValue
- * @typedef {("number"|"string"|"link")} CellType
+ * @typedef {("number"|"string"|"link"|"date")} CellType
  */
 /**
  *
@@ -52,7 +52,7 @@ declare namespace Cell {
     export { CellValue, CellType };
 }
 type CellValue = (number | string | Link);
-type CellType = ("number" | "string" | "link");
+type CellType = ("number" | "string" | "link" | "date");
 import Format = require("./format");
 import Link = require("./link");
 //# sourceMappingURL=cell.d.ts.map

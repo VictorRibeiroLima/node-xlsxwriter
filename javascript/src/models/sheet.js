@@ -33,8 +33,8 @@ class Sheet {
    *
    * @param {number} col - The column index of the cell
    * @param {number} row - The row index of the cell
-   * @param {string|number|Link|any} value - The value of the cell.
-   * @param {("number"|"string"|"link")} [cellType] - The type of the cell(if not provider .toString() will be used)
+   * @param {string|number|Link|Date|any} value - The value of the cell.
+   * @param {("number"|"string"|"link"|"date")} [cellType] - The type of the cell(if not provider .toString() will be used)
    * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
@@ -60,7 +60,6 @@ class Sheet {
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row > 1_048_577 or row < 0
-   * @throws {Error} - value is can't be converted to a string( null and undefined are allowed)
    */
   writeString(col, row, value, format) {
     this.writeCell(col, row, value, 'string', format);
@@ -75,7 +74,6 @@ class Sheet {
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row > 1_048_577 or row < 0
-   * @throws {Error} - value is not a number (null and undefined are allowed)
    */
   writeNumber(col, row, value, format) {
     if (!isNaN(value)) {
@@ -94,53 +92,75 @@ class Sheet {
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row > 1_048_577 or row < 0
-   * @throws {Error} - value is not a string (null and undefined are allowed)
    */
   writeLink(col, row, value, format) {
     this.writeCell(col, row, value, 'link', format);
   }
 
   /**
+   * writes a date value to a cell
+   * @param {number} col - The column index of the cell
+   * @param {number} row - The row index of the cell
+   * @param {Date} value - The value to write to the cell
+   * @param {Format} [format] - The format of the cell
+   * @returns {void}
+   * @throws {Error} - col > 65_535 or col < 0
+   * @throws {Error} - row > 1_048_577 or row < 0
+   */
+  writeDate(col, row, value, format) {
+    this.writeCell(col, row, value, 'date', format);
+  }
+
+  /**
+   *
+   * @typedef {Object} FormatOptions
+   * @property {Format} [headerFormat] - The format of the header cells
+   * @property {Format} [cellFormat] - The format of the data cells
+   * @property {Object.<string, Format>} [columnFormats] - The format of the cells in the columns
    * Writes the sheet based on the provided array of objects
    * For performance reasons the headers will be generated based on the first object
    * and those headers will be used for the rest of the objects,so if the objects have different keys
    * the keys that are not in the first object will not be written to the sheet
    * @param {Object[]} objects - The objects to write to the sheet
-   * @param {Format} [headerFormat] - The format of the header cells
-   * @param {Format} [cellFormat] - The format of the data cells
+   * @param {FormatOptions} [opts] - The format of the header cells
    * @returns {void}
    */
-  writeFromJson(objects, headerFormat, cellFormat) {
+  writeFromJson(objects, { headerFormat, cellFormat, columnFormats } = {}) {
     if (objects.length === 0) {
       return;
     }
+
     const keys = Object.keys(objects[0]);
     // write headers
     for (let i = 0; i < keys.length; i++) {
-      this.writeString(i, 0, keys[i], headerFormat);
+      const format = headerFormat || columnFormats?.[keys[i]];
+      this.writeString(i, 0, keys[i], format);
     }
 
     // write data
     for (let i = 0; i < objects.length; i++) {
       for (let j = 0; j < keys.length; j++) {
+        const format = columnFormats?.[keys[j]] || cellFormat;
         const type = typeof objects[i][keys[j]];
         const value = objects[i][keys[j]];
         switch (type) {
           case 'string':
-            this.writeString(j, i + 1, value, cellFormat);
+            this.writeString(j, i + 1, value, format);
             break;
           case 'number':
-            this.writeNumber(j, i + 1, value, cellFormat);
+            this.writeNumber(j, i + 1, value, format);
             break;
           case 'object':
             if (value instanceof Link) {
-              this.writeLink(j, i + 1, value, cellFormat);
+              this.writeLink(j, i + 1, value, format);
+            } else if (value instanceof Date) {
+              this.writeCell(j, i + 1, value, 'date', format);
             } else {
-              this.writeCell(j, i + 1, value, null, cellFormat);
+              this.writeCell(j, i + 1, value, null, format);
             }
             break;
           default:
-            this.writeCell(j, i + 1, value, null, cellFormat);
+            this.writeCell(j, i + 1, value, null, format);
         }
       }
     }

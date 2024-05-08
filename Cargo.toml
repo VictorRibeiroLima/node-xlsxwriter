@@ -13,5 +13,6 @@ crate-type = ["cdylib"]
 
 [dependencies]
 base64 = "0.22.1"
+chrono = "0.4.38"
 neon = "1"
-rust_xlsxwriter = "0.64.2"
+rust_xlsxwriter = { version = "0.64.2", features = ["chrono"] }

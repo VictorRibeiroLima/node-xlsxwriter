@@ -68,6 +68,7 @@ impl NodeXlsxCell {
         let cel_type = NodeXlsxTypes::from_js_string(cx, cel_type, value)?;
 
         let format: Option<Handle<JsObject>> = obj.get_opt(cx, "format")?;
+
         let format = match format {
             Some(format) => Some(Self::create_format(cx, format, format_map)?),
             None => None,

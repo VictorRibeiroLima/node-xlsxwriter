@@ -4,7 +4,7 @@ const Link = require('./link');
 
 /**
  * @typedef {(number|string|Link)} CellValue
- * @typedef {("number"|"string"|"link")} CellType
+ * @typedef {("number"|"string"|"link"|"date")} CellType
  */
 
 /**

@@ -1,6 +1,6 @@
 {
   "name": "node-xlsxwriter",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "main": "./javascript/src/index.js",
   "author": "Victor Ribeiro de Lima",

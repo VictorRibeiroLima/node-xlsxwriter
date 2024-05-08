@@ -93,6 +93,15 @@ impl NodeXlsxWorkbook {
                             worksheet.write_url(cell.row, cell.col, value)?;
                         }
                     }
+                    NodeXlsxTypes::Date(value) => {
+                        if let Some(format) = cell.format {
+                            let format = format_map.get(&format).unwrap();
+                            worksheet
+                                .write_datetime_with_format(cell.row, cell.col, value, format)?;
+                        } else {
+                            worksheet.write_datetime(cell.row, cell.col, value)?;
+                        }
+                    }
                 }
             }
             workbook.push_worksheet(worksheet);

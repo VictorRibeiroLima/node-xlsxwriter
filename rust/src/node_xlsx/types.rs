@@ -1,16 +1,17 @@
+use chrono::{DateTime, NaiveDateTime};
 use neon::{
     context::{Context, FunctionContext},
     handle::Handle,
     object::Object,
     result::NeonResult,
-    types::{JsNull, JsNumber, JsObject, JsString, JsUndefined, JsValue, Value},
+    types::{JsDate, JsNull, JsNumber, JsObject, JsString, JsUndefined, JsValue, Value},
 };
 use rust_xlsxwriter::Url;
-
 pub enum NodeXlsxTypes {
     String(String),
     Number(f64),
     Link(Url),
+    Date(NaiveDateTime),
     Unknown(String), // This is a catch-all for any type
 }
 
@@ -42,6 +43,10 @@ impl NodeXlsxTypes {
                 let js_any = any_to_url(cx, js_any)?;
                 NodeXlsxTypes::Link(js_any)
             }
+            "date" => {
+                let js_any = date_to_naive_date_time(cx, js_any)?;
+                NodeXlsxTypes::Date(js_any)
+            }
             _ => {
                 let js_any = any_to_string(cx, js_any)?;
                 NodeXlsxTypes::Unknown(js_any)
@@ -51,6 +56,12 @@ impl NodeXlsxTypes {
 }
 
 fn any_to_string<'a>(cx: &mut FunctionContext<'a>, js_any: Handle<JsValue>) -> NeonResult<String> {
+    if let Ok(_) = js_any.downcast::<JsNull, _>(cx) {
+        return Ok("".to_string());
+    }
+    if let Ok(_) = js_any.downcast::<JsUndefined, _>(cx) {
+        return Ok("".to_string());
+    }
     let js_string = js_any.to_string(cx)?;
     Ok(js_string.value(cx))
 }
@@ -107,4 +118,19 @@ fn object_to_url<'a>(cx: &mut FunctionContext<'a>, obj: Handle<JsObject>) -> Neo
         url = url.set_tip(tip.value(cx));
     }
     Ok(url)
+}
+
+fn date_to_naive_date_time<'a>(
+    cx: &mut FunctionContext<'a>,
+    js_any: Handle<JsValue>,
+) -> NeonResult<NaiveDateTime> {
+    let js_date = js_any.downcast_or_throw::<JsDate, _>(cx)?;
+    let timestamp = js_date.value(cx);
+    let naive_date_time = DateTime::from_timestamp_millis(timestamp as i64);
+    match naive_date_time {
+        Some(naive_date_time) => Ok(naive_date_time.naive_utc()),
+        None => {
+            Ok(NaiveDateTime::parse_from_str("1970-01-01 00:00:00", "%Y-%m-%d %H:%M:%S").unwrap())
+        }
+    }
 }

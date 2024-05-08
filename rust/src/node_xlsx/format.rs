@@ -54,14 +54,16 @@ impl Format {
     }
 
     fn inner_from_object(cx: &mut FunctionContext, object: &Handle<JsObject>) -> NeonResult<Self> {
-        let align: Option<FormatAlign> = match object.get(cx, "align") {
-            Ok(align) => Some(align_from_js_string(cx, align)?),
-            Err(_) => None,
+        let align: Option<Handle<JsString>> = object.get_opt(cx, "align")?;
+        let align: Option<FormatAlign> = match align {
+            Some(align) => Some(align_from_js_string(cx, align)?),
+            None => None,
         };
 
-        let background_color: Option<Color> = match object.get(cx, "backgroundColor") {
-            Ok(background_color) => Some(Color::from_js_object(cx, background_color)?),
-            Err(_) => None,
+        let background_color: Option<Handle<JsObject>> = object.get_opt(cx, "backgroundColor")?;
+        let background_color: Option<Color> = match background_color {
+            Some(background_color) => Some(Color::from_js_object(cx, background_color)?),
+            None => None,
         };
 
         let bold: Option<Handle<JsBoolean>> = object.get_opt(cx, "bold")?;

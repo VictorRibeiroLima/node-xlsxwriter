@@ -93,3 +93,99 @@ test('buffer from json', async (t) => {
   assert.ok(buffer instanceof Buffer);
   fs.writeFileSync('./temp/buffer_from_json.xlsx', buffer);
 });
+
+test('specific buffer', async (t) => {
+  const format = new Format({
+    numFmt: 'dd/mm/yy',
+  });
+
+  const objects = [
+    {
+      nr_contrato: '10887816',
+      cpf: '18811851505',
+      data_vencto_divida: new Date('2024-05-07T23:03:56.117Z'),
+      data_termino_divida: new Date('2024-05-07T23:03:56.121Z'),
+      praca: 'AA',
+      valor: '2,00',
+      data_compromisso: null,
+      vr_contrato: '3500,00',
+      nome_principal: 'Manuel Christiansen',
+      endereco: 'Earnest Brekke 234',
+      complemento_endereco: '',
+      bairro: '',
+      municipio: 'Leah Wintheiser',
+      cep: '22222-220',
+      estado: 'AA',
+      ddd_telefone: '5535958549689',
+    },
+    {
+      nr_contrato: '10887816',
+      cpf: '06224356394',
+      data_vencto_divida: new Date('2024-05-07T23:03:56.126Z'),
+      data_termino_divida: new Date('2024-05-07T23:03:56.130Z'),
+      praca: 'AA',
+      valor: '2,00',
+      data_compromisso: null,
+      vr_contrato: '3500,00',
+      nome_principal: 'Pablo Stracke MD',
+      endereco: 'Beth Weissnat 234',
+      complemento_endereco: '',
+      bairro: '',
+      municipio: 'James Kling',
+      cep: '22222-220',
+      estado: 'AA',
+      ddd_telefone: '5581937887608',
+    },
+    {
+      nr_contrato: '10887816',
+      cpf: '43632826730',
+      data_vencto_divida: new Date('2024-05-07T23:03:56.134Z'),
+      data_termino_divida: new Date('2024-05-07T23:03:56.137Z'),
+      praca: 'AA',
+      valor: '2,00',
+      data_compromisso: null,
+      vr_contrato: '3500,00',
+      nome_principal: 'Ada Ryan',
+      endereco: 'Mark Grady 234',
+      complemento_endereco: '',
+      bairro: '',
+      municipio: 'Dora Ward I',
+      cep: '22222-220',
+      estado: 'AA',
+      ddd_telefone: '5592975561790',
+    },
+    {
+      nr_contrato: '10887816',
+      cpf: '43632826730',
+      data_vencto_divida: new Date('2024-05-07T23:03:56.134Z'),
+      data_termino_divida: new Date('2024-05-07T23:03:56.137Z'),
+      praca: 'AA',
+      valor: '2,00',
+      data_compromisso: new Date('2024-05-07T23:03:56.137Z'),
+      vr_contrato: '3500,00',
+      nome_principal: 'Ada Ryan',
+      endereco: 'Mark Grady 234',
+      complemento_endereco: '',
+      bairro: '',
+      municipio: 'Dora Ward I',
+      cep: '22222-220',
+      estado: 'AA',
+      ddd_telefone: '5592975561790',
+    },
+  ];
+
+  const workbook = new Workbook();
+  const sheet = workbook.addSheet();
+  sheet.writeFromJson(objects, {
+    columnFormats: {
+      data_vencto_divida: format,
+      data_termino_divida: format,
+      data_compromisso: format,
+    },
+  });
+
+  console.log('workbook', workbook);
+  const buffer = await workbook.saveToBuffer();
+  assert.ok(buffer instanceof Buffer);
+  fs.writeFileSync('./temp/specific_buffer.xlsx', buffer);
+});
