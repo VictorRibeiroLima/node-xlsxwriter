@@ -73,7 +73,7 @@ You also can use the `writeFromJson` method to create a sheet from a JSON object
   const buffer = await workbook.saveToBuffer();
 ```
 
-# Warnings
+# Warnings ⚠️
 
 ## Binary
 The installation process will automatically download the `./native/node-xlsxwriter.node` binary for your system, but if you have any problems, you can download it manually from the [releases page](
@@ -87,7 +87,7 @@ Also, the API may change in the future.
 
 Any help is welcome.
 
-## Format ⚠️
+## Format
 Formats you can and should reuse them, because they are cached internally, so you can save memory and improve performance.
 
 Example:
