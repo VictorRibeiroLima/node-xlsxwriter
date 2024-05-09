@@ -9,6 +9,7 @@ const { Border, DiagonalBorder } = require('./models/border');
 const {
   ConditionalFormatTwoColorScale,
   ConditionalFormatThreeColorScale,
+  ConditionalFormatAverage,
 } = require('./models/conditional_format');
 
 module.exports = {
@@ -21,4 +22,5 @@ module.exports = {
   DiagonalBorder,
   ConditionalFormatTwoColorScale,
   ConditionalFormatThreeColorScale,
+  ConditionalFormatAverage,
 };

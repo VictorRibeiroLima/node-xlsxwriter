@@ -1,10 +1,8 @@
 use rust_xlsxwriter::{
-    ConditionalFormat, ConditionalFormat2ColorScale, ConditionalFormat3ColorScale,
-    ConditionalFormatAverage, ConditionalFormatBlank, ConditionalFormatCell,
-    ConditionalFormatCustomIcon, ConditionalFormatDataBar, ConditionalFormatDate,
+    ConditionalFormat2ColorScale, ConditionalFormat3ColorScale, ConditionalFormatAverage,
+    ConditionalFormatBlank, ConditionalFormatCell, ConditionalFormatDataBar, ConditionalFormatDate,
     ConditionalFormatDuplicate, ConditionalFormatError, ConditionalFormatFormula,
-    ConditionalFormatIconSet, ConditionalFormatText, ConditionalFormatTop, ConditionalFormatType,
-    ConditionalFormatValue, Worksheet, XlsxError,
+    ConditionalFormatIconSet, ConditionalFormatText, ConditionalFormatTop, Worksheet, XlsxError,
 };
 
 pub enum NodeXlsxConditionalFormatType {

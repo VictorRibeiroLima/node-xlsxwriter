@@ -1,6 +1,7 @@
 // @ts-check
 
 const Color = require('./color');
+const Format = require('./format');
 
 //Enums
 /**
@@ -233,6 +234,22 @@ class ConditionalFormat {
      */
     this.stopIfTrue = stopIfTrue;
   }
+
+  /**
+   * @param {string} multiRange
+   * @returns {void}
+   */
+  setMultiRange(multiRange) {
+    this.multiRange = multiRange;
+  }
+
+  /**
+   * @param {boolean} stopIfTrue
+   * @returns {void}
+   */
+  setStopIfTrue(stopIfTrue) {
+    this.stopIfTrue = stopIfTrue;
+  }
 }
 
 /**
@@ -388,6 +405,53 @@ class ConditionalFormatThreeColorScale extends ConditionalFormatTwoColorScale {
   }
 }
 
+/**
+ * @class ConditionalFormatAverage
+ * @classdesc Represents an Average/Standard Deviation style conditional format
+ * Is used to represent a Average or Standard Deviation style conditional format in Excel
+ * @property {ConditionalFormatAverageRule} rule - The rule for the average value.(default: 'aboveAverage')
+ * @property {Format} [format] - The format for the average value.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+class ConditionalFormatAverage extends ConditionalFormat {
+  /**
+   * @param {Object} [options] - The options object
+   * @param {ConditionalFormatAverageRule} [options.rule] - The rule for the average value.(default: 'aboveAverage')
+   * @param {Format} [options.format] - The format for the average value.
+   * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+   * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+   */
+  constructor(options = {}) {
+    super('average', options.multiRange, options.stopIfTrue);
+    /**
+     * @type {ConditionalFormatAverageRule}
+     * @default 'aboveAverage'
+     */
+    this.rule = options.rule || 'aboveAverage';
+
+    /**
+     * @type {Format|undefined}
+     * @default undefined
+     */
+    this.format = options.format;
+  }
+
+  /**
+   * @param {ConditionalFormatAverageRule} rule
+   */
+  setRule(rule) {
+    this.rule = rule;
+  }
+
+  /**
+   * @param {Format} format
+   */
+  setFormat(format) {
+    this.format = format;
+  }
+}
+
 module.exports = {
   ConditionalFormat,
   ConditionalFormatCellRule,
@@ -395,4 +459,5 @@ module.exports = {
   ConditionalFormatTopRule,
   ConditionalFormatTwoColorScale,
   ConditionalFormatThreeColorScale,
+  ConditionalFormatAverage,
 };

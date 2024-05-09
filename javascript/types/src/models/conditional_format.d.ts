@@ -1,26 +1,108 @@
-export type ConditionalFormatEnumType = ("automatic" | "lowest" | "number" | "percent" | "formula" | "percentile" | "highest");
-export type ConditionalFormatAverageRule = ("aboveAverage" | "belowAverage" | "equalOrAboveAverage" | "equalOrBelowAverage" | "oneStandardDeviationAbove" | "oneStandardDeviationBelow" | "twoStandardDeviationsAbove" | "twoStandardDeviationsBelow" | "threeStandardDeviationsAbove" | "threeStandardDeviationsBelow");
-export type ConditionalFormatDataBarAxisPosition = ("automatic" | "midpoint" | "none");
-export type ConditionalFormatDataBarDirection = ("context" | "leftToRight" | "rightToLeft");
-export type ConditionalFormatDateRule = ("yesterday" | "today" | "tomorrow" | "last7Days" | "lastWeek" | "thisWeek" | "nextWeek" | "lastMonth" | "thisMonth" | "nextMonth");
-export type ConditionalFormatIconType = ("treeArrows" | "threeArrowsGray" | "threeFlags" | "threeTrafficLights" | "threeTrafficLightsWithRim" | "threeSigns" | "threeSymbolsCircled" | "threeSymbols" | "threeStars" | "threeTriangles" | "fourArrows" | "fourArrowsGray" | "fourRedToBlack" | "fourHistograms" | "fourTrafficLights" | "fiveArrows" | "fiveArrowsGray" | "fiveHistograms" | "fiveQuadrants" | "fiveBoxes");
-export type ConditionalFormatValue = (string | number | Date);
-export type ConditionalFormatCellRuleType = ("equalTo" | "notEqualTo" | "greaterThan" | "greaterThanOrEqualTo" | "lessThan" | "lessThanOrEqualTo" | "between" | "notBetween");
-export type ConditionalFormatTextRuleType = ("contains" | "doesNotContain" | "beginsWith" | "endsWith");
-export type ConditionalFormatTopRuleType = ("top" | "bottom" | "topPercent" | "bottomPercent");
-export type ConditionalFormatClassType = ("twoColorScale" | "threeColorScale" | "average" | "blank" | "cell" | "dataBar" | "date" | "duplicate" | "error" | "formula" | "iconSet" | "text" | "top");
+export type ConditionalFormatEnumType =
+  | 'automatic'
+  | 'lowest'
+  | 'number'
+  | 'percent'
+  | 'formula'
+  | 'percentile'
+  | 'highest';
+export type ConditionalFormatAverageRule =
+  | 'aboveAverage'
+  | 'belowAverage'
+  | 'equalOrAboveAverage'
+  | 'equalOrBelowAverage'
+  | 'oneStandardDeviationAbove'
+  | 'oneStandardDeviationBelow'
+  | 'twoStandardDeviationsAbove'
+  | 'twoStandardDeviationsBelow'
+  | 'threeStandardDeviationsAbove'
+  | 'threeStandardDeviationsBelow';
+export type ConditionalFormatDataBarAxisPosition =
+  | 'automatic'
+  | 'midpoint'
+  | 'none';
+export type ConditionalFormatDataBarDirection =
+  | 'context'
+  | 'leftToRight'
+  | 'rightToLeft';
+export type ConditionalFormatDateRule =
+  | 'yesterday'
+  | 'today'
+  | 'tomorrow'
+  | 'last7Days'
+  | 'lastWeek'
+  | 'thisWeek'
+  | 'nextWeek'
+  | 'lastMonth'
+  | 'thisMonth'
+  | 'nextMonth';
+export type ConditionalFormatIconType =
+  | 'treeArrows'
+  | 'threeArrowsGray'
+  | 'threeFlags'
+  | 'threeTrafficLights'
+  | 'threeTrafficLightsWithRim'
+  | 'threeSigns'
+  | 'threeSymbolsCircled'
+  | 'threeSymbols'
+  | 'threeStars'
+  | 'threeTriangles'
+  | 'fourArrows'
+  | 'fourArrowsGray'
+  | 'fourRedToBlack'
+  | 'fourHistograms'
+  | 'fourTrafficLights'
+  | 'fiveArrows'
+  | 'fiveArrowsGray'
+  | 'fiveHistograms'
+  | 'fiveQuadrants'
+  | 'fiveBoxes';
+export type ConditionalFormatValue = string | number | Date;
+export type ConditionalFormatCellRuleType =
+  | 'equalTo'
+  | 'notEqualTo'
+  | 'greaterThan'
+  | 'greaterThanOrEqualTo'
+  | 'lessThan'
+  | 'lessThanOrEqualTo'
+  | 'between'
+  | 'notBetween';
+export type ConditionalFormatTextRuleType =
+  | 'contains'
+  | 'doesNotContain'
+  | 'beginsWith'
+  | 'endsWith';
+export type ConditionalFormatTopRuleType =
+  | 'top'
+  | 'bottom'
+  | 'topPercent'
+  | 'bottomPercent';
+export type ConditionalFormatClassType =
+  | 'twoColorScale'
+  | 'threeColorScale'
+  | 'average'
+  | 'blank'
+  | 'cell'
+  | 'dataBar'
+  | 'date'
+  | 'duplicate'
+  | 'error'
+  | 'formula'
+  | 'iconSet'
+  | 'text'
+  | 'top';
 export type ConditionalFormatColorScaleRule = {
-    /**
-     * - The type of the rule.
-     */
-    type: ConditionalFormatEnumType;
-    /**
-     * - The value of the rule.
-     * /
-     *
-     * /**
-     */
-    value: ConditionalFormatValue;
+  /**
+   * - The type of the rule.
+   */
+  type: ConditionalFormatEnumType;
+  /**
+   * - The value of the rule.
+   * /
+   *
+   * /**
+   */
+  value: ConditionalFormatValue;
 };
 /**
  * @typedef {(
@@ -48,31 +130,45 @@ export type ConditionalFormatColorScaleRule = {
  * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
  */
 export class ConditionalFormat {
-    /**
-     * @param {ConditionalFormatClassType} type
-     * @param {string} [multiRange]
-     * @param {boolean} [stopIfTrue]
-     */
-    constructor(type: ConditionalFormatClassType, multiRange?: string, stopIfTrue?: boolean);
-    /**
-     * @type {number}
-     * @default Math.floor(Math.random() * 1000000)
-     */
-    id: number;
-    /**
-     * @type {ConditionalFormatClassType}
-     */
-    type: ConditionalFormatClassType;
-    /**
-     * @type {string|undefined}
-     * @default undefined
-     */
-    multiRange: string | undefined;
-    /**
-     * @type {boolean|undefined}
-     * @default undefined
-     */
-    stopIfTrue: boolean | undefined;
+  /**
+   * @param {ConditionalFormatClassType} type
+   * @param {string} [multiRange]
+   * @param {boolean} [stopIfTrue]
+   */
+  constructor(
+    type: ConditionalFormatClassType,
+    multiRange?: string,
+    stopIfTrue?: boolean,
+  );
+  /**
+   * @type {number}
+   * @default Math.floor(Math.random() * 1000000)
+   */
+  id: number;
+  /**
+   * @type {ConditionalFormatClassType}
+   */
+  type: ConditionalFormatClassType;
+  /**
+   * @type {string|undefined}
+   * @default undefined
+   */
+  multiRange: string | undefined;
+  /**
+   * @type {boolean|undefined}
+   * @default undefined
+   */
+  stopIfTrue: boolean | undefined;
+  /**
+   * @param {string} multiRange
+   * @returns {void}
+   */
+  setMultiRange(multiRange: string): void;
+  /**
+   * @param {boolean} stopIfTrue
+   * @returns {void}
+   */
+  setStopIfTrue(stopIfTrue: boolean): void;
 }
 /**
  * @typedef {(
@@ -166,19 +262,22 @@ export class ConditionalFormat {
  * @property {ConditionalFormatValueValue} value - The value of the rule.
  */
 export class ConditionalFormatCellRule {
-    /**
-     * @param {ConditionalFormatCellRuleType} type
-     * @param {ConditionalFormatValue} value
-     */
-    constructor(type: ConditionalFormatCellRuleType, value: ConditionalFormatValue);
-    /**
-     * @type {ConditionalFormatCellRuleType}
-     */
-    type: ConditionalFormatCellRuleType;
-    /**
-     * @type {ConditionalFormatValue}
-     */
-    value: ConditionalFormatValue;
+  /**
+   * @param {ConditionalFormatCellRuleType} type
+   * @param {ConditionalFormatValue} value
+   */
+  constructor(
+    type: ConditionalFormatCellRuleType,
+    value: ConditionalFormatValue,
+  );
+  /**
+   * @type {ConditionalFormatCellRuleType}
+   */
+  type: ConditionalFormatCellRuleType;
+  /**
+   * @type {ConditionalFormatValue}
+   */
+  value: ConditionalFormatValue;
 }
 /**
  * @typedef {(
@@ -194,19 +293,19 @@ export class ConditionalFormatCellRule {
  * @property {string} value - The value of the rule.
  */
 export class ConditionalFormatTextRule {
-    /**
-     * @param {ConditionalFormatTextRuleType} type
-     * @param {string} value
-     */
-    constructor(type: ConditionalFormatTextRuleType, value: string);
-    /**
-     * @type {ConditionalFormatTextRuleType}
-     */
-    type: ConditionalFormatTextRuleType;
-    /**
-     * @type {string}
-     */
-    value: string;
+  /**
+   * @param {ConditionalFormatTextRuleType} type
+   * @param {string} value
+   */
+  constructor(type: ConditionalFormatTextRuleType, value: string);
+  /**
+   * @type {ConditionalFormatTextRuleType}
+   */
+  type: ConditionalFormatTextRuleType;
+  /**
+   * @type {string}
+   */
+  value: string;
 }
 /**
  * @typedef {(
@@ -222,19 +321,19 @@ export class ConditionalFormatTextRule {
  * @property {number} value - The value of the rule.
  */
 export class ConditionalFormatTopRule {
-    /**
-     * @param {ConditionalFormatTopRuleType} type
-     * @param {number} value
-     */
-    constructor(type: ConditionalFormatTopRuleType, value: number);
-    /**
-     * @type {ConditionalFormatTopRuleType}
-     */
-    type: ConditionalFormatTopRuleType;
-    /**
-     * @type {number}
-     */
-    value: number;
+  /**
+   * @param {ConditionalFormatTopRuleType} type
+   * @param {number} value
+   */
+  constructor(type: ConditionalFormatTopRuleType, value: number);
+  /**
+   * @type {ConditionalFormatTopRuleType}
+   */
+  type: ConditionalFormatTopRuleType;
+  /**
+   * @type {number}
+   */
+  value: number;
 }
 /**
  * @typedef {Object} ConditionalFormatColorScaleRule
@@ -255,67 +354,59 @@ export class ConditionalFormatTopRule {
  * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
  */
 export class ConditionalFormatTwoColorScale extends ConditionalFormat {
-    /**
-     * @param {Object} [options] - The options object
-     * @param {Color} [options.minColor] - The color for the minimum value.
-     * @param {Color} [options.maxColor] - The color for the maximum value.
-     * @param {ConditionalFormatColorScaleRule} [options.minRule] - The rule for the minimum value.
-     * @param {ConditionalFormatColorScaleRule} [options.maxRule] - The rule for the maximum value.
-     * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
-     * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
-     */
-    constructor(options?: {
-        minColor?: Color;
-        maxColor?: Color;
-        minRule?: ConditionalFormatColorScaleRule;
-        maxRule?: ConditionalFormatColorScaleRule;
-        multiRange?: string;
-        stopIfTrue?: boolean;
-    });
-    /**
-     * @type {Color|undefined}
-     * @default undefined
-     */
-    minColor: Color | undefined;
-    /**
-     * @type {Color|undefined}
-     * @default undefined
-     */
-    maxColor: Color | undefined;
-    /**
-     * @type {ConditionalFormatColorScaleRule|undefined}
-     * @default undefined
-     */
-    minRule: ConditionalFormatColorScaleRule | undefined;
-    /**
-     * @type {ConditionalFormatColorScaleRule|undefined}
-     * @default undefined
-     */
-    maxRule: ConditionalFormatColorScaleRule | undefined;
-    /**
-     * @param {Color} color
-     */
-    setMinColor(color: Color): void;
-    /**
-     * @param {Color} color
-     */
-    setMaxColor(color: Color): void;
-    /**
-     * @param {ConditionalFormatColorScaleRule} rule
-     */
-    setMinRule(rule: ConditionalFormatColorScaleRule): void;
-    /**
-     * @param {ConditionalFormatColorScaleRule} rule
-     */
-    setMaxRule(rule: ConditionalFormatColorScaleRule): void;
-    /**
-     * @param {string} multiRange
-     */
-    setMultiRange(multiRange: string): void;
-    /**
-     * @param {boolean} stopIfTrue
-     */
-    setStopIfTrue(stopIfTrue: boolean): void;
+  /**
+   * @param {Object} [options] - The options object
+   * @param {Color} [options.minColor] - The color for the minimum value.
+   * @param {Color} [options.maxColor] - The color for the maximum value.
+   * @param {ConditionalFormatColorScaleRule} [options.minRule] - The rule for the minimum value.
+   * @param {ConditionalFormatColorScaleRule} [options.maxRule] - The rule for the maximum value.
+   * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+   * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+   */
+  constructor(options?: {
+    minColor?: Color;
+    maxColor?: Color;
+    minRule?: ConditionalFormatColorScaleRule;
+    maxRule?: ConditionalFormatColorScaleRule;
+    multiRange?: string;
+    stopIfTrue?: boolean;
+  });
+  /**
+   * @type {Color|undefined}
+   * @default undefined
+   */
+  minColor: Color | undefined;
+  /**
+   * @type {Color|undefined}
+   * @default undefined
+   */
+  maxColor: Color | undefined;
+  /**
+   * @type {ConditionalFormatColorScaleRule|undefined}
+   * @default undefined
+   */
+  minRule: ConditionalFormatColorScaleRule | undefined;
+  /**
+   * @type {ConditionalFormatColorScaleRule|undefined}
+   * @default undefined
+   */
+  maxRule: ConditionalFormatColorScaleRule | undefined;
+  /**
+   * @param {Color} color
+   */
+  setMinColor(color: Color): void;
+  /**
+   * @param {Color} color
+   */
+  setMaxColor(color: Color): void;
+  /**
+   * @param {ConditionalFormatColorScaleRule} rule
+   */
+  setMinRule(rule: ConditionalFormatColorScaleRule): void;
+  /**
+   * @param {ConditionalFormatColorScaleRule} rule
+   */
+  setMaxRule(rule: ConditionalFormatColorScaleRule): void;
 }
 /**
  * @class ConditionalFormatTreeColorScale
@@ -326,45 +417,88 @@ export class ConditionalFormatTwoColorScale extends ConditionalFormat {
  * @property {ConditionalFormatTwoColorScaleRule} [midRule] - The rule for the mid value.
  */
 export class ConditionalFormatThreeColorScale extends ConditionalFormatTwoColorScale {
-    /**
-     * @param {Object} [options] - The options object
-     * @param {Color} [options.minColor] - The color for the minimum value.
-     * @param {Color} [options.midColor] - The color for the mid value.
-     * @param {Color} [options.maxColor] - The color for the maximum value.
-     * @param {ConditionalFormatColorScaleRule} [options.minRule] - The rule for the minimum value.
-     * @param {ConditionalFormatColorScaleRule} [options.midRule] - The rule for the maximum value.
-     * @param {ConditionalFormatColorScaleRule} [options.maxRule] - The rule for the maximum value.
-     * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
-     * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
-     */
-    constructor(options?: {
-        minColor?: Color;
-        midColor?: Color;
-        maxColor?: Color;
-        minRule?: ConditionalFormatColorScaleRule;
-        midRule?: ConditionalFormatColorScaleRule;
-        maxRule?: ConditionalFormatColorScaleRule;
-        multiRange?: string;
-        stopIfTrue?: boolean;
-    });
-    /**
-     * @type {Color|undefined}
-     * @default undefined
-     */
-    midColor: Color | undefined;
-    /**
-     * @type {ConditionalFormatColorScaleRule|undefined}
-     * @default undefined
-     */
-    midRule: ConditionalFormatColorScaleRule | undefined;
-    /**
-     * @param {Color} color
-     */
-    setMidColor(color: Color): void;
-    /**
-     * @param {ConditionalFormatColorScaleRule} rule
-     */
-    setMidRule(rule: ConditionalFormatColorScaleRule): void;
+  /**
+   * @param {Object} [options] - The options object
+   * @param {Color} [options.minColor] - The color for the minimum value.
+   * @param {Color} [options.midColor] - The color for the mid value.
+   * @param {Color} [options.maxColor] - The color for the maximum value.
+   * @param {ConditionalFormatColorScaleRule} [options.minRule] - The rule for the minimum value.
+   * @param {ConditionalFormatColorScaleRule} [options.midRule] - The rule for the maximum value.
+   * @param {ConditionalFormatColorScaleRule} [options.maxRule] - The rule for the maximum value.
+   * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+   * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+   */
+  constructor(options?: {
+    minColor?: Color;
+    midColor?: Color;
+    maxColor?: Color;
+    minRule?: ConditionalFormatColorScaleRule;
+    midRule?: ConditionalFormatColorScaleRule;
+    maxRule?: ConditionalFormatColorScaleRule;
+    multiRange?: string;
+    stopIfTrue?: boolean;
+  });
+  /**
+   * @type {Color|undefined}
+   * @default undefined
+   */
+  midColor: Color | undefined;
+  /**
+   * @type {ConditionalFormatColorScaleRule|undefined}
+   * @default undefined
+   */
+  midRule: ConditionalFormatColorScaleRule | undefined;
+  /**
+   * @param {Color} color
+   */
+  setMidColor(color: Color): void;
+  /**
+   * @param {ConditionalFormatColorScaleRule} rule
+   */
+  setMidRule(rule: ConditionalFormatColorScaleRule): void;
 }
-import Color = require("./color");
+/**
+ * @class ConditionalFormatAverage
+ * @classdesc Represents an Average/Standard Deviation style conditional format
+ * Is used to represent a Average or Standard Deviation style conditional format in Excel
+ * @property {ConditionalFormatAverageRule} rule - The rule for the average value.(default: 'aboveAverage')
+ * @property {Format} [format] - The format for the average value.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+export class ConditionalFormatAverage extends ConditionalFormat {
+  /**
+   * @param {Object} [options] - The options object
+   * @param {ConditionalFormatAverageRule} [options.rule] - The rule for the average value.(default: 'aboveAverage')
+   * @param {Format} [options.format] - The format for the average value.
+   * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+   * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+   */
+  constructor(options?: {
+    rule?: ConditionalFormatAverageRule;
+    format?: Format;
+    multiRange?: string;
+    stopIfTrue?: boolean;
+  });
+  /**
+   * @type {ConditionalFormatAverageRule}
+   * @default 'aboveAverage'
+   */
+  rule: ConditionalFormatAverageRule;
+  /**
+   * @type {Format|undefined}
+   * @default undefined
+   */
+  format: Format | undefined;
+  /**
+   * @param {ConditionalFormatAverageRule} rule
+   */
+  setRule(rule: ConditionalFormatAverageRule): void;
+  /**
+   * @param {Format} format
+   */
+  setFormat(format: Format): void;
+}
+import Color = require('./color');
+import Format = require('./format');
 //# sourceMappingURL=conditional_format.d.ts.map
