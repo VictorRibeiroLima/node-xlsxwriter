@@ -1,4 +1,3 @@
-export = Sheet;
 /**
  *
  * @class Sheet
@@ -6,8 +5,9 @@ export = Sheet;
  * @property {string} name - The name of the sheet
  * @property {Cell[]} cells - The cells in the sheet
  * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
+ * @property {ArrayFormulaSheetValue[]} arrayFormulas - The array formulas of the sheet
  */
-declare class Sheet {
+export class Sheet {
     /**
      * @param {string} name - The name of the sheet
      */
@@ -28,6 +28,11 @@ declare class Sheet {
      */
     conditionalFormats: ConditionalFormatSheetValue[];
     /**
+     * The array formulas of the sheet
+     * @type {ArrayFormulaSheetValue[]}
+     */
+    arrayFormulas: ArrayFormulaSheetValue[];
+    /**
      * Adds a conditional format to the sheet
      * @param {Object} opts - The options for the conditional format
      * @param {number} opts.firstRow - The first row of the range
@@ -44,6 +49,11 @@ declare class Sheet {
         lastColumn: number;
         format: ConditionalFormat;
     }): void;
+    /**
+     * adds an array formula to the sheet
+     * @param {ArrayFormulaSheetValue} arrayFormula
+     */
+    addArrayFormula(arrayFormula: ArrayFormulaSheetValue): void;
     /**
      * Writes a cell to the sheet
      *
@@ -145,6 +155,65 @@ declare class Sheet {
         };
     }): void;
 }
+/**
+ * @class ArrayFormulaSheetValue
+ * @classdesc Represents the values of an array formula sheet.
+ * @property {number} firstRow - The first row of the range
+ * @property {number} lastRow - The last row of the range
+ * @property {number} firstColumn - The first column of the range
+ * @property {number} lastColumn - The last column of the range
+ * @property {Formula} formula - The formula of the range
+ * @property {Format} [format] - The format of the range
+ */
+export class ArrayFormulaSheetValue {
+    /**
+     * @param {Object} opts - The options for the array formula
+     * @param {number} opts.firstRow - The first row of the range
+     * @param {number} opts.lastRow - The last row of the range
+     * @param {number} opts.firstColumn - The first column of the range
+     * @param {number} opts.lastColumn - The last column of the range
+     * @param {Formula} opts.formula - The formula of the range
+     * @param {Format} [opts.format] - The format of the range
+     */
+    constructor(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstColumn: number;
+        lastColumn: number;
+        formula: Formula;
+        format?: Format;
+    });
+    /**
+     * The first row of the range
+     * @type {number}
+     */
+    firstRow: number;
+    /**
+     * The last row of the range
+     * @type {number}
+     */
+    lastRow: number;
+    /**
+     * The first column of the range
+     * @type {number}
+     */
+    firstColumn: number;
+    /**
+     * The last column of the range
+     * @type {number}
+     */
+    lastColumn: number;
+    /**
+     * The formula of the range
+     * @type {Formula}
+     */
+    formula: Formula;
+    /**
+     * The format of the range
+     * @type {Format|undefined}
+     */
+    format: Format | undefined;
+}
 import Cell = require("./cell");
 /**
  * @class ConditionalFormatSheetValue
@@ -195,4 +264,5 @@ import { ConditionalFormat } from "./conditional_format";
 import Link = require("./link");
 import Formula = require("./formula");
 import Format = require("./format");
+export {};
 //# sourceMappingURL=sheet.d.ts.map

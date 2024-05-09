@@ -7,7 +7,7 @@ const saveToBase64 = funcs.saveToBase64;
 const saveToBase64Sync = funcs.saveToBase64Sync;
 // @ts-check
 
-const Sheet = require('./sheet');
+const { Sheet } = require('./sheet');
 /**
  *
  * @class Workbook

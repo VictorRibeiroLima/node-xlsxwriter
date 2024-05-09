@@ -54,12 +54,69 @@ class ConditionalFormatSheetValue {
 }
 
 /**
+ * @class ArrayFormulaSheetValue
+ * @classdesc Represents the values of an array formula sheet.
+ * @property {number} firstRow - The first row of the range
+ * @property {number} lastRow - The last row of the range
+ * @property {number} firstColumn - The first column of the range
+ * @property {number} lastColumn - The last column of the range
+ * @property {Formula} formula - The formula of the range
+ * @property {Format} [format] - The format of the range
+ */
+class ArrayFormulaSheetValue {
+  /**
+   * @param {Object} opts - The options for the array formula
+   * @param {number} opts.firstRow - The first row of the range
+   * @param {number} opts.lastRow - The last row of the range
+   * @param {number} opts.firstColumn - The first column of the range
+   * @param {number} opts.lastColumn - The last column of the range
+   * @param {Formula} opts.formula - The formula of the range
+   * @param {Format} [opts.format] - The format of the range
+   */
+  constructor(opts) {
+    const { firstRow, lastRow, firstColumn, lastColumn, formula } = opts;
+    /**
+     * The first row of the range
+     * @type {number}
+     */
+    this.firstRow = firstRow;
+    /**
+     * The last row of the range
+     * @type {number}
+     */
+    this.lastRow = lastRow;
+    /**
+     * The first column of the range
+     * @type {number}
+     */
+    this.firstColumn = firstColumn;
+    /**
+     * The last column of the range
+     * @type {number}
+     */
+    this.lastColumn = lastColumn;
+    /**
+     * The formula of the range
+     * @type {Formula}
+     */
+    this.formula = formula;
+
+    /**
+     * The format of the range
+     * @type {Format|undefined}
+     */
+    this.format = opts.format ?? undefined;
+  }
+}
+
+/**
  *
  * @class Sheet
  * @classdesc A sheet is a collection of cells.
  * @property {string} name - The name of the sheet
  * @property {Cell[]} cells - The cells in the sheet
  * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
+ * @property {ArrayFormulaSheetValue[]} arrayFormulas - The array formulas of the sheet
  */
 class Sheet {
   /**
@@ -82,6 +139,12 @@ class Sheet {
      * @type {ConditionalFormatSheetValue[]}
      */
     this.conditionalFormats = [];
+
+    /**
+     * The array formulas of the sheet
+     * @type {ArrayFormulaSheetValue[]}
+     */
+    this.arrayFormulas = [];
   }
 
   /**
@@ -104,6 +167,14 @@ class Sheet {
       format,
     );
     this.conditionalFormats.push(conditionalSheetValue);
+  }
+
+  /**
+   * adds an array formula to the sheet
+   * @param {ArrayFormulaSheetValue} arrayFormula
+   */
+  addArrayFormula(arrayFormula) {
+    this.arrayFormulas.push(arrayFormula);
   }
 
   /**
@@ -263,4 +334,4 @@ class Sheet {
   }
 }
 
-module.exports = Sheet;
+module.exports = { Sheet, ArrayFormulaSheetValue };

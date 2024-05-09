@@ -6,7 +6,7 @@ use neon::{
     result::NeonResult,
     types::{JsArray, JsObject, JsValue},
 };
-use rust_xlsxwriter::{Workbook, Worksheet};
+use rust_xlsxwriter::{worksheet, Workbook, Worksheet};
 
 use self::{error::NodeXlsxError, sheet::NodeXlsxSheet, types::NodeXlsxTypes};
 
@@ -64,61 +64,7 @@ impl NodeXlsxWorkbook {
     fn parse(self) -> Result<Workbook, NodeXlsxError> {
         let mut workbook = rust_xlsxwriter::Workbook::new();
         for sheet in self.sheets {
-            let format_map = sheet.format_map;
-            let conditional_format_map = sheet.conditional_format_map;
-            let mut worksheet = Worksheet::new();
-            worksheet.set_name(&sheet.name)?;
-            for cf in sheet.conditional_formats {
-                cf.set_conditional_format(&mut worksheet, &conditional_format_map)?;
-            }
-            for cell in sheet.cells {
-                match cell.cell_type {
-                    NodeXlsxTypes::String(value) | NodeXlsxTypes::Unknown(value) => {
-                        if let Some(format) = cell.format {
-                            let format = format_map.get(&format).unwrap();
-                            worksheet
-                                .write_string_with_format(cell.row, cell.col, &value, format)?;
-                        } else {
-                            worksheet.write_string(cell.row, cell.col, &value)?;
-                        }
-                    }
-                    NodeXlsxTypes::Number(value) => {
-                        if let Some(format) = cell.format {
-                            let format = format_map.get(&format).unwrap();
-                            worksheet
-                                .write_number_with_format(cell.row, cell.col, value, format)?;
-                        } else {
-                            worksheet.write_number(cell.row, cell.col, value)?;
-                        }
-                    }
-                    NodeXlsxTypes::Link(value) => {
-                        if let Some(format) = cell.format {
-                            let format = format_map.get(&format).unwrap();
-                            worksheet.write_url_with_format(cell.row, cell.col, value, format)?;
-                        } else {
-                            worksheet.write_url(cell.row, cell.col, value)?;
-                        }
-                    }
-                    NodeXlsxTypes::Date(value) => {
-                        if let Some(format) = cell.format {
-                            let format = format_map.get(&format).unwrap();
-                            worksheet
-                                .write_datetime_with_format(cell.row, cell.col, value, format)?;
-                        } else {
-                            worksheet.write_datetime(cell.row, cell.col, value)?;
-                        }
-                    }
-                    NodeXlsxTypes::Formula(value) => {
-                        if let Some(format) = cell.format {
-                            let format = format_map.get(&format).unwrap();
-                            worksheet
-                                .write_formula_with_format(cell.row, cell.col, value, format)?;
-                        } else {
-                            worksheet.write_formula(cell.row, cell.col, value)?;
-                        }
-                    }
-                }
-            }
+            let worksheet = sheet.try_into().unwrap(); //TODO: Handle error
             workbook.push_worksheet(worksheet);
         }
         return Ok(workbook);

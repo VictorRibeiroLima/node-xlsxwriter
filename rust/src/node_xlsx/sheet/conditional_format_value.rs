@@ -17,6 +17,7 @@ use crate::node_xlsx::conditional_format::{
     data_bar::DataBar,
     date::Date,
     duplicate::Duplicate,
+    error::Error,
     scale::{ThreeColorScale, TwoColorScale},
 };
 
@@ -117,6 +118,11 @@ impl ConditionalFormatSheetValue {
                     conditional_format_map,
                     format_map,
                 )?;
+                id
+            }
+            "error" => {
+                let id =
+                    Error::create_and_set_to_map(cx, format, conditional_format_map, format_map)?;
                 id
             }
             _ => {

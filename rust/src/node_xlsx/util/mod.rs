@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use chrono::{DateTime, NaiveDateTime};
 use neon::{
     context::{Context, FunctionContext},
@@ -7,6 +9,8 @@ use neon::{
     types::{JsBoolean, JsDate, JsNull, JsNumber, JsObject, JsString, JsUndefined, JsValue, Value},
 };
 use rust_xlsxwriter::{Formula, Url};
+
+use super::format::NodeXlsxFormat;
 
 pub fn any_to_string<'a>(
     cx: &mut FunctionContext<'a>,
@@ -86,7 +90,7 @@ pub fn js_date_to_naive_date_time<'a>(
 pub fn any_to_formula<'a>(
     cx: &mut FunctionContext<'a>,
     js_any: Handle<JsValue>,
-) -> NeonResult<Formula> {
+) -> NeonResult<(Formula, bool)> {
     if let Ok(obj) = js_any.downcast::<JsObject, _>(cx) {
         let formula = object_to_formula(cx, obj)?;
         return Ok(formula);
@@ -100,7 +104,7 @@ pub fn any_to_formula<'a>(
 pub fn object_to_formula<'a>(
     cx: &mut FunctionContext<'a>,
     obj: Handle<JsObject>,
-) -> NeonResult<rust_xlsxwriter::Formula> {
+) -> NeonResult<(Formula, bool)> {
     let formula: Handle<JsString> = obj.get(cx, "formula")?;
     let formula = formula.value(cx);
 
@@ -122,6 +126,12 @@ pub fn object_to_formula<'a>(
         None => None,
     };
 
+    let dynamic: Option<Handle<JsBoolean>> = obj.get_opt(cx, "dynamic")?;
+    let dynamic = match dynamic {
+        Some(dynamic) => dynamic.value(cx),
+        None => false,
+    };
+
     let mut formula = Formula::new(formula);
 
     if let Some(result) = result {
@@ -140,7 +150,7 @@ pub fn object_to_formula<'a>(
         }
     }
 
-    Ok(formula)
+    Ok((formula, dynamic))
 }
 
 pub fn object_to_url<'a>(cx: &mut FunctionContext<'a>, obj: Handle<JsObject>) -> NeonResult<Url> {
@@ -156,4 +166,18 @@ pub fn object_to_url<'a>(cx: &mut FunctionContext<'a>, obj: Handle<JsObject>) ->
         url = url.set_tip(tip.value(cx));
     }
     Ok(url)
+}
+
+pub fn create_format(
+    cx: &mut FunctionContext,
+    obj: Handle<JsObject>,
+    format_map: &mut HashMap<u32, rust_xlsxwriter::Format>,
+) -> NeonResult<u32> {
+    let id: Handle<JsNumber> = obj.get(cx, "id")?;
+    let id = id.value(cx) as u32;
+    if !format_map.contains_key(&id) {
+        let format = NodeXlsxFormat::from_js_object(cx, obj)?;
+        format_map.insert(id, format.into());
+    }
+    Ok(id)
 }

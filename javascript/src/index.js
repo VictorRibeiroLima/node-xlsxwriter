@@ -1,7 +1,7 @@
 // @ts-check
 
 const Workbook = require('./models/workbook');
-const Sheet = require('./models/sheet');
+const { Sheet, ArrayFormulaSheetValue } = require('./models/sheet');
 const Color = require('./models/color');
 const Format = require('./models/format');
 const Formula = require('./models/formula');
@@ -37,4 +37,5 @@ module.exports = {
   ConditionalFormatDate,
   ConditionalFormatDuplicate,
   ConditionalFormatError,
+  ArrayFormulaSheetValue,
 };

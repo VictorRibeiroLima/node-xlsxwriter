@@ -7,6 +7,7 @@
  * @property {string} [result] - The result of the formula.
  * @property {boolean} [useFutureFunctions=false] - Enable the use of newer Excel future functions in the formula
  * @property {boolean} [useTableFunctions=false] - Enable backward compatible formulas in table.
+ * @property {boolean} [dynamic=false] - Enable the use of dynamic arrays in the formula
  */
 class Formula {
   /**
@@ -15,6 +16,7 @@ class Formula {
    * @param {string} [opts.result] - The result of the formula.
    * @param {boolean} [opts.useFutureFunctions=false] - Enable the use of newer Excel future functions in the formula
    * @param {boolean} [opts.useTableFunctions=false] - Enable backward compatible formulas in table.
+   * @param {boolean} [opts.dynamic=false] - Enable the use of dynamic arrays in the formula
    */
   constructor(opts) {
     /**
@@ -37,6 +39,12 @@ class Formula {
      * @type {boolean}
      */
     this.useTableFunctions = opts.useTableFunctions || false;
+
+    /**
+     * Enable the use of dynamic arrays in the formula
+     * @type {boolean}
+     */
+    this.dynamic = opts.dynamic || false;
   }
 
   /**

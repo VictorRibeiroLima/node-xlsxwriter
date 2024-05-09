@@ -16,7 +16,7 @@ pub enum NodeXlsxTypes {
     Link(Url),
     Date(NaiveDateTime),
     Unknown(String), // This is a catch-all for any type
-    Formula(Formula),
+    Formula((Formula, bool)),
 }
 
 impl NodeXlsxTypes {

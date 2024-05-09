@@ -6,6 +6,7 @@ export = Formula;
  * @property {string} [result] - The result of the formula.
  * @property {boolean} [useFutureFunctions=false] - Enable the use of newer Excel future functions in the formula
  * @property {boolean} [useTableFunctions=false] - Enable backward compatible formulas in table.
+ * @property {boolean} [dynamic=false] - Enable the use of dynamic arrays in the formula
  */
 declare class Formula {
     /**
@@ -14,12 +15,14 @@ declare class Formula {
      * @param {string} [opts.result] - The result of the formula.
      * @param {boolean} [opts.useFutureFunctions=false] - Enable the use of newer Excel future functions in the formula
      * @param {boolean} [opts.useTableFunctions=false] - Enable backward compatible formulas in table.
+     * @param {boolean} [opts.dynamic=false] - Enable the use of dynamic arrays in the formula
      */
     constructor(opts: {
         formula: string;
         result?: string;
         useFutureFunctions?: boolean;
         useTableFunctions?: boolean;
+        dynamic?: boolean;
     });
     /**
      * The formula string.
@@ -41,6 +44,11 @@ declare class Formula {
      * @type {boolean}
      */
     useTableFunctions: boolean;
+    /**
+     * Enable the use of dynamic arrays in the formula
+     * @type {boolean}
+     */
+    dynamic: boolean;
     /**
      * Set the result of the formula.
      * @param {string} result - The result of the formula.
