@@ -8,6 +8,7 @@ const Link = require('./models/link');
 const { Border, DiagonalBorder } = require('./models/border');
 const {
   ConditionalFormatTwoColorScale,
+  ConditionalFormatThreeColorScale,
 } = require('./models/conditional_format');
 
 module.exports = {
@@ -19,4 +20,5 @@ module.exports = {
   Border,
   DiagonalBorder,
   ConditionalFormatTwoColorScale,
+  ConditionalFormatThreeColorScale,
 };

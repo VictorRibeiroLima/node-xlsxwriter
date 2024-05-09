@@ -185,7 +185,6 @@ class ConditionalFormatTopRule {
  * "average" |
  * "blank" |
  * "cell" |
- * "customIcon" |
  * "dataBar" |
  * "date" |
  * "duplicate" |
@@ -193,13 +192,13 @@ class ConditionalFormatTopRule {
  * "formula" |
  * "iconSet" |
  * "text" |
- * "top"|
- * "value"
+ * "top"
  * )} ConditionalFormatClassType
  *
  * @class ConditionalFormat
  * @description Represents a generic conditional format.
  * @abstract
+ * @property {number} id - The id of the conditional format.
  * @property {ConditionalFormatType} type - The type of the conditional format.
  * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
  * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
@@ -211,6 +210,12 @@ class ConditionalFormat {
    * @param {boolean} [stopIfTrue]
    */
   constructor(type, multiRange, stopIfTrue) {
+    /**
+     * @type {number}
+     * @default Math.floor(Math.random() * 1000000)
+     */
+    this.id = Math.floor(Math.random() * 1000000);
+
     /**
      * @type {ConditionalFormatClassType}
      */
@@ -231,10 +236,12 @@ class ConditionalFormat {
 }
 
 /**
- * @typedef {Object} ConditionalFormatTwoColorScaleRule
+ * @typedef {Object} ConditionalFormatColorScaleRule
  * @property {ConditionalFormatEnumType} type - The type of the rule.
  * @property {ConditionalFormatValue} value - The value of the rule.
- *
+ * /
+
+/**
  * @class ConditionalFormatTwoColorScale
  * @classdesc Represents a 2 Color Scale conditional format.
  * Used to represent a Cell style conditional format in Excel. A 2 Color Scale Cell conditional format shows a per cell color gradient from the minimum value to the maximum value.
@@ -251,8 +258,8 @@ class ConditionalFormatTwoColorScale extends ConditionalFormat {
    * @param {Object} [options] - The options object
    * @param {Color} [options.minColor] - The color for the minimum value.
    * @param {Color} [options.maxColor] - The color for the maximum value.
-   * @param {ConditionalFormatTwoColorScaleRule} [options.minRule] - The rule for the minimum value.
-   * @param {ConditionalFormatTwoColorScaleRule} [options.maxRule] - The rule for the maximum value.
+   * @param {ConditionalFormatColorScaleRule} [options.minRule] - The rule for the minimum value.
+   * @param {ConditionalFormatColorScaleRule} [options.maxRule] - The rule for the maximum value.
    * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
    * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
    */
@@ -271,13 +278,13 @@ class ConditionalFormatTwoColorScale extends ConditionalFormat {
     this.maxColor = options.maxColor;
 
     /**
-     * @type {ConditionalFormatTwoColorScaleRule|undefined}
+     * @type {ConditionalFormatColorScaleRule|undefined}
      * @default undefined
      */
     this.minRule = options.minRule;
 
     /**
-     * @type {ConditionalFormatTwoColorScaleRule|undefined}
+     * @type {ConditionalFormatColorScaleRule|undefined}
      * @default undefined
      */
     this.maxRule = options.maxRule;
@@ -298,14 +305,14 @@ class ConditionalFormatTwoColorScale extends ConditionalFormat {
   }
 
   /**
-   * @param {ConditionalFormatTwoColorScaleRule} rule
+   * @param {ConditionalFormatColorScaleRule} rule
    */
   setMinRule(rule) {
     this.minRule = rule;
   }
 
   /**
-   * @param {ConditionalFormatTwoColorScaleRule} rule
+   * @param {ConditionalFormatColorScaleRule} rule
    */
   setMaxRule(rule) {
     this.maxRule = rule;
@@ -326,10 +333,52 @@ class ConditionalFormatTwoColorScale extends ConditionalFormat {
   }
 }
 
+/**
+ * @class ConditionalFormatTreeColorScale
+ * @classdesc Represents a 3 Color Scale conditional format.
+ * Used to represent a Cell style conditional format in Excel. A 3 Color Scale Cell conditional format shows a per cell color gradient from the minimum value to the maximum value.
+ * @extends ConditionalFormatTwoColorScale
+ * @property {Color} [midColor] - The color for the mid value.(If not set, Excel will use the default color for the mid value)
+ * @property {ConditionalFormatTwoColorScaleRule} [midRule] - The rule for the mid value.
+ */
+class ConditionalFormatThreeColorScale extends ConditionalFormatTwoColorScale {
+  /**
+   * @param {Object} [options] - The options object
+   * @param {Color} [options.minColor] - The color for the minimum value.
+   * @param {Color} [options.midColor] - The color for the mid value.
+   * @param {Color} [options.maxColor] - The color for the maximum value.
+   * @param {ConditionalFormatColorScaleRule} [options.minRule] - The rule for the minimum value.
+   * @param {ConditionalFormatColorScaleRule} [options.midRule] - The rule for the maximum value.
+   * @param {ConditionalFormatColorScaleRule} [options.maxRule] - The rule for the maximum value.
+   * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+   * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+   */
+  constructor(options = {}) {
+    super(options);
+    /**
+     * @type {ConditionalFormatClassType}
+     */
+    this.type = 'threeColorScale';
+
+    /**
+     * @type {Color|undefined}
+     * @default undefined
+     */
+    this.midColor = options.midColor;
+
+    /**
+     * @type {ConditionalFormatColorScaleRule|undefined}
+     * @default undefined
+     */
+    this.midRule = options.midRule;
+  }
+}
+
 module.exports = {
   ConditionalFormat,
   ConditionalFormatCellRule,
   ConditionalFormatTextRule,
   ConditionalFormatTopRule,
   ConditionalFormatTwoColorScale,
+  ConditionalFormatThreeColorScale,
 };
