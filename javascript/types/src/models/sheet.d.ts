@@ -5,6 +5,7 @@ export = Sheet;
  * @classdesc A sheet is a collection of cells.
  * @property {string} name - The name of the sheet
  * @property {Cell[]} cells - The cells in the sheet
+ * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
  */
 declare class Sheet {
     /**
@@ -21,6 +22,28 @@ declare class Sheet {
      * @type {Cell[]}
      */
     cells: Cell[];
+    /**
+     * The conditional format values of the sheet
+     * @type {ConditionalFormatSheetValue[]}
+     */
+    conditionalFormats: ConditionalFormatSheetValue[];
+    /**
+     * Adds a conditional format to the sheet
+     * @param {Object} opts - The options for the conditional format
+     * @param {number} opts.firstRow - The first row of the range
+     * @param {number} opts.lastRow - The last row of the range
+     * @param {number} opts.firstColumn - The first column of the range
+     * @param {number} opts.lastColumn - The last column of the range
+     * @param {ConditionalFormat} opts.format - The format of the range
+     * @returns {void}
+     */
+    addConditionalFormat(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstColumn: number;
+        lastColumn: number;
+        format: ConditionalFormat;
+    }): void;
     /**
      * Writes a cell to the sheet
      *
@@ -114,6 +137,52 @@ declare class Sheet {
     }): void;
 }
 import Cell = require("./cell");
+/**
+ * @class ConditionalFormatSheetValue
+ * @classdesc Represents the values of a conditional format sheet.
+ * @property {number} firstRow - The first row of the range
+ * @property {number} lastRow - The last row of the range
+ * @property {number} firstColumn - The first column of the range
+ * @property {number} lastColumn - The last column of the range
+ * @property {ConditionalFormat} format - The format of the range
+ *
+ */
+declare class ConditionalFormatSheetValue {
+    /**
+     * @param {number} firstRow - The first row of the range
+     * @param {number} lastRow - The last row of the range
+     * @param {number} firstColumn - The first column of the range
+     * @param {number} lastColumn - The last column of the range
+     * @param {ConditionalFormat} format - The format of the range
+     */
+    constructor(firstRow: number, lastRow: number, firstColumn: number, lastColumn: number, format: ConditionalFormat);
+    /**
+     * The first row of the range
+     * @type {number}
+     */
+    firstRow: number;
+    /**
+     * The last row of the range
+     * @type {number}
+     */
+    lastRow: number;
+    /**
+     * The first column of the range
+     * @type {number}
+     */
+    firstColumn: number;
+    /**
+     * The last column of the range
+     * @type {number}
+     */
+    lastColumn: number;
+    /**
+     * The format of the range
+     * @type {ConditionalFormat}
+     */
+    format: ConditionalFormat;
+}
+import { ConditionalFormat } from "./conditional_format";
 import Link = require("./link");
 import Format = require("./format");
 //# sourceMappingURL=sheet.d.ts.map

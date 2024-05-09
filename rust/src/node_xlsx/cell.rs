@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use super::{format::Format, types::NodeXlsxTypes};
+use super::{format::NodeXlsxFormat, types::NodeXlsxTypes};
 use neon::{
     context::{Context, FunctionContext},
     handle::Handle,
@@ -90,7 +90,7 @@ impl NodeXlsxCell {
         let id: Handle<JsNumber> = obj.get(cx, "id")?;
         let id = id.value(cx) as u32;
         if !format_map.contains_key(&id) {
-            let format = Format::from_js_object(cx, obj)?;
+            let format = NodeXlsxFormat::from_js_object(cx, obj)?;
             format_map.insert(id, format.into());
         }
         Ok(id)

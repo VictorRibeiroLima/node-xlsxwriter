@@ -13,10 +13,12 @@ use self::{error::NodeXlsxError, sheet::NodeXlsxSheet, types::NodeXlsxTypes};
 mod border;
 mod cell;
 mod color;
+mod conditional_format;
 mod error;
 mod format;
 mod sheet;
 mod types;
+mod util;
 
 pub struct NodeXlsxWorkbook {
     sheets: Vec<NodeXlsxSheet>,
@@ -63,8 +65,12 @@ impl NodeXlsxWorkbook {
         let mut workbook = rust_xlsxwriter::Workbook::new();
         for sheet in self.sheets {
             let format_map = sheet.format_map;
+            let conditional_format_map = sheet.conditional_format_map;
             let mut worksheet = Worksheet::new();
             worksheet.set_name(&sheet.name)?;
+            for cf in sheet.conditional_formats {
+                cf.set_conditional_format(&mut worksheet, &conditional_format_map)?;
+            }
             for cell in sheet.cells {
                 match cell.cell_type {
                     NodeXlsxTypes::String(value) | NodeXlsxTypes::Unknown(value) => {

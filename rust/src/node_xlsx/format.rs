@@ -12,7 +12,7 @@ use super::{
     color::Color,
 };
 
-pub struct Format {
+pub struct NodeXlsxFormat {
     align: Option<FormatAlign>,
     background_color: Option<Color>,
     bold: Option<bool>,
@@ -40,7 +40,7 @@ pub struct Format {
     underline: Option<FormatUnderline>,
 }
 
-impl Format {
+impl NodeXlsxFormat {
     pub fn from_js_object(cx: &mut FunctionContext, obj: Handle<JsObject>) -> NeonResult<Self> {
         let result = Self::inner_from_object(cx, &obj);
         match result {
@@ -234,7 +234,7 @@ impl Format {
     }
 }
 
-impl Into<rust_xlsxwriter::Format> for Format {
+impl Into<rust_xlsxwriter::Format> for NodeXlsxFormat {
     fn into(self) -> rust_xlsxwriter::Format {
         let mut format = rust_xlsxwriter::Format::new();
 
