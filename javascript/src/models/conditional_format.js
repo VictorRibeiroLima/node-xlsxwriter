@@ -774,6 +774,53 @@ class ConditionalFormatDate extends ConditionalFormat {
   }
 }
 
+/**
+ * @class ConditionalFormatDuplicate
+ * @classdesc Represents a Duplicate/Unique conditional format.
+ * @extends ConditionalFormat
+ * @property {boolean} invert - Inverts the conditional format.
+ * @property {Format} [format] - The format for the average value.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+class ConditionalFormatDuplicate extends ConditionalFormat {
+  /**
+   * @param {Object} [options] - The options object
+   * @param {boolean} [options.invert] - Inverts the conditional format.
+   * @param {Format} [options.format] - The format for the average value.
+   * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+   * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+   */
+  constructor(options = {}) {
+    super('duplicate', options.multiRange, options.stopIfTrue);
+    /**
+     * @type {boolean}
+     * @default false
+     */
+    this.invert = options.invert || false;
+
+    /**
+     * @type {Format|undefined}
+     * @default undefined
+     */
+    this.format = options.format;
+  }
+
+  /**
+   * @param {boolean} invert
+   */
+  setInvert(invert) {
+    this.invert = invert;
+  }
+
+  /**
+   * @param {Format} format
+   */
+  setFormat(format) {
+    this.format = format;
+  }
+}
+
 module.exports = {
   ConditionalFormat,
   ConditionalFormatTextRule,
@@ -785,4 +832,5 @@ module.exports = {
   ConditionalFormatCell,
   ConditionalFormatDataBar,
   ConditionalFormatDate,
+  ConditionalFormatDuplicate,
 };

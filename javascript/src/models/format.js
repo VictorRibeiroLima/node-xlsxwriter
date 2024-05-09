@@ -55,7 +55,7 @@ const Color = require('./color');
  * @class Format
  * @classdesc Represents a format
  * @property {number} id - the id of the format (do not set this directly)
- * @property {FormatAlign} [align] - The alignment of the cell
+ * @property {FormatAlign|undefined} [align=undefined] - The alignment of the cell
  * @property {Color} [backgroundColor] - The background color of the cell
  * @property {boolean} [bold] - If the font is bold
  * @property {Border} [leftBorder] - The left border of the cell
@@ -140,30 +140,179 @@ class Format {
     underline,
   } = {}) {
     this.id = Math.floor(Math.random() * 1_000_000);
+    /**
+     * The alignment of the cell
+     * @type {?FormatAlign}
+     * @default undefined
+     */
     this.align = align;
+
+    /**
+     * The background color of the cell
+     * @type {?Color}
+     * @default undefined
+     */
     this.backgroundColor = backgroundColor;
+
+    /**
+     * If the font is bold
+     * @type {?boolean} [bold]
+     * @default undefined
+     */
     this.bold = bold;
+
+    /**
+     * The left border of the cell
+     * @type {?Border}
+     * @default undefined
+     */
     this.leftBorder = leftBorder;
+
+    /**
+     * The right border of the cell
+     * @type {?Border}
+     * @default undefined
+     */
     this.rightBorder = rightBorder;
+
+    /**
+     * The top border of the cell
+     * @type {?Border}
+     * @default undefined
+     */
     this.topBorder = topBorder;
+
+    /**
+     * The bottom border of the cell
+     * @type {?Border}
+     * @default undefined
+     */
     this.bottomBorder = bottomBorder;
+
+    /**
+     * The diagonal border of the cell
+     * @type {?Border}
+     * @default undefined
+     */
     this.diagonalBorder = diagonalBorder;
+
+    /**
+     * The charset of the cell
+     * @type {?number}
+     * @default undefined
+     */
     this.charset = charset;
+
+    /**
+     * The font color of the cell
+     * @type {?Color}
+     * @default undefined
+     */
     this.fontColor = fontColor;
+
+    /**
+     * The font family of the cell
+     * @type {?number}
+     * @default undefined
+     */
     this.fontFamily = fontFamily;
+
+    /**
+     * The font name of the cell
+     * @type {?string}
+     * @default undefined
+     */
     this.fontName = fontName;
+
+    /**
+     * The font scheme of the cell
+     * @type {?string}
+     * @default undefined
+     */
     this.fontScheme = fontScheme;
+
+    /**
+     * The font size of the cell
+     * @type {?number}
+     * @default undefined
+     */
     this.fontSize = fontSize;
+
+    /**
+     * If the font is strikethrough
+     * @type {?boolean}
+     * @default undefined
+     */
     this.strikeThrough = strikeThrough;
+
+    /**
+     * The foreground color of the cell
+     * @type {?Color}
+     * @default undefined
+     */
     this.foregroundColor = foregroundColor;
+
+    /**
+     * If the cell is hidden
+     * @type {?boolean}
+     * @default undefined
+     */
     this.hidden = hidden;
+
+    /**
+     * The hyperlink of the cell
+     * @type {?boolean}
+     * @default undefined
+     */
     this.hyperlink = hyperlink;
+
+    /**
+     * The indent of the cell
+     * @type {?number}
+     * @default undefined
+     */
     this.indent = indent;
+
+    /**
+     * If the font is italic
+     * @type {?boolean}
+     * @default undefined
+     */
     this.italic = italic;
+
+    /**
+     * If the cell is locked
+     * @type {?boolean}
+     * @default undefined
+     */
     this.locked = locked;
+
+    /**
+     * The number format of the cell
+     * @type {?string}
+     * @default undefined
+     */
     this.numFmt = numFmt;
+
+    /**
+     * The number format ID of the cell
+     * @type {?number}
+     * @default undefined
+     */
     this.numFmtId = numFmtId;
+
+    /**
+     * The pattern of the cell
+     * @type {?FormatPattern}
+     * @default undefined
+     */
     this.pattern = pattern;
+
+    /**
+     * If the font is underlined
+     * @type {?string}
+     * @default undefined
+     */
     this.underline = underline;
   }
 
