@@ -13,6 +13,7 @@ const {
   ConditionalFormatBlank,
   ConditionalFormatCell,
   ConditionalFormatDataBar,
+  ConditionalFormatDate,
 } = require('./models/conditional_format');
 
 module.exports = {
@@ -29,4 +30,5 @@ module.exports = {
   ConditionalFormatBlank,
   ConditionalFormatCell,
   ConditionalFormatDataBar,
+  ConditionalFormatDate,
 };

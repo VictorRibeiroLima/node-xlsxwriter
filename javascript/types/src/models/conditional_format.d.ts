@@ -654,6 +654,47 @@ export class ConditionalFormatDataBar extends ConditionalFormat {
      */
     setSolidFill(solidFill: boolean): void;
 }
+/**
+ * @class ConditionalFormatDate
+ * @classdesc Represents a Date style conditional format.
+ * @extends ConditionalFormat
+ * @property {Format} [format] - The format for the date.
+ * @property {ConditionalFormatDateRule} rule - The rule for the date.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+export class ConditionalFormatDate extends ConditionalFormat {
+    /**
+     * @param {Object} [options] - The options object
+     * @param {Format} [options.format] - The format for the date.
+     * @param {ConditionalFormatDateRule} [options.rule] - The rule for the date.
+     * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+     * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+     */
+    constructor(options?: {
+        format?: Format;
+        rule?: ConditionalFormatDateRule;
+        multiRange?: string;
+        stopIfTrue?: boolean;
+    });
+    /**
+     * @type {Format|undefined}
+     * @default undefined
+     */
+    format: Format | undefined;
+    /**
+     * @type {ConditionalFormatDateRule}
+     */
+    rule: ConditionalFormatDateRule;
+    /**
+     * @param {Format} format
+     */
+    setFormat(format: Format): void;
+    /**
+     * @param {ConditionalFormatDateRule} rule
+     */
+    setRule(rule: ConditionalFormatDateRule): void;
+}
 import Color = require("./color");
 import Format = require("./format");
 //# sourceMappingURL=conditional_format.d.ts.map

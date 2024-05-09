@@ -728,6 +728,52 @@ class ConditionalFormatDataBar extends ConditionalFormat {
   }
 }
 
+/**
+ * @class ConditionalFormatDate
+ * @classdesc Represents a Date style conditional format.
+ * @extends ConditionalFormat
+ * @property {Format} [format] - The format for the date.
+ * @property {ConditionalFormatDateRule} rule - The rule for the date.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+class ConditionalFormatDate extends ConditionalFormat {
+  /**
+   * @param {Object} [options] - The options object
+   * @param {Format} [options.format] - The format for the date.
+   * @param {ConditionalFormatDateRule} [options.rule] - The rule for the date.
+   * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+   * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+   */
+  constructor(options = {}) {
+    super('date', options.multiRange, options.stopIfTrue);
+    /**
+     * @type {Format|undefined}
+     * @default undefined
+     */
+    this.format = options.format;
+
+    /**
+     * @type {ConditionalFormatDateRule}
+     */
+    this.rule = options.rule;
+  }
+
+  /**
+   * @param {Format} format
+   */
+  setFormat(format) {
+    this.format = format;
+  }
+
+  /**
+   * @param {ConditionalFormatDateRule} rule
+   */
+  setRule(rule) {
+    this.rule = rule;
+  }
+}
+
 module.exports = {
   ConditionalFormat,
   ConditionalFormatTextRule,
@@ -738,4 +784,5 @@ module.exports = {
   ConditionalFormatBlank,
   ConditionalFormatCell,
   ConditionalFormatDataBar,
+  ConditionalFormatDate,
 };
