@@ -237,7 +237,7 @@ class ConditionalFormat {
 }
 
 /**
- * @typedef {Object} ConditionalFormatColorScaleRule
+ * @typedef {Object} ConditionalFormatTypeRule
  * @property {ConditionalFormatEnumType} type - The type of the rule.
  * @property {ConditionalFormatValue} value - The value of the rule.
  * /
@@ -259,8 +259,8 @@ class ConditionalFormatTwoColorScale extends ConditionalFormat {
    * @param {Object} [options] - The options object
    * @param {Color} [options.minColor] - The color for the minimum value.
    * @param {Color} [options.maxColor] - The color for the maximum value.
-   * @param {ConditionalFormatColorScaleRule} [options.minRule] - The rule for the minimum value.
-   * @param {ConditionalFormatColorScaleRule} [options.maxRule] - The rule for the maximum value.
+   * @param {ConditionalFormatTypeRule} [options.minRule] - The rule for the minimum value.
+   * @param {ConditionalFormatTypeRule} [options.maxRule] - The rule for the maximum value.
    * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
    * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
    */
@@ -279,13 +279,13 @@ class ConditionalFormatTwoColorScale extends ConditionalFormat {
     this.maxColor = options.maxColor;
 
     /**
-     * @type {ConditionalFormatColorScaleRule|undefined}
+     * @type {ConditionalFormatTypeRule|undefined}
      * @default undefined
      */
     this.minRule = options.minRule;
 
     /**
-     * @type {ConditionalFormatColorScaleRule|undefined}
+     * @type {ConditionalFormatTypeRule|undefined}
      * @default undefined
      */
     this.maxRule = options.maxRule;
@@ -306,14 +306,14 @@ class ConditionalFormatTwoColorScale extends ConditionalFormat {
   }
 
   /**
-   * @param {ConditionalFormatColorScaleRule} rule
+   * @param {ConditionalFormatTypeRule} rule
    */
   setMinRule(rule) {
     this.minRule = rule;
   }
 
   /**
-   * @param {ConditionalFormatColorScaleRule} rule
+   * @param {ConditionalFormatTypeRule} rule
    */
   setMaxRule(rule) {
     this.maxRule = rule;
@@ -348,9 +348,9 @@ class ConditionalFormatThreeColorScale extends ConditionalFormatTwoColorScale {
    * @param {Color} [options.minColor] - The color for the minimum value.
    * @param {Color} [options.midColor] - The color for the mid value.
    * @param {Color} [options.maxColor] - The color for the maximum value.
-   * @param {ConditionalFormatColorScaleRule} [options.minRule] - The rule for the minimum value.
-   * @param {ConditionalFormatColorScaleRule} [options.midRule] - The rule for the maximum value.
-   * @param {ConditionalFormatColorScaleRule} [options.maxRule] - The rule for the maximum value.
+   * @param {ConditionalFormatTypeRule} [options.minRule] - The rule for the minimum value.
+   * @param {ConditionalFormatTypeRule} [options.midRule] - The rule for the maximum value.
+   * @param {ConditionalFormatTypeRule} [options.maxRule] - The rule for the maximum value.
    * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
    * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
    */
@@ -368,7 +368,7 @@ class ConditionalFormatThreeColorScale extends ConditionalFormatTwoColorScale {
     this.midColor = options.midColor;
 
     /**
-     * @type {ConditionalFormatColorScaleRule|undefined}
+     * @type {ConditionalFormatTypeRule|undefined}
      * @default undefined
      */
     this.midRule = options.midRule;
@@ -382,7 +382,7 @@ class ConditionalFormatThreeColorScale extends ConditionalFormatTwoColorScale {
   }
 
   /**
-   * @param {ConditionalFormatColorScaleRule} rule
+   * @param {ConditionalFormatTypeRule} rule
    */
   setMidRule(rule) {
     this.midRule = rule;
@@ -531,6 +531,203 @@ class ConditionalFormatCell extends ConditionalFormat {
   }
 }
 
+/**
+ * @class ConditionalFormatDataBar
+ * @classdesc Represents a Data Bar style conditional format.
+ * @extends ConditionalFormat
+ * @property {Color} [axisColor] - The color of the axis.
+ * @property {ConditionalFormatDataBarAxisPosition} [axisPosition] - The position of the axis.
+ * @property {boolean} [barOnly] - Show only the bar.
+ * @property {Color} [borderColor] - The color of the border.
+ * @property {boolean} [borderOff] - Turn off the border.
+ * @property {ConditionalFormatDataBarDirection} [direction] - The direction of the data bar.
+ * @property {Color} [fillColor] - The color of the fill.
+ * @property {ConditionalFormatTypeRule} [maxRule] - The rule for the maximum value.
+ * @property {ConditionalFormatTypeRule} [minRule] - The rule for the minimum value.
+ * @property {Color} [negativeBorderColor] - The color of the negative border.
+ * @property {Color} [negativeFillColor] - The color of the negative fill.
+ * @property {boolean} [solidFill] - Show a solid fill.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+class ConditionalFormatDataBar extends ConditionalFormat {
+  /**
+   * @param {Object} [options] - The options object
+   * @param {Color} [options.axisColor] - The color of the axis.
+   * @param {ConditionalFormatDataBarAxisPosition} [options.axisPosition] - The position of the axis.
+   * @param {boolean} [options.barOnly] - Show only the bar.
+   * @param {Color} [options.borderColor] - The color of the border.
+   * @param {boolean} [options.borderOff] - Turn off the border.
+   * @param {ConditionalFormatDataBarDirection} [options.direction] - The direction of the data bar.
+   * @param {Color} [options.fillColor] - The color of the fill.
+   * @param {ConditionalFormatTypeRule} [options.maxRule] - The rule for the maximum value.
+   * @param {ConditionalFormatTypeRule} [options.minRule] - The rule for the minimum value.
+   * @param {Color} [options.negativeBorderColor] - The color of the negative border.
+   * @param {Color} [options.negativeFillColor] - The color of the negative fill.
+   * @param {boolean} [options.solidFill] - Show a solid fill.
+   * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+   * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+   */
+  constructor(options = {}) {
+    super('dataBar', options.multiRange, options.stopIfTrue);
+    /**
+     * @type {Color|undefined}
+     * @default undefined
+     */
+    this.axisColor = options.axisColor;
+
+    /**
+     * @type {ConditionalFormatDataBarAxisPosition|undefined}
+     * @default undefined
+     */
+    this.axisPosition = options.axisPosition;
+
+    /**
+     * @type {boolean|undefined}
+     * @default undefined
+     */
+    this.barOnly = options.barOnly;
+
+    /**
+     * @type {Color|undefined}
+     * @default undefined
+     */
+    this.borderColor = options.borderColor;
+
+    /**
+     * @type {boolean|undefined}
+     * @default undefined
+     */
+    this.borderOff = options.borderOff;
+
+    /**
+     * @type {ConditionalFormatDataBarDirection|undefined}
+     * @default undefined
+     */
+    this.direction = options.direction;
+
+    /**
+     * @type {Color|undefined}
+     * @default undefined
+     */
+    this.fillColor = options.fillColor;
+
+    /**
+     * @type {ConditionalFormatTypeRule|undefined}
+     * @default undefined
+     */
+    this.maxRule = options.maxRule;
+
+    /**
+     * @type {ConditionalFormatTypeRule|undefined}
+     * @default undefined
+     */
+    this.minRule = options.minRule;
+
+    /**
+     * @type {Color|undefined}
+     * @default undefined
+     */
+    this.negativeBorderColor = options.negativeBorderColor;
+
+    /**
+     * @type {Color|undefined}
+     * @default undefined
+     */
+    this.negativeFillColor = options.negativeFillColor;
+
+    /**
+     * @type {boolean|undefined}
+     * @default undefined
+     */
+    this.solidFill = options.solidFill;
+  }
+
+  /**
+   * @param {Color} color
+   */
+  setAxisColor(color) {
+    this.axisColor = color;
+  }
+
+  /**
+   * @param {ConditionalFormatDataBarAxisPosition} position
+   */
+  setAxisPosition(position) {
+    this.axisPosition = position;
+  }
+
+  /**
+   * @param {boolean} barOnly
+   */
+  setBarOnly(barOnly) {
+    this.barOnly = barOnly;
+  }
+
+  /**
+   * @param {Color} color
+   */
+  setBorderColor(color) {
+    this.borderColor = color;
+  }
+
+  /**
+   * @param {boolean} borderOff
+   */
+  setBorderOff(borderOff) {
+    this.borderOff = borderOff;
+  }
+
+  /**
+   * @param {ConditionalFormatDataBarDirection} direction
+   */
+  setDirection(direction) {
+    this.direction = direction;
+  }
+
+  /**
+   * @param {Color} color
+   */
+  setFillColor(color) {
+    this.fillColor = color;
+  }
+
+  /**
+   * @param {ConditionalFormatTypeRule} rule
+   */
+  setMaxRule(rule) {
+    this.maxRule = rule;
+  }
+
+  /**
+   * @param {ConditionalFormatTypeRule} rule
+   */
+  setMinRule(rule) {
+    this.minRule = rule;
+  }
+
+  /**
+   * @param {Color} color
+   */
+  setNegativeBorderColor(color) {
+    this.negativeBorderColor = color;
+  }
+
+  /**
+   * @param {Color} color
+   */
+  setNegativeFillColor(color) {
+    this.negativeFillColor = color;
+  }
+
+  /**
+   * @param {boolean} solidFill
+   */
+  setSolidFill(solidFill) {
+    this.solidFill = solidFill;
+  }
+}
+
 module.exports = {
   ConditionalFormat,
   ConditionalFormatTextRule,
@@ -540,4 +737,5 @@ module.exports = {
   ConditionalFormatAverage,
   ConditionalFormatBlank,
   ConditionalFormatCell,
+  ConditionalFormatDataBar,
 };

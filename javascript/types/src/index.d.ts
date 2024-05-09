@@ -10,5 +10,6 @@ import { ConditionalFormatThreeColorScale } from "./models/conditional_format";
 import { ConditionalFormatAverage } from "./models/conditional_format";
 import { ConditionalFormatBlank } from "./models/conditional_format";
 import { ConditionalFormatCell } from "./models/conditional_format";
-export { Workbook, Sheet, Color, Format, Link, Border, DiagonalBorder, ConditionalFormatTwoColorScale, ConditionalFormatThreeColorScale, ConditionalFormatAverage, ConditionalFormatBlank, ConditionalFormatCell };
+import { ConditionalFormatDataBar } from "./models/conditional_format";
+export { Workbook, Sheet, Color, Format, Link, Border, DiagonalBorder, ConditionalFormatTwoColorScale, ConditionalFormatThreeColorScale, ConditionalFormatAverage, ConditionalFormatBlank, ConditionalFormatCell, ConditionalFormatDataBar };
 //# sourceMappingURL=index.d.ts.map

@@ -14,6 +14,7 @@ use crate::node_xlsx::conditional_format::{
     blank::Blank,
     c_type::NodeXlsxConditionalFormatType,
     cell::Cell,
+    data_bar::DataBar,
     scale::{ThreeColorScale, TwoColorScale},
 };
 
@@ -95,6 +96,10 @@ impl ConditionalFormatSheetValue {
             "cell" => {
                 let id =
                     Cell::create_and_set_to_map(cx, format, conditional_format_map, format_map)?;
+                id
+            }
+            "dataBar" => {
+                let id = DataBar::create_and_set_to_map(cx, format, conditional_format_map)?;
                 id
             }
             _ => {

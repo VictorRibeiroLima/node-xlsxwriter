@@ -12,6 +12,7 @@ const {
   ConditionalFormatAverage,
   ConditionalFormatBlank,
   ConditionalFormatCell,
+  ConditionalFormatDataBar,
 } = require('./models/conditional_format');
 
 module.exports = {
@@ -27,4 +28,5 @@ module.exports = {
   ConditionalFormatAverage,
   ConditionalFormatBlank,
   ConditionalFormatCell,
+  ConditionalFormatDataBar,
 };
