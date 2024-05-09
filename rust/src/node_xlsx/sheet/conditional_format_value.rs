@@ -15,6 +15,7 @@ use crate::node_xlsx::conditional_format::{
     c_type::NodeXlsxConditionalFormatType,
     cell::Cell,
     data_bar::DataBar,
+    date::Date,
     scale::{ThreeColorScale, TwoColorScale},
 };
 
@@ -100,6 +101,12 @@ impl ConditionalFormatSheetValue {
             }
             "dataBar" => {
                 let id = DataBar::create_and_set_to_map(cx, format, conditional_format_map)?;
+                id
+            }
+            "date" => {
+                let id =
+                    Date::create_and_set_to_map(cx, format, conditional_format_map, format_map)?;
+
                 id
             }
             _ => {
