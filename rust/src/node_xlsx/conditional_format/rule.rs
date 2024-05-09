@@ -9,12 +9,12 @@ use rust_xlsxwriter::{ConditionalFormatType, ConditionalFormatValue};
 
 use crate::node_xlsx::util::js_date_to_naive_date_time;
 
-pub struct NodeXlsxRule {
+pub struct NodeXlsxFormatTypeRule {
     pub r_type: ConditionalFormatType,
     pub value: ConditionalFormatValue,
 }
 
-impl NodeXlsxRule {
+impl NodeXlsxFormatTypeRule {
     pub fn from_js_value(cx: &mut FunctionContext, obj: Handle<JsObject>) -> NeonResult<Self> {
         let r_type: Handle<JsString> = obj.get(cx, "type")?;
         let r_type = type_from_js_string(cx, r_type)?;

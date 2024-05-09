@@ -7,9 +7,10 @@ use neon::{
     result::NeonResult,
     types::{JsNumber, JsObject, JsString},
 };
-use rust_xlsxwriter::Worksheet;
+use rust_xlsxwriter::{Format, Worksheet};
 
 use crate::node_xlsx::conditional_format::{
+    average::Average,
     c_type::NodeXlsxConditionalFormatType,
     scale::{ThreeColorScale, TwoColorScale},
 };
@@ -26,7 +27,8 @@ impl ConditionalFormatSheetValue {
     pub fn from_js_object(
         cx: &mut FunctionContext,
         obj: Handle<JsObject>,
-        format_map: &mut HashMap<u32, NodeXlsxConditionalFormatType>,
+        format_map: &mut HashMap<u32, Format>,
+        conditional_format_map: &mut HashMap<u32, NodeXlsxConditionalFormatType>,
     ) -> NeonResult<Self> {
         let first_row: Handle<JsNumber> = obj.get(cx, "firstRow")?;
         let first_row = first_row.value(cx);
@@ -70,11 +72,17 @@ impl ConditionalFormatSheetValue {
         let f_type = f_type.value(cx);
         let format = match f_type.as_str() {
             "twoColorScale" => {
-                let id = TwoColorScale::create_and_set_to_map(cx, format, format_map)?;
+                let id = TwoColorScale::create_and_set_to_map(cx, format, conditional_format_map)?;
                 id
             }
             "threeColorScale" => {
-                let id = ThreeColorScale::create_and_set_to_map(cx, format, format_map)?;
+                let id =
+                    ThreeColorScale::create_and_set_to_map(cx, format, conditional_format_map)?;
+                id
+            }
+            "average" => {
+                let id =
+                    Average::create_and_set_to_map(cx, format, conditional_format_map, format_map)?;
                 id
             }
             _ => {

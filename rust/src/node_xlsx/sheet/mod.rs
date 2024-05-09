@@ -51,6 +51,7 @@ impl NodeXlsxSheet {
             let conditional_format = ConditionalFormatSheetValue::from_js_object(
                 cx,
                 conditional_format,
+                &mut format_map,
                 &mut conditional_format_map,
             )?;
             inner_conditional_formats.push(conditional_format);

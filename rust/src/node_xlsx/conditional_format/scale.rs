@@ -11,15 +11,15 @@ use rust_xlsxwriter::{Color, ConditionalFormat2ColorScale, ConditionalFormat3Col
 
 use crate::node_xlsx::color::Color as NodeColor;
 
-use super::{c_type::NodeXlsxConditionalFormatType, rule::NodeXlsxRule};
+use super::{c_type::NodeXlsxConditionalFormatType, rule::NodeXlsxFormatTypeRule};
 
 pub struct TwoColorScale {
     multi_range: Option<String>,
     stop_if_true: Option<bool>,
     min_color: Option<Color>,
     max_color: Option<Color>,
-    min_rule: Option<NodeXlsxRule>,
-    max_rule: Option<NodeXlsxRule>,
+    min_rule: Option<NodeXlsxFormatTypeRule>,
+    max_rule: Option<NodeXlsxFormatTypeRule>,
 }
 
 impl TwoColorScale {
@@ -52,13 +52,13 @@ impl TwoColorScale {
 
         let min_rule: Option<Handle<JsObject>> = obj.get_opt(cx, "minRule")?;
         let min_rule = match min_rule {
-            Some(rule) => Some(NodeXlsxRule::from_js_value(cx, rule)?),
+            Some(rule) => Some(NodeXlsxFormatTypeRule::from_js_value(cx, rule)?),
             None => None,
         };
 
         let max_rule: Option<Handle<JsObject>> = obj.get_opt(cx, "maxRule")?;
         let max_rule = match max_rule {
-            Some(rule) => Some(NodeXlsxRule::from_js_value(cx, rule)?),
+            Some(rule) => Some(NodeXlsxFormatTypeRule::from_js_value(cx, rule)?),
             None => None,
         };
 
@@ -117,7 +117,7 @@ impl Into<ConditionalFormat2ColorScale> for TwoColorScale {
 
 pub struct ThreeColorScale {
     mid_color: Option<Color>,
-    mid_rule: Option<NodeXlsxRule>,
+    mid_rule: Option<NodeXlsxFormatTypeRule>,
     two_color_scale: TwoColorScale,
 }
 
@@ -135,7 +135,7 @@ impl ThreeColorScale {
 
         let mid_rule: Option<Handle<JsObject>> = obj.get_opt(cx, "midRule")?;
         let mid_rule = match mid_rule {
-            Some(rule) => Some(NodeXlsxRule::from_js_value(cx, rule)?),
+            Some(rule) => Some(NodeXlsxFormatTypeRule::from_js_value(cx, rule)?),
             None => None,
         };
 
