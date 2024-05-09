@@ -74,7 +74,7 @@ You also can use the `writeFromJson` method to create a sheet from a JSON object
 ```
 
 Obs: The `writeFromJson` method trades performance for convenience,
-so if will only generate the JSON for the sheet and not use anywhere, it's better to use the `writeCell` method instead.
+so if are only generating the JSON for the sheet and not using anywhere else, it's better to use the `writeCell` method instead.
 
 # More complex examples
 More complex examples can be found in the `javascript/docs` folder.
