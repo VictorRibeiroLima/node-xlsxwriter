@@ -14,5 +14,6 @@ import { ConditionalFormatCell } from "./models/conditional_format";
 import { ConditionalFormatDataBar } from "./models/conditional_format";
 import { ConditionalFormatDate } from "./models/conditional_format";
 import { ConditionalFormatDuplicate } from "./models/conditional_format";
-export { Workbook, Sheet, Color, Format, Formula, Link, Border, DiagonalBorder, ConditionalFormatTwoColorScale, ConditionalFormatThreeColorScale, ConditionalFormatAverage, ConditionalFormatBlank, ConditionalFormatCell, ConditionalFormatDataBar, ConditionalFormatDate, ConditionalFormatDuplicate };
+import { ConditionalFormatError } from "./models/conditional_format";
+export { Workbook, Sheet, Color, Format, Formula, Link, Border, DiagonalBorder, ConditionalFormatTwoColorScale, ConditionalFormatThreeColorScale, ConditionalFormatAverage, ConditionalFormatBlank, ConditionalFormatCell, ConditionalFormatDataBar, ConditionalFormatDate, ConditionalFormatDuplicate, ConditionalFormatError };
 //# sourceMappingURL=index.d.ts.map

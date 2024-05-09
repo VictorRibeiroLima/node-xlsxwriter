@@ -16,6 +16,7 @@ const {
   ConditionalFormatDataBar,
   ConditionalFormatDate,
   ConditionalFormatDuplicate,
+  ConditionalFormatError,
 } = require('./models/conditional_format');
 
 module.exports = {
@@ -35,4 +36,5 @@ module.exports = {
   ConditionalFormatDataBar,
   ConditionalFormatDate,
   ConditionalFormatDuplicate,
+  ConditionalFormatError,
 };
