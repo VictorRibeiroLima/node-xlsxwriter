@@ -5,7 +5,7 @@ use neon::{
     result::NeonResult,
     types::{JsDate, JsNumber, JsObject, JsString, JsValue},
 };
-use rust_xlsxwriter::{ConditionalFormatType, ConditionalFormatValue};
+use rust_xlsxwriter::{ConditionalFormatCellRule, ConditionalFormatType, ConditionalFormatValue};
 
 use crate::node_xlsx::util::js_date_to_naive_date_time;
 
@@ -22,6 +22,12 @@ impl NodeXlsxFormatTypeRule {
         let value = value_from_js_value(cx, value)?;
         Ok(Self { r_type, value })
     }
+}
+
+pub enum NodeXlsxConditionalFormatCellRule<'a> {
+    String(ConditionalFormatCellRule<String>),
+    Number(ConditionalFormatCellRule<f64>),
+    DateTime(ConditionalFormatCellRule<&'a chrono::NaiveDateTime>),
 }
 
 pub fn type_from_js_string(

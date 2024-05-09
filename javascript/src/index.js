@@ -11,6 +11,7 @@ const {
   ConditionalFormatThreeColorScale,
   ConditionalFormatAverage,
   ConditionalFormatBlank,
+  ConditionalFormatCell,
 } = require('./models/conditional_format');
 
 module.exports = {
@@ -25,4 +26,5 @@ module.exports = {
   ConditionalFormatThreeColorScale,
   ConditionalFormatAverage,
   ConditionalFormatBlank,
+  ConditionalFormatCell,
 };

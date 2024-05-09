@@ -13,6 +13,7 @@ use crate::node_xlsx::conditional_format::{
     average::Average,
     blank::Blank,
     c_type::NodeXlsxConditionalFormatType,
+    cell::Cell,
     scale::{ThreeColorScale, TwoColorScale},
 };
 
@@ -89,6 +90,11 @@ impl ConditionalFormatSheetValue {
             "blank" => {
                 let id =
                     Blank::create_and_set_to_map(cx, format, conditional_format_map, format_map)?;
+                id
+            }
+            "cell" => {
+                let id =
+                    Cell::create_and_set_to_map(cx, format, conditional_format_map, format_map)?;
                 id
             }
             _ => {

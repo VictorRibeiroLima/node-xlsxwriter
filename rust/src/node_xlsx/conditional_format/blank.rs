@@ -66,10 +66,11 @@ impl<'a> Blank<'a> {
     ) -> NeonResult<u32> {
         let id: Handle<JsNumber> = obj.get(cx, "id")?;
         let id = id.value(cx) as u32;
+        if !c_format_map.contains_key(&id) {
+            let blank = Blank::from_js_object(cx, obj, format_map)?;
+            c_format_map.insert(id, NodeXlsxConditionalFormatType::Blank(blank.into()));
+        }
 
-        let blank = Blank::from_js_object(cx, obj, format_map)?;
-
-        c_format_map.insert(id, NodeXlsxConditionalFormatType::Blank(blank.into()));
         Ok(id)
     }
 }

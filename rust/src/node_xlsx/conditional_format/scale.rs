@@ -80,12 +80,14 @@ impl TwoColorScale {
         let id: Handle<JsNumber> = obj.get(cx, "id")?;
         let id = id.value(cx) as u32;
 
-        let two_color_scale = TwoColorScale::from_js_object(cx, obj)?;
+        if !format_map.contains_key(&id) {
+            let two_color_scale = TwoColorScale::from_js_object(cx, obj)?;
+            format_map.insert(
+                id,
+                NodeXlsxConditionalFormatType::TwoColorScale(two_color_scale.into()),
+            );
+        }
 
-        format_map.insert(
-            id,
-            NodeXlsxConditionalFormatType::TwoColorScale(two_color_scale.into()),
-        );
         Ok(id)
     }
 }
@@ -156,12 +158,14 @@ impl ThreeColorScale {
         let id: Handle<JsNumber> = obj.get(cx, "id")?;
         let id = id.value(cx) as u32;
 
-        let three_color_scale = ThreeColorScale::from_js_object(cx, obj)?;
+        if !format_map.contains_key(&id) {
+            let three_color_scale = ThreeColorScale::from_js_object(cx, obj)?;
+            format_map.insert(
+                id,
+                NodeXlsxConditionalFormatType::ThreeColorScale(three_color_scale.into()),
+            );
+        }
 
-        format_map.insert(
-            id,
-            NodeXlsxConditionalFormatType::ThreeColorScale(three_color_scale.into()),
-        );
         Ok(id)
     }
 }

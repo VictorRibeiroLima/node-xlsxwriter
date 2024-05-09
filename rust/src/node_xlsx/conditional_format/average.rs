@@ -70,9 +70,11 @@ impl<'a> Average<'a> {
         let id: Handle<JsNumber> = obj.get(cx, "id")?;
         let id = id.value(cx) as u32;
 
-        let average = Average::from_js_object(cx, obj, format_map)?;
+        if !c_format_map.contains_key(&id) {
+            let average = Average::from_js_object(cx, obj, format_map)?;
 
-        c_format_map.insert(id, NodeXlsxConditionalFormatType::Average(average.into()));
+            c_format_map.insert(id, NodeXlsxConditionalFormatType::Average(average.into()));
+        }
         Ok(id)
     }
 }

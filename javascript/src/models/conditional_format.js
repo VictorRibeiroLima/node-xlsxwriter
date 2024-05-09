@@ -94,27 +94,11 @@ const Format = require('./format');
  * "between" |
  * "notBetween"
  * )} ConditionalFormatCellRuleType
- * @Class ConditionalFormatCellRule
- * @classdesc Represents a rule for a conditional format cell.
+ * @typedef {Object} ConditionalFormatCellRule
  * @property {ConditionalFormatCellRuleType} type - The type of the rule.
- * @property {ConditionalFormatValueValue} value - The value of the rule.
+ * @property {ConditionalFormatValue} value - The value of the rule.
+ * @property {ConditionalFormatValue} [optionalValue] - The optional value of the rule (between, notBetween).
  */
-class ConditionalFormatCellRule {
-  /**
-   * @param {ConditionalFormatCellRuleType} type
-   * @param {ConditionalFormatValue} value
-   */
-  constructor(type, value) {
-    /**
-     * @type {ConditionalFormatCellRuleType}
-     */
-    this.type = type;
-    /**
-     * @type {ConditionalFormatValue}
-     */
-    this.value = value;
-  }
-}
 
 /**
  * @typedef {(
@@ -501,13 +485,59 @@ class ConditionalFormatBlank extends ConditionalFormat {
   }
 }
 
+/**
+ * @class ConditionalFormatCell
+ * @classdesc Represents a cell style conditional format.
+ * @extends ConditionalFormat
+ * @property {ConditionalFormatCellRule} rule - The rule for the cell.
+ * @property {Format} [format] - The format for the cell.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+class ConditionalFormatCell extends ConditionalFormat {
+  /**
+   * @param {Object} [options] - The options object
+   * @param {ConditionalFormatCellRule} [options.rule] - The rule for the cell.
+   * @param {Format} [options.format] - The format for the cell.
+   * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+   * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+   */
+  constructor(options = {}) {
+    super('cell', options.multiRange, options.stopIfTrue);
+    /**
+     * @type {ConditionalFormatCellRule}
+     */
+    this.rule = options.rule;
+
+    /**
+     * @type {Format|undefined}
+     * @default undefined
+     */
+    this.format = options.format;
+  }
+
+  /**
+   * @param {ConditionalFormatCellRule} rule
+   */
+  setRule(rule) {
+    this.rule = rule;
+  }
+
+  /**
+   * @param {Format} format
+   */
+  setFormat(format) {
+    this.format = format;
+  }
+}
+
 module.exports = {
   ConditionalFormat,
-  ConditionalFormatCellRule,
   ConditionalFormatTextRule,
   ConditionalFormatTopRule,
   ConditionalFormatTwoColorScale,
   ConditionalFormatThreeColorScale,
   ConditionalFormatAverage,
   ConditionalFormatBlank,
+  ConditionalFormatCell,
 };
