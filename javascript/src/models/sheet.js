@@ -3,6 +3,7 @@
 const Cell = require('./cell');
 const Format = require('./format');
 const Link = require('./link');
+const Formula = require('./formula');
 const { ConditionalFormat } = require('./conditional_format');
 
 /**
@@ -110,8 +111,8 @@ class Sheet {
    *
    * @param {number} col - The column index of the cell
    * @param {number} row - The row index of the cell
-   * @param {string|number|Link|Date|any} value - The value of the cell.
-   * @param {("number"|"string"|"link"|"date")} [cellType] - The type of the cell(if not provider .toString() will be used)
+   * @param {string|number|Link|Date|Formula|any} value - The value of the cell.
+   * @param {("number"|"string"|"link"|"date"|"formula")} [cellType] - The type of the cell(if not provider .toString() will be used)
    * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
@@ -124,7 +125,13 @@ class Sheet {
     if (row > 1_048_577 || row < 0) {
       throw new Error('Invalid row index');
     }
-    const cell = new Cell(col, row, value, cellType, format);
+    const cell = new Cell({
+      col,
+      row,
+      value,
+      cellType,
+      format,
+    });
     this.cells.push(cell);
   }
 
@@ -186,6 +193,18 @@ class Sheet {
    */
   writeDate(col, row, value, format) {
     this.writeCell(col, row, value, 'date', format);
+  }
+
+  /**
+   * writes a formula value to a cell
+   * @param {number} col - The column index of the cell
+   * @param {number} row - The row index of the cell
+   * @param {Formula} value - The value to write to the cell
+   * @param {Format} [format] - The format of the cell
+   * @returns {void}
+   */
+  writeFormula(col, row, value, format) {
+    this.writeCell(col, row, value, 'formula', format);
   }
 
   /**

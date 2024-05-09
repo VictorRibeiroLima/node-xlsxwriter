@@ -4,9 +4,9 @@ use neon::{
     handle::Handle,
     object::Object,
     result::NeonResult,
-    types::{JsDate, JsNull, JsNumber, JsObject, JsString, JsUndefined, JsValue, Value},
+    types::{JsBoolean, JsDate, JsNull, JsNumber, JsObject, JsString, JsUndefined, JsValue, Value},
 };
-use rust_xlsxwriter::Url;
+use rust_xlsxwriter::{Formula, Url};
 
 pub fn any_to_string<'a>(
     cx: &mut FunctionContext<'a>,
@@ -81,6 +81,66 @@ pub fn js_date_to_naive_date_time<'a>(
             Ok(NaiveDateTime::parse_from_str("1970-01-01 00:00:00", "%Y-%m-%d %H:%M:%S").unwrap())
         }
     }
+}
+
+pub fn any_to_formula<'a>(
+    cx: &mut FunctionContext<'a>,
+    js_any: Handle<JsValue>,
+) -> NeonResult<Formula> {
+    if let Ok(obj) = js_any.downcast::<JsObject, _>(cx) {
+        let formula = object_to_formula(cx, obj)?;
+        return Ok(formula);
+    }
+
+    let error = format!("Value cannot be converted to formula: {:?}", js_any);
+    let js_error = cx.string(error);
+    cx.throw(js_error)
+}
+
+pub fn object_to_formula<'a>(
+    cx: &mut FunctionContext<'a>,
+    obj: Handle<JsObject>,
+) -> NeonResult<rust_xlsxwriter::Formula> {
+    let formula: Handle<JsString> = obj.get(cx, "formula")?;
+    let formula = formula.value(cx);
+
+    let result: Option<Handle<JsString>> = obj.get_opt(cx, "result")?;
+    let result = match result {
+        Some(result) => Some(result.value(cx)),
+        None => None,
+    };
+
+    let use_future_functions: Option<Handle<JsBoolean>> = obj.get_opt(cx, "useFutureFunctions")?;
+    let use_future_functions = match use_future_functions {
+        Some(use_future_functions) => Some(use_future_functions.value(cx)),
+        None => None,
+    };
+
+    let use_table_functions: Option<Handle<JsBoolean>> = obj.get_opt(cx, "useTableFunctions")?;
+    let use_table_functions = match use_table_functions {
+        Some(use_table_functions) => Some(use_table_functions.value(cx)),
+        None => None,
+    };
+
+    let mut formula = Formula::new(formula);
+
+    if let Some(result) = result {
+        formula = formula.set_result(result);
+    }
+
+    if let Some(use_future_functions) = use_future_functions {
+        if use_future_functions {
+            formula = formula.use_future_functions()
+        }
+    }
+
+    if let Some(use_table_functions) = use_table_functions {
+        if use_table_functions {
+            formula = formula.use_table_functions()
+        }
+    }
+
+    Ok(formula)
 }
 
 pub fn object_to_url<'a>(cx: &mut FunctionContext<'a>, obj: Handle<JsObject>) -> NeonResult<Url> {

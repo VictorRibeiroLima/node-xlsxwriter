@@ -8,11 +8,16 @@ export = Color;
  */
 declare class Color {
     /**
-     * @param {number} red
-     * @param {number} green
-     * @param {number} blue
+     * @param {Object} [opts = {}] - Options for the color
+     * @param {number} [opts.red=0]
+     * @param {number} [opts.green=0]
+     * @param {number} [opts.blue=0]
      */
-    constructor(red: number, green: number, blue: number);
+    constructor(opts?: {
+        red?: number;
+        green?: number;
+        blue?: number;
+    });
     /**
      * The red value of the color
      * @type {number}

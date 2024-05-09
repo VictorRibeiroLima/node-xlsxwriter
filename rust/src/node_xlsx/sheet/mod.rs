@@ -41,6 +41,7 @@ impl NodeXlsxSheet {
 
         for cell in cells {
             let cell = cell.downcast_or_throw::<JsObject, FunctionContext>(cx)?;
+
             let cell = NodeXlsxCell::from_js_object(cx, cell, &mut format_map)?;
             inner_cells.push(cell);
         }

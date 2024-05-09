@@ -12,7 +12,12 @@ test('save to file with conditional format ("ConditionalFormatDataBar")', async 
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
 
-  const lightGreen = new Color(102, 255, 102);
+  const lightGreen = new Color({
+    red: 204,
+    green: 255,
+    blue: 204,
+  });
+
   // Write a standard Excel data bar. The conditional format is applied over
   // the full range of values from minimum to maximum.
   const conditionalFormat = new ConditionalFormatDataBar();

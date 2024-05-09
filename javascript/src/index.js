@@ -4,6 +4,7 @@ const Workbook = require('./models/workbook');
 const Sheet = require('./models/sheet');
 const Color = require('./models/color');
 const Format = require('./models/format');
+const Formula = require('./models/formula');
 const Link = require('./models/link');
 const { Border, DiagonalBorder } = require('./models/border');
 const {
@@ -22,6 +23,7 @@ module.exports = {
   Sheet,
   Color,
   Format,
+  Formula,
   Link,
   Border,
   DiagonalBorder,

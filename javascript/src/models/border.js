@@ -39,7 +39,7 @@ class Border {
    */
   constructor(style, color) {
     if (!color) {
-      color = new Color(0, 0, 0);
+      color = new Color();
     }
     if (!style) {
       style = 'none';

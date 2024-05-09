@@ -49,14 +49,14 @@ declare class Sheet {
      *
      * @param {number} col - The column index of the cell
      * @param {number} row - The row index of the cell
-     * @param {string|number|Link|Date|any} value - The value of the cell.
-     * @param {("number"|"string"|"link"|"date")} [cellType] - The type of the cell(if not provider .toString() will be used)
+     * @param {string|number|Link|Date|Formula|any} value - The value of the cell.
+     * @param {("number"|"string"|"link"|"date"|"formula")} [cellType] - The type of the cell(if not provider .toString() will be used)
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeCell(col: number, row: number, value: string | number | Link | Date | any, cellType?: ("number" | "string" | "link" | "date"), format?: Format): void;
+    writeCell(col: number, row: number, value: string | number | Link | Date | Formula | any, cellType?: ("number" | "string" | "link" | "date" | "formula"), format?: Format): void;
     /**
      * writes a string value to a cell
      * @param {number} col - The column index of the cell
@@ -101,6 +101,15 @@ declare class Sheet {
      * @throws {Error} - row > 1_048_577 or row < 0
      */
     writeDate(col: number, row: number, value: Date, format?: Format): void;
+    /**
+     * writes a formula value to a cell
+     * @param {number} col - The column index of the cell
+     * @param {number} row - The row index of the cell
+     * @param {Formula} value - The value to write to the cell
+     * @param {Format} [format] - The format of the cell
+     * @returns {void}
+     */
+    writeFormula(col: number, row: number, value: Formula, format?: Format): void;
     /**
      *
      * @typedef {Object} FormatOptions
@@ -184,5 +193,6 @@ declare class ConditionalFormatSheetValue {
 }
 import { ConditionalFormat } from "./conditional_format";
 import Link = require("./link");
+import Formula = require("./formula");
 import Format = require("./format");
 //# sourceMappingURL=sheet.d.ts.map

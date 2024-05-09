@@ -2,6 +2,7 @@ import Workbook = require("./models/workbook");
 import Sheet = require("./models/sheet");
 import Color = require("./models/color");
 import Format = require("./models/format");
+import Formula = require("./models/formula");
 import Link = require("./models/link");
 import { Border } from "./models/border";
 import { DiagonalBorder } from "./models/border";
@@ -13,5 +14,5 @@ import { ConditionalFormatCell } from "./models/conditional_format";
 import { ConditionalFormatDataBar } from "./models/conditional_format";
 import { ConditionalFormatDate } from "./models/conditional_format";
 import { ConditionalFormatDuplicate } from "./models/conditional_format";
-export { Workbook, Sheet, Color, Format, Link, Border, DiagonalBorder, ConditionalFormatTwoColorScale, ConditionalFormatThreeColorScale, ConditionalFormatAverage, ConditionalFormatBlank, ConditionalFormatCell, ConditionalFormatDataBar, ConditionalFormatDate, ConditionalFormatDuplicate };
+export { Workbook, Sheet, Color, Format, Formula, Link, Border, DiagonalBorder, ConditionalFormatTwoColorScale, ConditionalFormatThreeColorScale, ConditionalFormatAverage, ConditionalFormatBlank, ConditionalFormatCell, ConditionalFormatDataBar, ConditionalFormatDate, ConditionalFormatDuplicate };
 //# sourceMappingURL=index.d.ts.map

@@ -5,15 +5,18 @@ use neon::{
     result::NeonResult,
     types::{JsString, JsValue},
 };
-use rust_xlsxwriter::Url;
+use rust_xlsxwriter::{Formula, Url};
 
-use super::util::{any_to_naive_date_time, any_to_number, any_to_string, any_to_url};
+use super::util::{
+    any_to_formula, any_to_naive_date_time, any_to_number, any_to_string, any_to_url,
+};
 pub enum NodeXlsxTypes {
     String(String),
     Number(f64),
     Link(Url),
     Date(NaiveDateTime),
     Unknown(String), // This is a catch-all for any type
+    Formula(Formula),
 }
 
 impl NodeXlsxTypes {
@@ -47,6 +50,10 @@ impl NodeXlsxTypes {
             "date" => {
                 let js_any = any_to_naive_date_time(cx, js_any)?;
                 NodeXlsxTypes::Date(js_any)
+            }
+            "formula" => {
+                let formula = any_to_formula(cx, js_any)?;
+                NodeXlsxTypes::Formula(formula)
             }
             _ => {
                 let js_any = any_to_string(cx, js_any)?;

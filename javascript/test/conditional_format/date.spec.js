@@ -18,9 +18,22 @@ test('save to file with conditional format ("ConditionalFormatDate")', async (t)
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
 
-  const red = new Color(255, 102, 102);
-  const green = new Color(102, 255, 102);
-  const blue = new Color(102, 102, 255);
+  const red = new Color({
+    red: 255,
+    green: 102,
+    blue: 102,
+  });
+
+  const green = new Color({
+    red: 102,
+    green: 255,
+    blue: 102,
+  });
+  const blue = new Color({
+    red: 102,
+    green: 102,
+    blue: 255,
+  });
 
   const redFormat = new Format({
     backgroundColor: red,

@@ -13,8 +13,17 @@ test('save to file with conditional format ("ConditionalFormatDuplicate")', asyn
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
 
-  const lightRed = new Color(255, 102, 102);
-  const lightGreen = new Color(102, 255, 102);
+  const lightRed = new Color({
+    red: 255,
+    green: 102,
+    blue: 102,
+  });
+
+  const lightGreen = new Color({
+    red: 102,
+    green: 255,
+    blue: 102,
+  });
 
   const duplicated = new Format({
     backgroundColor: lightRed,
