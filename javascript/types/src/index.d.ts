@@ -8,5 +8,6 @@ import { DiagonalBorder } from "./models/border";
 import { ConditionalFormatTwoColorScale } from "./models/conditional_format";
 import { ConditionalFormatThreeColorScale } from "./models/conditional_format";
 import { ConditionalFormatAverage } from "./models/conditional_format";
-export { Workbook, Sheet, Color, Format, Link, Border, DiagonalBorder, ConditionalFormatTwoColorScale, ConditionalFormatThreeColorScale, ConditionalFormatAverage };
+import { ConditionalFormatBlank } from "./models/conditional_format";
+export { Workbook, Sheet, Color, Format, Link, Border, DiagonalBorder, ConditionalFormatTwoColorScale, ConditionalFormatThreeColorScale, ConditionalFormatAverage, ConditionalFormatBlank };
 //# sourceMappingURL=index.d.ts.map
