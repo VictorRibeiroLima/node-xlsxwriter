@@ -372,6 +372,20 @@ class ConditionalFormatThreeColorScale extends ConditionalFormatTwoColorScale {
      */
     this.midRule = options.midRule;
   }
+
+  /**
+   * @param {Color} color
+   */
+  setMidColor(color) {
+    this.midColor = color;
+  }
+
+  /**
+   * @param {ConditionalFormatColorScaleRule} rule
+   */
+  setMidRule(rule) {
+    this.midRule = rule;
+  }
 }
 
 module.exports = {

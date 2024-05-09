@@ -1,74 +1,18 @@
 use std::collections::HashMap;
 
 use neon::{
-    context::{Context, FunctionContext},
+    context::FunctionContext,
     handle::Handle,
     object::Object,
     result::NeonResult,
-    types::{JsBoolean, JsDate, JsNumber, JsObject, JsString, JsValue},
+    types::{JsBoolean, JsNumber, JsObject, JsString},
 };
-use rust_xlsxwriter::{
-    Color, ConditionalFormat2ColorScale, ConditionalFormatType, ConditionalFormatValue,
-};
+use rust_xlsxwriter::{Color, ConditionalFormat2ColorScale, ConditionalFormat3ColorScale};
 
 use crate::node_xlsx::color::Color as NodeColor;
 
-use crate::node_xlsx::util::js_date_to_naive_date_time;
+use super::{c_type::NodeXlsxConditionalFormatType, rule::NodeXlsxRule};
 
-use super::c_type::NodeXlsxConditionalFormatType;
-
-struct NodeXlsxRule {
-    pub r_type: ConditionalFormatType,
-    pub value: ConditionalFormatValue,
-}
-
-impl NodeXlsxRule {
-    pub fn from_js_value(cx: &mut FunctionContext, obj: Handle<JsObject>) -> NeonResult<Self> {
-        let r_type: Handle<JsString> = obj.get(cx, "type")?;
-        let r_type = type_from_js_string(cx, r_type)?;
-        let value: Handle<JsValue> = obj.get(cx, "value")?;
-        let value = value_from_js_value(cx, value)?;
-        Ok(Self { r_type, value })
-    }
-}
-
-fn type_from_js_string(
-    cx: &mut FunctionContext,
-    value: Handle<JsString>,
-) -> NeonResult<ConditionalFormatType> {
-    let value = value.value(cx);
-    match value.as_str() {
-        "number" => Ok(ConditionalFormatType::Number),
-        "percent" => Ok(ConditionalFormatType::Percent),
-        "formula" => Ok(ConditionalFormatType::Formula),
-        "percentile" => Ok(ConditionalFormatType::Percentile),
-        "automatic" => Ok(ConditionalFormatType::Automatic),
-        "lowest" => Ok(ConditionalFormatType::Lowest),
-        "highest" => Ok(ConditionalFormatType::Highest),
-        _ => {
-            let err = format!("Invalid ConditionalFormatType: {}", value);
-            cx.throw_error(err)
-        }
-    }
-}
-
-fn value_from_js_value(
-    cx: &mut FunctionContext,
-    value: Handle<JsValue>,
-) -> NeonResult<ConditionalFormatValue> {
-    if let Ok(string) = value.downcast::<JsString, _>(cx) {
-        let string = string.value(cx);
-        return Ok(string.into());
-    } else if let Ok(number) = value.downcast::<JsNumber, _>(cx) {
-        let number = number.value(cx);
-        return Ok(number.into());
-    } else if let Ok(date) = value.downcast::<JsDate, _>(cx) {
-        let naive = &js_date_to_naive_date_time(cx, date)?;
-        return Ok(naive.into());
-    }
-    let err = format!("Invalid ConditionalFormatValue: {:?}", value);
-    cx.throw_error(err)
-}
 pub struct TwoColorScale {
     multi_range: Option<String>,
     stop_if_true: Option<bool>,
@@ -165,6 +109,88 @@ impl Into<ConditionalFormat2ColorScale> for TwoColorScale {
             scale = scale.set_minimum(min_rule.r_type, min_rule.value);
         }
         if let Some(max_rule) = self.max_rule {
+            scale = scale.set_maximum(max_rule.r_type, max_rule.value);
+        }
+        scale
+    }
+}
+
+pub struct ThreeColorScale {
+    mid_color: Option<Color>,
+    mid_rule: Option<NodeXlsxRule>,
+    two_color_scale: TwoColorScale,
+}
+
+impl ThreeColorScale {
+    pub fn from_js_object(cx: &mut FunctionContext, obj: Handle<JsObject>) -> NeonResult<Self> {
+        let mid_color: Option<Handle<JsObject>> = obj.get_opt(cx, "midColor")?;
+        let mid_color = match mid_color {
+            Some(color) => {
+                let color = NodeColor::from_js_object(cx, color)?;
+                let color = color.into();
+                Some(color)
+            }
+            None => None,
+        };
+
+        let mid_rule: Option<Handle<JsObject>> = obj.get_opt(cx, "midRule")?;
+        let mid_rule = match mid_rule {
+            Some(rule) => Some(NodeXlsxRule::from_js_value(cx, rule)?),
+            None => None,
+        };
+
+        let two_color_scale = TwoColorScale::from_js_object(cx, obj)?;
+
+        Ok(Self {
+            mid_color,
+            mid_rule,
+            two_color_scale,
+        })
+    }
+
+    pub fn create_and_set_to_map(
+        cx: &mut FunctionContext,
+        obj: Handle<JsObject>,
+        format_map: &mut HashMap<u32, NodeXlsxConditionalFormatType>,
+    ) -> NeonResult<u32> {
+        let id: Handle<JsNumber> = obj.get(cx, "id")?;
+        let id = id.value(cx) as u32;
+
+        let three_color_scale = ThreeColorScale::from_js_object(cx, obj)?;
+
+        format_map.insert(
+            id,
+            NodeXlsxConditionalFormatType::ThreeColorScale(three_color_scale.into()),
+        );
+        Ok(id)
+    }
+}
+
+impl Into<ConditionalFormat3ColorScale> for ThreeColorScale {
+    fn into(self) -> ConditionalFormat3ColorScale {
+        let mut scale = ConditionalFormat3ColorScale::new();
+        if let Some(mid_color) = self.mid_color {
+            scale = scale.set_midpoint_color(mid_color);
+        }
+        if let Some(mid_rule) = self.mid_rule {
+            scale = scale.set_midpoint(mid_rule.r_type, mid_rule.value);
+        }
+        if let Some(multi_range) = self.two_color_scale.multi_range {
+            scale = scale.set_multi_range(multi_range);
+        }
+        if let Some(stop_if_true) = self.two_color_scale.stop_if_true {
+            scale = scale.set_stop_if_true(stop_if_true);
+        }
+        if let Some(min_color) = self.two_color_scale.min_color {
+            scale = scale.set_minimum_color(min_color);
+        }
+        if let Some(max_color) = self.two_color_scale.max_color {
+            scale = scale.set_maximum_color(max_color);
+        }
+        if let Some(min_rule) = self.two_color_scale.min_rule {
+            scale = scale.set_minimum(min_rule.r_type, min_rule.value);
+        }
+        if let Some(max_rule) = self.two_color_scale.max_rule {
             scale = scale.set_maximum(max_rule.r_type, max_rule.value);
         }
         scale

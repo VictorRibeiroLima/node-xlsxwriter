@@ -10,7 +10,8 @@ use neon::{
 use rust_xlsxwriter::Worksheet;
 
 use crate::node_xlsx::conditional_format::{
-    c_type::NodeXlsxConditionalFormatType, two_color_scale::TwoColorScale,
+    c_type::NodeXlsxConditionalFormatType,
+    scale::{ThreeColorScale, TwoColorScale},
 };
 
 pub struct ConditionalFormatSheetValue {
@@ -70,6 +71,10 @@ impl ConditionalFormatSheetValue {
         let format = match f_type.as_str() {
             "twoColorScale" => {
                 let id = TwoColorScale::create_and_set_to_map(cx, format, format_map)?;
+                id
+            }
+            "threeColorScale" => {
+                let id = ThreeColorScale::create_and_set_to_map(cx, format, format_map)?;
                 id
             }
             _ => {

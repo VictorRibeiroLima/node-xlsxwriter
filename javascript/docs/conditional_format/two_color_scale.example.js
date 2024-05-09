@@ -1,5 +1,5 @@
 // @ts-check
-const { ConditionalFormatTwoColorScale, Sheet } = require('../src/index');
+const { ConditionalFormatTwoColorScale, Sheet } = require('../../src/index');
 
 const sheet = new Sheet('example');
 

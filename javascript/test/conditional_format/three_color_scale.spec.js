@@ -1,16 +1,19 @@
 // @ts-check
 const { test } = require('node:test');
 const assert = require('node:assert');
-const { Workbook, ConditionalFormatTwoColorScale } = require('../../src/index');
+const {
+  Workbook,
+  ConditionalFormatThreeColorScale,
+} = require('../../src/index');
 const fs = require('fs');
 
-test('save to file with format ("ConditionalFormatTwoColorScale")', async (t) => {
+test('save to file with format ("ConditionalFormatThreeColorScale")', async (t) => {
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
-  // Write a 2 color scale formats with standard Excel colors. The conditional
+  // Write a 3 color scale formats with standard Excel colors. The conditional
   // format is applied from the lowest to the highest value.
 
-  const twoColorScale = new ConditionalFormatTwoColorScale();
+  const twoColorScale = new ConditionalFormatThreeColorScale();
   sheet.addConditionalFormat({
     firstRow: 2,
     lastRow: 11,
@@ -19,10 +22,10 @@ test('save to file with format ("ConditionalFormatTwoColorScale")', async (t) =>
     format: twoColorScale,
   });
 
-  // Write a 2 color scale formats with standard Excel colors but a user
+  // Write a 3 color scale formats with standard Excel colors but a user
   // defined range. Values <= 3 will be shown with the minimum color while
   // values >= 7 will be shown with the maximum color.
-  const twoColorScaleCustomRange = new ConditionalFormatTwoColorScale({
+  const twoColorScaleCustomRange = new ConditionalFormatThreeColorScale({
     minRule: { type: 'number', value: 3 },
     maxRule: { type: 'number', value: 7 },
   });
@@ -35,12 +38,15 @@ test('save to file with format ("ConditionalFormatTwoColorScale")', async (t) =>
     format: twoColorScaleCustomRange,
   });
 
-  const twoColorScaleCustomRangeWithColor = new ConditionalFormatTwoColorScale({
-    minRule: { type: 'number', value: 3 },
-    maxRule: { type: 'number', value: 7 },
-    minColor: { red: 0, green: 0, blue: 255 },
-    maxColor: { red: 255, green: 0, blue: 0 },
-  });
+  const twoColorScaleCustomRangeWithColor =
+    new ConditionalFormatThreeColorScale({
+      minRule: { type: 'number', value: 1 },
+      midRule: { type: 'number', value: 4 },
+      maxRule: { type: 'number', value: 7 },
+      minColor: { red: 0, green: 0, blue: 255 },
+      midColor: { red: 0, green: 255, blue: 0 },
+      maxColor: { red: 255, green: 0, blue: 0 },
+    });
 
   sheet.addConditionalFormat({
     firstRow: 2,
@@ -57,11 +63,11 @@ test('save to file with format ("ConditionalFormatTwoColorScale")', async (t) =>
   }
 
   await workbook.saveToFile(
-    './temp/conditional_format/save-to-file-with-format-two-color-scale.xlsx',
+    './temp/conditional_format/save-to-file-with-format-three-color-scale.xlsx',
   );
   assert.ok(
     fs.existsSync(
-      './temp/conditional_format/save-to-file-with-format-two-color-scale.xlsx',
+      './temp/conditional_format/save-to-file-with-format-three-color-scale.xlsx',
     ),
   );
 });

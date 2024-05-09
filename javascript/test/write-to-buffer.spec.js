@@ -184,7 +184,6 @@ test('specific buffer', async (t) => {
     },
   });
 
-  console.log('workbook', workbook);
   const buffer = await workbook.saveToBuffer();
   assert.ok(buffer instanceof Buffer);
   fs.writeFileSync('./temp/specific_buffer.xlsx', buffer);
