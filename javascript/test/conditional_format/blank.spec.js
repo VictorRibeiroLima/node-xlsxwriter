@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const { Workbook, ConditionalFormatBlank, Format } = require('../../src/index');
 const fs = require('fs');
 
-test('save to file with format ("ConditionalFormatBlank")', async (t) => {
+test('save to file with conditional format ("ConditionalFormatBlank")', async (t) => {
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
 

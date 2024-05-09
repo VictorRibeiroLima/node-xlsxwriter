@@ -7,7 +7,7 @@ const {
 } = require('../../src/index');
 const fs = require('fs');
 
-test('save to file with format ("ConditionalFormatThreeColorScale")', async (t) => {
+test('save to file with conditional format ("ConditionalFormatThreeColorScale")', async (t) => {
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
   // Write a 3 color scale formats with standard Excel colors. The conditional

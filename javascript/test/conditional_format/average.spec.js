@@ -7,7 +7,7 @@ const {
 } = require('../../src/index');
 const fs = require('fs');
 
-test('save to file with format ("ConditionalFormatAverage")', async (t) => {
+test('save to file with conditional format ("ConditionalFormatAverage")', async (t) => {
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
 

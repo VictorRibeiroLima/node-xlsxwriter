@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const { Workbook, ConditionalFormatTwoColorScale } = require('../../src/index');
 const fs = require('fs');
 
-test('save to file with format ("ConditionalFormatTwoColorScale")', async (t) => {
+test('save to file with conditional format ("ConditionalFormatTwoColorScale")', async (t) => {
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
   // Write a 2 color scale formats with standard Excel colors. The conditional

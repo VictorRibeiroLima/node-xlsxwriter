@@ -8,7 +8,7 @@ const {
 } = require('../../src/index');
 const fs = require('fs');
 
-test('save to file with format ("ConditionalFormatDataBar")', async (t) => {
+test('save to file with conditional format ("ConditionalFormatDataBar")', async (t) => {
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
 

@@ -4,7 +4,7 @@ const assert = require('node:assert');
 const { Workbook, ConditionalFormatCell, Format } = require('../../src/index');
 const fs = require('fs');
 
-test('save to file with format ("ConditionalFormatCell") greaterThanOrEqualTo', async (t) => {
+test('save to file with conditional format ("ConditionalFormatCell") greaterThanOrEqualTo', async (t) => {
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
 
@@ -42,7 +42,7 @@ test('save to file with format ("ConditionalFormatCell") greaterThanOrEqualTo', 
   );
 });
 
-test('save to file with format ("ConditionalFormatCell") between', async (t) => {
+test('save to file with conditional format ("ConditionalFormatCell") between', async (t) => {
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
 
@@ -108,7 +108,7 @@ test('save to file with format ("ConditionalFormatCell") between', async (t) => 
   }
 });
 
-test('save to file with format ("ConditionalFormatCell") notBetween', async (t) => {
+test('save to file with conditional format ("ConditionalFormatCell") notBetween', async (t) => {
   const today = new Date();
   const tomorrow = addDays(today, 1);
 

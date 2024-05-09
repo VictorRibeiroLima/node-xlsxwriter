@@ -9,7 +9,7 @@ const {
 } = require('../../src/index');
 const fs = require('fs');
 
-test('save to file with format ("ConditionalFormatDate")', async (t) => {
+test('save to file with conditional format ("ConditionalFormatDate")', async (t) => {
   const thisMoth = new Date();
   const nextMonth = new Date();
   const lastMonth = new Date();
