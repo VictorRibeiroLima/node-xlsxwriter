@@ -11,6 +11,7 @@ use rust_xlsxwriter::{Format, Worksheet};
 
 use crate::node_xlsx::conditional_format::{
     average::Average,
+    blank::Blank,
     c_type::NodeXlsxConditionalFormatType,
     scale::{ThreeColorScale, TwoColorScale},
 };
@@ -83,6 +84,11 @@ impl ConditionalFormatSheetValue {
             "average" => {
                 let id =
                     Average::create_and_set_to_map(cx, format, conditional_format_map, format_map)?;
+                id
+            }
+            "blank" => {
+                let id =
+                    Blank::create_and_set_to_map(cx, format, conditional_format_map, format_map)?;
                 id
             }
             _ => {
