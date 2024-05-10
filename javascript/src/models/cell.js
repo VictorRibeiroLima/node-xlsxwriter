@@ -1,10 +1,11 @@
 // @ts-check
 const Format = require('./format');
 const Link = require('./link');
+const Formula = require('./formula');
 
 /**
- * @typedef {(number|string|Link)} CellValue
- * @typedef {("number"|"string"|"link"|"date")} CellType
+ * @typedef {(number|string|Link|Formula)} CellValue
+ * @typedef {("number"|"string"|"link"|"date"|"formula")} CellType
  */
 
 /**
@@ -19,42 +20,41 @@ const Link = require('./link');
  */
 class Cell {
   /**
-   * @param {number} col - The column index of the cell
-   * @param {number} row - The row index of the cell
-   * @param {string|number|Link} value - The value of the cell
-   * @param {CellType} [cellType] - The type of the cell
-   * @param {Format} [format] - The format of the cell
+   * @param {Object} opts - Options for the cell
+   * @param {number} opts.col - The column index of the cell
+   * @param {number} opts.row - The row index of the cell
+   * @param {CellValue} opts.value - The value of the cell
+   * @param {CellType} [opts.cellType] - The type of the cell
+   * @param {Format} [opts.format] - The format of the cell
    */
-  constructor(col, row, value, cellType, format) {
+  constructor(opts) {
     /**
      * The column index of the cell
      * @type {number}
      */
-    this.col = col;
+    this.col = opts.col;
     /**
      * The row index of the cell
      * @type {number}
      */
-    this.row = row;
+    this.row = opts.row;
     /**
      * The value of the cell
      * @type {CellValue}
      */
-    this.value = value;
-    if (cellType) {
-      /**
-       * The type of the cell
-       * @type {CellType}
-       */
-      this.cellType = cellType;
-    }
-    if (format) {
-      /**
-       * The format of the cell
-       * @type {Format}
-       */
-      this.format = format;
-    }
+    this.value = opts.value;
+
+    /**
+     * The type of the cell
+     * @type {CellType|undefined}
+     */
+    this.cellType = opts.cellType ?? undefined;
+
+    /**
+     * The format of the cell
+     * @type {Format|undefined}
+     */
+    this.format = opts.format ?? undefined;
   }
 }
 

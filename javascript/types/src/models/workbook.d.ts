@@ -75,5 +75,5 @@ declare class Workbook {
      */
     saveToBase64Sync(): string;
 }
-import Sheet = require("./sheet");
+import { Sheet } from "./sheet";
 //# sourceMappingURL=workbook.d.ts.map

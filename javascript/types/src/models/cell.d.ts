@@ -1,7 +1,7 @@
 export = Cell;
 /**
- * @typedef {(number|string|Link)} CellValue
- * @typedef {("number"|"string"|"link"|"date")} CellType
+ * @typedef {(number|string|Link|Formula)} CellValue
+ * @typedef {("number"|"string"|"link"|"date"|"formula")} CellType
  */
 /**
  *
@@ -15,13 +15,20 @@ export = Cell;
  */
 declare class Cell {
     /**
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
-     * @param {string|number|Link} value - The value of the cell
-     * @param {CellType} [cellType] - The type of the cell
-     * @param {Format} [format] - The format of the cell
+     * @param {Object} opts - Options for the cell
+     * @param {number} opts.col - The column index of the cell
+     * @param {number} opts.row - The row index of the cell
+     * @param {CellValue} opts.value - The value of the cell
+     * @param {CellType} [opts.cellType] - The type of the cell
+     * @param {Format} [opts.format] - The format of the cell
      */
-    constructor(col: number, row: number, value: string | number | Link, cellType?: CellType, format?: Format);
+    constructor(opts: {
+        col: number;
+        row: number;
+        value: CellValue;
+        cellType?: CellType;
+        format?: Format;
+    });
     /**
      * The column index of the cell
      * @type {number}
@@ -39,20 +46,21 @@ declare class Cell {
     value: CellValue;
     /**
      * The type of the cell
-     * @type {CellType}
+     * @type {CellType|undefined}
      */
-    cellType: CellType;
+    cellType: CellType | undefined;
     /**
      * The format of the cell
-     * @type {Format}
+     * @type {Format|undefined}
      */
-    format: Format;
+    format: Format | undefined;
 }
 declare namespace Cell {
     export { CellValue, CellType };
 }
-type CellValue = (number | string | Link);
-type CellType = ("number" | "string" | "link" | "date");
+type CellValue = (number | string | Link | Formula);
+type CellType = ("number" | "string" | "link" | "date" | "formula");
 import Format = require("./format");
 import Link = require("./link");
+import Formula = require("./formula");
 //# sourceMappingURL=cell.d.ts.map

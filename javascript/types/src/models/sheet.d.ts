@@ -1,12 +1,13 @@
-export = Sheet;
 /**
  *
  * @class Sheet
  * @classdesc A sheet is a collection of cells.
  * @property {string} name - The name of the sheet
  * @property {Cell[]} cells - The cells in the sheet
+ * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
+ * @property {ArrayFormulaSheetValue[]} arrayFormulas - The array formulas of the sheet
  */
-declare class Sheet {
+export class Sheet {
     /**
      * @param {string} name - The name of the sheet
      */
@@ -22,62 +23,115 @@ declare class Sheet {
      */
     cells: Cell[];
     /**
+     * The conditional format values of the sheet
+     * @type {ConditionalFormatSheetValue[]}
+     */
+    conditionalFormats: ConditionalFormatSheetValue[];
+    /**
+     * The array formulas of the sheet
+     * @type {ArrayFormulaSheetValue[]}
+     */
+    arrayFormulas: ArrayFormulaSheetValue[];
+    /**
+     * Adds a conditional format to the sheet
+     * @param {Object} opts - The options for the conditional format
+     * @param {number} opts.firstRow - The first row of the range
+     * @param {number} opts.lastRow - The last row of the range
+     * @param {number} opts.firstColumn - The first column of the range
+     * @param {number} opts.lastColumn - The last column of the range
+     * @param {ConditionalFormat} opts.format - The format of the range
+     * @returns {void}
+     */
+    addConditionalFormat(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstColumn: number;
+        lastColumn: number;
+        format: ConditionalFormat;
+    }): void;
+    /**
+     * @param {Object} opts - The options for the array formula
+     * @param {number} opts.firstRow - The first row of the range
+     * @param {number} opts.lastRow - The last row of the range
+     * @param {number} opts.firstColumn - The first column of the range
+     * @param {number} opts.lastColumn - The last column of the range
+     * @param {Formula} opts.formula - The formula of the range
+     * @param {Format} [opts.format] - The format of the range
+     */
+    addArrayFormula(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstColumn: number;
+        lastColumn: number;
+        formula: Formula;
+        format?: Format;
+    }): void;
+    /**
      * Writes a cell to the sheet
      *
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
-     * @param {string|number|Link|Date|any} value - The value of the cell.
-     * @param {("number"|"string"|"link"|"date")} [cellType] - The type of the cell(if not provider .toString() will be used)
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
+     * @param {string|number|Link|Date|Formula|any} value - The value of the cell.
+     * @param {("number"|"string"|"link"|"date"|"formula")} [cellType] - The type of the cell(if not provider .toString() will be used)
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeCell(col: number, row: number, value: string | number | Link | Date | any, cellType?: ("number" | "string" | "link" | "date"), format?: Format): void;
+    writeCell(row: number, col: number, value: string | number | Link | Date | Formula | any, cellType?: ("number" | "string" | "link" | "date" | "formula"), format?: Format): void;
     /**
      * writes a string value to a cell
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
      * @param {string} value - The value to write to the cell
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeString(col: number, row: number, value: string, format?: Format): void;
+    writeString(row: number, col: number, value: string, format?: Format): void;
     /**
      * writes a number value to a cell
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
      * @param {number} value - The value to write to the cell
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeNumber(col: number, row: number, value: number, format?: Format): void;
+    writeNumber(row: number, col: number, value: number, format?: Format): void;
     /**
      * writes a link value to a cell
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
      * @param {Link} value - The value to write to the cell
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeLink(col: number, row: number, value: Link, format?: Format): void;
+    writeLink(row: number, col: number, value: Link, format?: Format): void;
     /**
      * writes a date value to a cell
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
      * @param {Date} value - The value to write to the cell
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeDate(col: number, row: number, value: Date, format?: Format): void;
+    writeDate(row: number, col: number, value: Date, format?: Format): void;
+    /**
+     * writes a formula value to a cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
+     * @param {Formula} value - The value to write to the cell
+     * @param {Format} [format] - The format of the cell
+     * @returns {void}
+     */
+    writeFormula(row: number, col: number, value: Formula, format?: Format): void;
     /**
      *
      * @typedef {Object} FormatOptions
@@ -113,7 +167,114 @@ declare class Sheet {
         };
     }): void;
 }
+/**
+ * @class ArrayFormulaSheetValue
+ * @classdesc Represents the values of an array formula sheet.
+ * @property {number} firstRow - The first row of the range
+ * @property {number} lastRow - The last row of the range
+ * @property {number} firstColumn - The first column of the range
+ * @property {number} lastColumn - The last column of the range
+ * @property {Formula} formula - The formula of the range
+ * @property {Format} [format] - The format of the range
+ */
+export class ArrayFormulaSheetValue {
+    /**
+     * @param {Object} opts - The options for the array formula
+     * @param {number} opts.firstRow - The first row of the range
+     * @param {number} opts.lastRow - The last row of the range
+     * @param {number} opts.firstColumn - The first column of the range
+     * @param {number} opts.lastColumn - The last column of the range
+     * @param {Formula} opts.formula - The formula of the range
+     * @param {Format} [opts.format] - The format of the range
+     */
+    constructor(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstColumn: number;
+        lastColumn: number;
+        formula: Formula;
+        format?: Format;
+    });
+    /**
+     * The first row of the range
+     * @type {number}
+     */
+    firstRow: number;
+    /**
+     * The last row of the range
+     * @type {number}
+     */
+    lastRow: number;
+    /**
+     * The first column of the range
+     * @type {number}
+     */
+    firstColumn: number;
+    /**
+     * The last column of the range
+     * @type {number}
+     */
+    lastColumn: number;
+    /**
+     * The formula of the range
+     * @type {Formula}
+     */
+    formula: Formula;
+    /**
+     * The format of the range
+     * @type {Format|undefined}
+     */
+    format: Format | undefined;
+}
 import Cell = require("./cell");
-import Link = require("./link");
+/**
+ * @class ConditionalFormatSheetValue
+ * @classdesc Represents the values of a conditional format sheet.
+ * @property {number} firstRow - The first row of the range
+ * @property {number} lastRow - The last row of the range
+ * @property {number} firstColumn - The first column of the range
+ * @property {number} lastColumn - The last column of the range
+ * @property {ConditionalFormat} format - The format of the range
+ *
+ */
+declare class ConditionalFormatSheetValue {
+    /**
+     * @param {number} firstRow - The first row of the range
+     * @param {number} lastRow - The last row of the range
+     * @param {number} firstColumn - The first column of the range
+     * @param {number} lastColumn - The last column of the range
+     * @param {ConditionalFormat} format - The format of the range
+     */
+    constructor(firstRow: number, lastRow: number, firstColumn: number, lastColumn: number, format: ConditionalFormat);
+    /**
+     * The first row of the range
+     * @type {number}
+     */
+    firstRow: number;
+    /**
+     * The last row of the range
+     * @type {number}
+     */
+    lastRow: number;
+    /**
+     * The first column of the range
+     * @type {number}
+     */
+    firstColumn: number;
+    /**
+     * The last column of the range
+     * @type {number}
+     */
+    lastColumn: number;
+    /**
+     * The format of the range
+     * @type {ConditionalFormat}
+     */
+    format: ConditionalFormat;
+}
+import { ConditionalFormat } from "./conditional_format";
+import Formula = require("./formula");
 import Format = require("./format");
+import Link = require("./link");
+export {};
 //# sourceMappingURL=sheet.d.ts.map

@@ -9,26 +9,27 @@
  */
 class Color {
   /**
-   * @param {number} red
-   * @param {number} green
-   * @param {number} blue
+   * @param {Object} [opts = {}] - Options for the color
+   * @param {number} [opts.red=0]
+   * @param {number} [opts.green=0]
+   * @param {number} [opts.blue=0]
    */
-  constructor(red, green, blue) {
+  constructor(opts = {}) {
     /**
      * The red value of the color
      * @type {number}
      */
-    this.red = red;
+    this.red = opts.red ?? 0;
     /**
      * The green value of the color
      * @type {number}
      */
-    this.green = green;
+    this.green = opts.green ?? 0;
     /**
      * The blue value of the color
      * @type {number}
      */
-    this.blue = blue;
+    this.blue = opts.blue ?? 0;
   }
 }
 

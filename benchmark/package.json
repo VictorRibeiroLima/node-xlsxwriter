@@ -1,0 +1,21 @@
+{
+  "name": "benchmark",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dry": "node dry_run.js",
+    "run:100": "node --max-old-space-size=4096 bench_100.js",
+    "run:1000": "node --max-old-space-size=4096 bench_1000.js",
+    "run:10000": "node --max-old-space-size=4096 bench_10_000.js",
+    "run": "npm run run:100 && npm run run:1000 && npm run run:10000"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "benchmarkify": "^4.0.0",
+    "excel4node": "^1.8.2",
+    "xlsx": "^0.18.5"
+  }
+}

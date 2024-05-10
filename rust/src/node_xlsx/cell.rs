@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use super::{format::Format, types::NodeXlsxTypes};
+use super::{types::NodeXlsxTypes, util::create_format};
 use neon::{
     context::{Context, FunctionContext},
     handle::Handle,
@@ -70,7 +70,7 @@ impl NodeXlsxCell {
         let format: Option<Handle<JsObject>> = obj.get_opt(cx, "format")?;
 
         let format = match format {
-            Some(format) => Some(Self::create_format(cx, format, format_map)?),
+            Some(format) => Some(create_format(cx, format, format_map)?),
             None => None,
         };
 
@@ -80,19 +80,5 @@ impl NodeXlsxCell {
             cell_type: cel_type,
             format,
         })
-    }
-
-    fn create_format(
-        cx: &mut FunctionContext,
-        obj: Handle<JsObject>,
-        format_map: &mut HashMap<u32, rust_xlsxwriter::Format>,
-    ) -> NeonResult<u32> {
-        let id: Handle<JsNumber> = obj.get(cx, "id")?;
-        let id = id.value(cx) as u32;
-        if !format_map.contains_key(&id) {
-            let format = Format::from_js_object(cx, obj)?;
-            format_map.insert(id, format.into());
-        }
-        Ok(id)
     }
 }

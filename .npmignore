@@ -13,3 +13,5 @@ README.md
 /rust
 *.rs
 **/test
+**/docs
+/benchmark

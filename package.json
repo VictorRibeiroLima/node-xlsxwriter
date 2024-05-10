@@ -1,6 +1,6 @@
 {
   "name": "node-xlsxwriter",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "node-xlsxwriter is a Node.js wrapper for the Rust library rust_xlsxwriter",
   "main": "./javascript/src/index.js",
   "author": "Victor Ribeiro de Lima",
@@ -10,6 +10,7 @@
     "build": "cargo-cp-artifact -nc index.node -- cargo build --message-format=json-render-diagnostics",
     "build:debug": "npm run build && rm -rf native && mkdir native && mv ./index.node ./native/node-xlsxwriter.node",
     "build:release": "npm run build -- --release && npx tsc",
+    "release:types": "npx tsc",
     "release:native": "npm run build:release && rm -rf native && mkdir native && mv ./index.node ./native/node-xlsxwriter.node",
     "test:rust": "cargo test",
     "test:node": "node --test javascript/test"

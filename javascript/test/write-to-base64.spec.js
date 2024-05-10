@@ -25,14 +25,18 @@ test('save to base64 with format', async (t) => {
   const format = new Format({
     align: 'center',
     bold: true,
-    backgroundColor: new Color(255, 0, 0),
+    backgroundColor: new Color({
+      red: 255,
+      green: 0,
+      blue: 0,
+    }),
     fontSize: 16,
     underline: 'double',
     fontScheme: 'minor',
     fontName: 'Arial',
   });
 
-  format.setBorder(new Border('thin', new Color(0, 0, 0)));
+  format.setBorder(new Border('thin', new Color()));
   sheet.writeString(1, 1, 'Hello, World!', format);
   const base64 = await workbook.saveToBase64();
   assert.ok(typeof base64 === 'string');

@@ -21,14 +21,14 @@ test('save to file with format', async (t) => {
   const format = new Format({
     align: 'center',
     bold: true,
-    backgroundColor: new Color(255, 0, 0),
+    backgroundColor: new Color({ red: 255 }),
     fontSize: 16,
     underline: 'double',
     fontScheme: 'minor',
     fontName: 'Arial',
   });
 
-  format.setBorder(new Border('thin', new Color(0, 0, 0)));
+  format.setBorder(new Border('thin', new Color()));
   sheet.writeString(1, 1, 'Hello, World!', format);
   await workbook.saveToFile('./temp/save-to-file-with-format.xlsx');
   assert.ok(fs.existsSync('./temp/save-to-file-with-format.xlsx'));
