@@ -6,9 +6,9 @@ use neon::{
     result::NeonResult,
     types::{JsArray, JsObject, JsValue},
 };
-use rust_xlsxwriter::{worksheet, Workbook, Worksheet};
+use rust_xlsxwriter::Workbook;
 
-use self::{error::NodeXlsxError, sheet::NodeXlsxSheet, types::NodeXlsxTypes};
+use self::{error::NodeXlsxError, sheet::NodeXlsxSheet};
 
 mod border;
 mod cell;

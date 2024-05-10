@@ -19,7 +19,10 @@ const {
   ConditionalFormatError,
 } = require('./models/conditional_format');
 
+const { colorUtils } = require('./utils');
+
 module.exports = {
+  colorUtils,
   Workbook,
   Sheet,
   Color,

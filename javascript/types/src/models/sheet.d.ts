@@ -50,15 +50,27 @@ export class Sheet {
         format: ConditionalFormat;
     }): void;
     /**
-     * adds an array formula to the sheet
-     * @param {ArrayFormulaSheetValue} arrayFormula
+     * @param {Object} opts - The options for the array formula
+     * @param {number} opts.firstRow - The first row of the range
+     * @param {number} opts.lastRow - The last row of the range
+     * @param {number} opts.firstColumn - The first column of the range
+     * @param {number} opts.lastColumn - The last column of the range
+     * @param {Formula} opts.formula - The formula of the range
+     * @param {Format} [opts.format] - The format of the range
      */
-    addArrayFormula(arrayFormula: ArrayFormulaSheetValue): void;
+    addArrayFormula(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstColumn: number;
+        lastColumn: number;
+        formula: Formula;
+        format?: Format;
+    }): void;
     /**
      * Writes a cell to the sheet
      *
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
      * @param {string|number|Link|Date|Formula|any} value - The value of the cell.
      * @param {("number"|"string"|"link"|"date"|"formula")} [cellType] - The type of the cell(if not provider .toString() will be used)
      * @param {Format} [format] - The format of the cell
@@ -66,60 +78,60 @@ export class Sheet {
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeCell(col: number, row: number, value: string | number | Link | Date | Formula | any, cellType?: ("number" | "string" | "link" | "date" | "formula"), format?: Format): void;
+    writeCell(row: number, col: number, value: string | number | Link | Date | Formula | any, cellType?: ("number" | "string" | "link" | "date" | "formula"), format?: Format): void;
     /**
      * writes a string value to a cell
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
      * @param {string} value - The value to write to the cell
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeString(col: number, row: number, value: string, format?: Format): void;
+    writeString(row: number, col: number, value: string, format?: Format): void;
     /**
      * writes a number value to a cell
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
      * @param {number} value - The value to write to the cell
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeNumber(col: number, row: number, value: number, format?: Format): void;
+    writeNumber(row: number, col: number, value: number, format?: Format): void;
     /**
      * writes a link value to a cell
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
      * @param {Link} value - The value to write to the cell
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeLink(col: number, row: number, value: Link, format?: Format): void;
+    writeLink(row: number, col: number, value: Link, format?: Format): void;
     /**
      * writes a date value to a cell
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
      * @param {Date} value - The value to write to the cell
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      * @throws {Error} - col > 65_535 or col < 0
      * @throws {Error} - row > 1_048_577 or row < 0
      */
-    writeDate(col: number, row: number, value: Date, format?: Format): void;
+    writeDate(row: number, col: number, value: Date, format?: Format): void;
     /**
      * writes a formula value to a cell
-     * @param {number} col - The column index of the cell
-     * @param {number} row - The row index of the cell
+     * @param {number} row - the cell row
+     * @param {number} col - the cell col
      * @param {Formula} value - The value to write to the cell
      * @param {Format} [format] - The format of the cell
      * @returns {void}
      */
-    writeFormula(col: number, row: number, value: Formula, format?: Format): void;
+    writeFormula(row: number, col: number, value: Formula, format?: Format): void;
     /**
      *
      * @typedef {Object} FormatOptions
@@ -261,8 +273,8 @@ declare class ConditionalFormatSheetValue {
     format: ConditionalFormat;
 }
 import { ConditionalFormat } from "./conditional_format";
-import Link = require("./link");
 import Formula = require("./formula");
 import Format = require("./format");
+import Link = require("./link");
 export {};
 //# sourceMappingURL=sheet.d.ts.map

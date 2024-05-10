@@ -170,18 +170,24 @@ class Sheet {
   }
 
   /**
-   * adds an array formula to the sheet
-   * @param {ArrayFormulaSheetValue} arrayFormula
+   * @param {Object} opts - The options for the array formula
+   * @param {number} opts.firstRow - The first row of the range
+   * @param {number} opts.lastRow - The last row of the range
+   * @param {number} opts.firstColumn - The first column of the range
+   * @param {number} opts.lastColumn - The last column of the range
+   * @param {Formula} opts.formula - The formula of the range
+   * @param {Format} [opts.format] - The format of the range
    */
-  addArrayFormula(arrayFormula) {
+  addArrayFormula(opts) {
+    const arrayFormula = new ArrayFormulaSheetValue(opts);
     this.arrayFormulas.push(arrayFormula);
   }
 
   /**
    * Writes a cell to the sheet
    *
-   * @param {number} col - The column index of the cell
-   * @param {number} row - The row index of the cell
+   * @param {number} row - the cell row
+   * @param {number} col - the cell col
    * @param {string|number|Link|Date|Formula|any} value - The value of the cell.
    * @param {("number"|"string"|"link"|"date"|"formula")} [cellType] - The type of the cell(if not provider .toString() will be used)
    * @param {Format} [format] - The format of the cell
@@ -189,7 +195,7 @@ class Sheet {
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row > 1_048_577 or row < 0
    */
-  writeCell(col, row, value, cellType, format) {
+  writeCell(row, col, value, cellType, format) {
     if (col > 65_535 || col < 0) {
       throw new Error('Invalid column index');
     }
@@ -208,74 +214,74 @@ class Sheet {
 
   /**
    * writes a string value to a cell
-   * @param {number} col - The column index of the cell
-   * @param {number} row - The row index of the cell
+   * @param {number} row - the cell row
+   * @param {number} col - the cell col
    * @param {string} value - The value to write to the cell
    * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row > 1_048_577 or row < 0
    */
-  writeString(col, row, value, format) {
-    this.writeCell(col, row, value, 'string', format);
+  writeString(row, col, value, format) {
+    this.writeCell(row, col, value, 'string', format);
   }
 
   /**
    * writes a number value to a cell
-   * @param {number} col - The column index of the cell
-   * @param {number} row - The row index of the cell
+   * @param {number} row - the cell row
+   * @param {number} col - the cell col
    * @param {number} value - The value to write to the cell
    * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row > 1_048_577 or row < 0
    */
-  writeNumber(col, row, value, format) {
+  writeNumber(row, col, value, format) {
     if (!isNaN(value)) {
-      this.writeCell(col, row, value, 'number', format);
+      this.writeCell(row, col, value, 'number', format);
       return;
     }
-    this.writeCell(col, row, value, 'string', format);
+    this.writeCell(row, col, value, 'string', format);
   }
 
   /**
    * writes a link value to a cell
-   * @param {number} col - The column index of the cell
-   * @param {number} row - The row index of the cell
+   * @param {number} row - the cell row
+   * @param {number} col - the cell col
    * @param {Link} value - The value to write to the cell
    * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row > 1_048_577 or row < 0
    */
-  writeLink(col, row, value, format) {
-    this.writeCell(col, row, value, 'link', format);
+  writeLink(row, col, value, format) {
+    this.writeCell(row, col, value, 'link', format);
   }
 
   /**
    * writes a date value to a cell
-   * @param {number} col - The column index of the cell
-   * @param {number} row - The row index of the cell
+   * @param {number} row - the cell row
+   * @param {number} col - the cell col
    * @param {Date} value - The value to write to the cell
    * @param {Format} [format] - The format of the cell
    * @returns {void}
    * @throws {Error} - col > 65_535 or col < 0
    * @throws {Error} - row > 1_048_577 or row < 0
    */
-  writeDate(col, row, value, format) {
-    this.writeCell(col, row, value, 'date', format);
+  writeDate(row, col, value, format) {
+    this.writeCell(row, col, value, 'date', format);
   }
 
   /**
    * writes a formula value to a cell
-   * @param {number} col - The column index of the cell
-   * @param {number} row - The row index of the cell
+   * @param {number} row - the cell row
+   * @param {number} col - the cell col
    * @param {Formula} value - The value to write to the cell
    * @param {Format} [format] - The format of the cell
    * @returns {void}
    */
-  writeFormula(col, row, value, format) {
-    this.writeCell(col, row, value, 'formula', format);
+  writeFormula(row, col, value, format) {
+    this.writeCell(row, col, value, 'formula', format);
   }
 
   /**
