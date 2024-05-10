@@ -305,35 +305,35 @@ class Sheet {
 
     const keys = Object.keys(objects[0]);
     // write headers
-    for (let i = 0; i < keys.length; i++) {
-      const format = headerFormat || columnFormats?.[keys[i]];
-      this.writeString(i, 0, keys[i], format);
+    for (let col = 0; col < keys.length; col++) {
+      const format = headerFormat || columnFormats?.[keys[col]];
+      this.writeString(0, col, keys[col], format);
     }
 
     // write data
-    for (let i = 0; i < objects.length; i++) {
-      for (let j = 0; j < keys.length; j++) {
-        const format = columnFormats?.[keys[j]] || cellFormat;
-        const type = typeof objects[i][keys[j]];
-        const value = objects[i][keys[j]];
+    for (let col = 0; col < objects.length; col++) {
+      for (let row = 0; row < keys.length; row++) {
+        const format = columnFormats?.[keys[row]] || cellFormat;
+        const type = typeof objects[col][keys[row]];
+        const value = objects[col][keys[row]];
         switch (type) {
           case 'string':
-            this.writeString(j, i + 1, value, format);
+            this.writeString(col + 1, row, value, format);
             break;
           case 'number':
-            this.writeNumber(j, i + 1, value, format);
+            this.writeNumber(col + 1, row, value, format);
             break;
           case 'object':
             if (value instanceof Link) {
-              this.writeLink(j, i + 1, value, format);
+              this.writeLink(col + 1, row, value, format);
             } else if (value instanceof Date) {
-              this.writeCell(j, i + 1, value, 'date', format);
+              this.writeCell(col + 1, row, value, 'date', format);
             } else {
-              this.writeCell(j, i + 1, value, null, format);
+              this.writeCell(col + 1, row, value, null, format);
             }
             break;
           default:
-            this.writeCell(j, i + 1, value, null, format);
+            this.writeCell(col + 1, row, value, null, format);
         }
       }
     }
