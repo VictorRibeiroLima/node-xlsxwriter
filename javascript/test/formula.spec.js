@@ -1,5 +1,14 @@
 // @ts-check
-const { Workbook, Format, Formula, Sheet, colorUtils } = require('../src');
+const {
+  Workbook,
+  Format,
+  Formula,
+  Sheet,
+  colorUtils,
+  Color,
+  Border,
+  Link,
+} = require('../src');
 const { test } = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');

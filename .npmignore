@@ -14,3 +14,4 @@ README.md
 *.rs
 **/test
 **/docs
+/benchmark
