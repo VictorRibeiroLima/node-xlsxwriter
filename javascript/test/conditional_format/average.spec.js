@@ -1,5 +1,9 @@
+// @ts-check
 const { test } = require('node:test');
 const assert = require('node:assert');
+const findRootDir = require('../util');
+const rootPath = findRootDir(__dirname);
+const path = rootPath + '/temp/conditional_format';
 const {
   Workbook,
   ConditionalFormatAverage,
@@ -47,20 +51,14 @@ test('save to file with conditional format ("ConditionalFormatAverage")', async 
     format: averageFormat2,
   });
 
-  for (let i = 2; i <= 11; i++) {
-    for (let j = 1; j <= 10; j++) {
-      sheet.writeNumber(j, i, i);
+  for (let row = 2; row <= 11; row++) {
+    for (let col = 1; col <= 10; col++) {
+      sheet.writeNumber(row, col, row);
     }
   }
 
-  await workbook.saveToFile(
-    './temp/conditional_format/save-to-file-with-format-average.xlsx',
-  );
-  assert.ok(
-    fs.existsSync(
-      './temp/conditional_format/save-to-file-with-format-average.xlsx',
-    ),
-  );
+  await workbook.saveToFile(`${path}/save-to-file-with-format-average.xlsx`);
+  assert.ok(fs.existsSync(`${path}/save-to-file-with-format-average.xlsx`));
 });
 
 test('save to file with no format ("ConditionalFormatAverage")', async (t) => {
@@ -80,18 +78,12 @@ test('save to file with no format ("ConditionalFormatAverage")', async (t) => {
     format: averageFormat2,
   });
 
-  for (let i = 2; i <= 11; i++) {
-    for (let j = 1; j <= 10; j++) {
-      sheet.writeNumber(j, i, i);
+  for (let row = 2; row <= 11; row++) {
+    for (let col = 1; col <= 10; col++) {
+      sheet.writeNumber(row, col, row);
     }
   }
 
-  await workbook.saveToFile(
-    './temp/conditional_format/save-to-file-with-no-format-average.xlsx',
-  );
-  assert.ok(
-    fs.existsSync(
-      './temp/conditional_format/save-to-file-with-no-format-average.xlsx',
-    ),
-  );
+  await workbook.saveToFile(`${path}/save-to-file-with-no-format-average.xlsx`);
+  assert.ok(fs.existsSync(`${path}/save-to-file-with-no-format-average.xlsx`));
 });

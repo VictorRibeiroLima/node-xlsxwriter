@@ -3,6 +3,9 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const { Workbook, Link, Format, Color, Border } = require('../src/index');
 const fs = require('fs');
+const findRootDir = require('./util');
+const rootPath = findRootDir(__dirname);
+const path = rootPath + '/temp';
 
 test('save to base64 basic', async (t) => {
   const workbook = new Workbook();
@@ -14,7 +17,7 @@ test('save to base64 basic', async (t) => {
   const base64 = await workbook.saveToBase64();
   assert.ok(typeof base64 === 'string');
   fs.writeFileSync(
-    './temp/save_to_base64_basic.xlsx',
+    `${path}/save_to_base64_basic.xlsx`,
     Buffer.from(base64, 'base64'),
   );
 });
@@ -41,7 +44,7 @@ test('save to base64 with format', async (t) => {
   const base64 = await workbook.saveToBase64();
   assert.ok(typeof base64 === 'string');
   fs.writeFileSync(
-    './temp/save_to_base64_with_format.xlsx',
+    `${path}/save_to_base64_with_format.xlsx`,
     Buffer.from(base64, 'base64'),
   );
 });
@@ -56,7 +59,7 @@ test('save to base64 sync', (t) => {
   const base64 = workbook.saveToBase64Sync();
   assert.ok(typeof base64 === 'string');
   fs.writeFileSync(
-    './temp/save_to_base64_sync.xlsx',
+    `${path}/save_to_base64_sync.xlsx`,
     Buffer.from(base64, 'base64'),
   );
 });

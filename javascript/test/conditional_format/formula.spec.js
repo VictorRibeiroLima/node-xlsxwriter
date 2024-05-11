@@ -3,19 +3,17 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const {
   Workbook,
-  ConditionalFormatDuplicate,
+  ConditionalFormatFormula,
   Color,
   Format,
+  Formula,
 } = require('../../src/index');
 const fs = require('fs');
 const findRootDir = require('../util');
 const rootPath = findRootDir(__dirname);
 const path = rootPath + '/temp/conditional_format';
 
-test('save to file with conditional format ("ConditionalFormatDuplicate")', async (t) => {
-  const workbook = new Workbook();
-  const sheet = workbook.addSheet();
-
+test('save to file with conditional format ("ConditionalFormatFormula")', async (t) => {
   const lightRed = new Color({
     red: 255,
     green: 102,
@@ -28,21 +26,41 @@ test('save to file with conditional format ("ConditionalFormatDuplicate")', asyn
     blue: 102,
   });
 
-  const duplicated = new Format({
+  const redFormat = new Format({
     backgroundColor: lightRed,
   });
 
-  const unique = new Format({
+  const greenFormat = new Format({
     backgroundColor: lightGreen,
   });
 
-  const duplicateFormat = new ConditionalFormatDuplicate({
-    format: duplicated,
+  const isOdd = new Formula({
+    formula: '=ISODD(B3)',
   });
 
-  const uniqueFormat = new ConditionalFormatDuplicate({
-    format: unique,
-    invert: true,
+  const isEven = new Formula({
+    formula: '=ISEVEN(B3)',
+  });
+
+  const oddFormat = new ConditionalFormatFormula({
+    formula: isOdd,
+    format: redFormat,
+  });
+
+  const evenFormat = new ConditionalFormatFormula({
+    formula: isEven,
+    format: greenFormat,
+  });
+
+  const workbook = new Workbook();
+  const sheet = workbook.addSheet();
+
+  sheet.addConditionalFormat({
+    firstRow: 2,
+    lastRow: 11,
+    firstColumn: 1,
+    lastColumn: 10,
+    format: oddFormat,
   });
 
   sheet.addConditionalFormat({
@@ -50,31 +68,16 @@ test('save to file with conditional format ("ConditionalFormatDuplicate")', asyn
     lastRow: 11,
     firstColumn: 1,
     lastColumn: 10,
-    format: duplicateFormat,
-  });
-
-  sheet.addConditionalFormat({
-    firstRow: 2,
-    lastRow: 11,
-    firstColumn: 1,
-    lastColumn: 10,
-    format: uniqueFormat,
+    format: evenFormat,
   });
 
   for (let row = 2; row <= 11; row++) {
     for (let col = 1; col <= 10; col++) {
-      if (row % 2 === 0) {
-        sheet.writeString(row, col, `${row}-${col}`);
-      } else {
-        sheet.writeString(row, col, 'duplicated');
-      }
+      sheet.writeNumber(row, col, row);
     }
   }
 
-  const fileName =
-    path + '/save-to-file-with-format-conditional-format-duplicate.xlsx';
+  await workbook.saveToFile(`${path}/save-to-file-with-format-formula.xlsx`);
 
-  await workbook.saveToFile(fileName);
-
-  assert.ok(fs.existsSync(fileName), 'File has been saved to the file system');
+  assert.ok(fs.existsSync(`${path}/save-to-file-with-format-formula.xlsx`));
 });

@@ -7,6 +7,9 @@ const {
   Color,
 } = require('../../src/index');
 const fs = require('fs');
+const findRootDir = require('../util');
+const rootPath = findRootDir(__dirname);
+const path = rootPath + '/temp/conditional_format';
 
 test('save to file with conditional format ("ConditionalFormatDataBar")', async (t) => {
   const workbook = new Workbook();
@@ -53,18 +56,12 @@ test('save to file with conditional format ("ConditionalFormatDataBar")', async 
     format: minMaxConditionalFormat,
   });
 
-  for (let i = 2; i <= 11; i++) {
-    sheet.writeNumber(1, i, i);
-    sheet.writeNumber(3, i, i);
+  for (let row = 2; row <= 11; row++) {
+    sheet.writeNumber(row, 1, row);
+    sheet.writeNumber(row, 3, row);
   }
 
-  await workbook.saveToFile(
-    './temp/conditional_format/save-to-file-with-format-data-bar.xlsx',
-  );
+  await workbook.saveToFile(`${path}/save-to-file-with-format-data-bar.xlsx`);
 
-  assert.ok(
-    fs.existsSync(
-      './temp/conditional_format/save-to-file-with-format-data-bar.xlsx',
-    ),
-  );
+  assert.ok(fs.existsSync(`${path}/save-to-file-with-format-data-bar.xlsx`));
 });

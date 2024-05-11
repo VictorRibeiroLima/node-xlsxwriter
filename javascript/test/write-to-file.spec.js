@@ -3,6 +3,9 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const { Workbook, Link, Format, Color, Border } = require('../src/index');
 const fs = require('fs');
+const findRootDir = require('./util');
+const rootPath = findRootDir(__dirname);
+const path = rootPath + '/temp';
 
 test('save to file basic', async (t) => {
   const workbook = new Workbook();
@@ -11,8 +14,8 @@ test('save to file basic', async (t) => {
   sheet.writeString(1, 1, 'Hello, World!');
   sheet.writeNumber(2, 1, 42);
   sheet.writeLink(3, 1, link);
-  await workbook.saveToFile('./temp/save-to-file-basic.xlsx');
-  assert.ok(fs.existsSync('./temp/save-to-file-basic.xlsx'));
+  await workbook.saveToFile(`${path}/save_to_file_basic.xlsx`);
+  assert.ok(fs.existsSync(`${path}/save_to_file_basic.xlsx`));
 });
 
 test('save to file with format', async (t) => {
@@ -30,8 +33,8 @@ test('save to file with format', async (t) => {
 
   format.setBorder(new Border('thin', new Color()));
   sheet.writeString(1, 1, 'Hello, World!', format);
-  await workbook.saveToFile('./temp/save-to-file-with-format.xlsx');
-  assert.ok(fs.existsSync('./temp/save-to-file-with-format.xlsx'));
+  await workbook.saveToFile(`${path}/save_to_file_with_format.xlsx`);
+  assert.ok(fs.existsSync(`${path}/save_to_file_with_format.xlsx`));
 });
 
 test('save to file basic sync', (t) => {
@@ -41,6 +44,6 @@ test('save to file basic sync', (t) => {
   sheet.writeString(1, 1, 'Hello, World!');
   sheet.writeNumber(2, 1, 42);
   sheet.writeLink(3, 1, link);
-  workbook.saveToFileSync('./temp/save-to-file-basic-sync.xlsx');
-  assert.ok(fs.existsSync('./temp/save-to-file-basic-sync.xlsx'));
+  workbook.saveToFileSync(`${path}/save_to_file_basic_sync.xlsx`);
+  assert.ok(fs.existsSync(`${path}/save_to_file_basic_sync.xlsx`));
 });

@@ -1,17 +1,11 @@
 // @ts-check
-const {
-  Workbook,
-  Format,
-  Formula,
-  Sheet,
-  colorUtils,
-  Color,
-  Border,
-  Link,
-} = require('../src');
+const { Workbook, Format, Formula, Sheet, colorUtils } = require('../src');
 const { test } = require('node:test');
 const assert = require('node:assert');
 const fs = require('fs');
+const findRootDir = require('./util');
+const rootPath = findRootDir(__dirname);
+const path = rootPath + '/temp';
 
 test('save to file with formula', async () => {
   const workbook = new Workbook();
@@ -27,7 +21,7 @@ test('save to file with formula', async () => {
   sheet.writeNumber(1, 0, 5);
   sheet.writeNumber(2, 0, 2);
 
-  const fileName = './temp/save-to-file-with-formula.xlsx';
+  const fileName = path + '/save-to-file-with-formula.xlsx';
 
   await workbook.saveToFile(fileName);
   assert.ok(fs.existsSync(fileName));
@@ -185,7 +179,7 @@ test('complex usage of formula', async () => {
   workbook.pushSheet(sortbySheet);
   workbook.pushSheet(dynamicRangeSheet);
 
-  await workbook.saveToFile('./temp/complex-usage-of-formula.xlsx');
+  await workbook.saveToFile(`${path}/save-to-file-with-formula-complex.xlsx`);
 });
 
 /**

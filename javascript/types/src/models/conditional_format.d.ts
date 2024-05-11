@@ -781,6 +781,49 @@ export class ConditionalFormatError extends ConditionalFormat {
      */
     setInvert(invert: boolean): void;
 }
+/**
+ * @class ConditionalFormatFormula
+ * @classdesc Represents a Formula style conditional format.
+ * @extends ConditionalFormat
+ * @property {Formula} [formula] - The formula(non-dynamic) for the conditional format.
+ * @property {Format} [format] - The format for the average value.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+export class ConditionalFormatFormula extends ConditionalFormat {
+    /**
+     * @param {Object} [options] - The options object
+     * @param {Formula} [options.formula] - The formula(non-dynamic) for the conditional format.
+     * @param {Format} [options.format] - The format for the average value.
+     * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+     * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+     */
+    constructor(options?: {
+        formula?: Formula;
+        format?: Format;
+        multiRange?: string;
+        stopIfTrue?: boolean;
+    });
+    /**
+     * @type {Formula|undefined}
+     * @default undefined
+     */
+    formula: Formula | undefined;
+    /**
+     * @type {Format|undefined}
+     * @default undefined
+     */
+    format: Format | undefined;
+    /**
+     * @param {Formula} formula
+     */
+    setFormula(formula: Formula): void;
+    /**
+     * @param {Format} format
+     */
+    setFormat(format: Format): void;
+}
 import Color = require("./color");
 import Format = require("./format");
+import Formula = require("./formula");
 //# sourceMappingURL=conditional_format.d.ts.map

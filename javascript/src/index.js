@@ -17,6 +17,7 @@ const {
   ConditionalFormatDate,
   ConditionalFormatDuplicate,
   ConditionalFormatError,
+  ConditionalFormatFormula,
 } = require('./models/conditional_format');
 
 const { colorUtils } = require('./utils');
@@ -31,6 +32,7 @@ module.exports = {
   Link,
   Border,
   DiagonalBorder,
+  ArrayFormulaSheetValue,
   ConditionalFormatTwoColorScale,
   ConditionalFormatThreeColorScale,
   ConditionalFormatAverage,
@@ -40,5 +42,5 @@ module.exports = {
   ConditionalFormatDate,
   ConditionalFormatDuplicate,
   ConditionalFormatError,
-  ArrayFormulaSheetValue,
+  ConditionalFormatFormula,
 };

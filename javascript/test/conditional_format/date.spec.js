@@ -8,6 +8,9 @@ const {
   Format,
 } = require('../../src/index');
 const fs = require('fs');
+const findRootDir = require('../util');
+const rootPath = findRootDir(__dirname);
+const path = rootPath + '/temp/conditional_format';
 
 test('save to file with conditional format ("ConditionalFormatDate")', async (t) => {
   const thisMoth = new Date();
@@ -90,26 +93,20 @@ test('save to file with conditional format ("ConditionalFormatDate")', async (t)
     format: nextMonthF,
   });
 
-  for (let i = 0; i <= 10; i++) {
-    if (i % 2 === 0) {
-      sheet.writeDate(0, i, lastMonth);
+  for (let row = 0; row <= 10; row++) {
+    if (row % 2 === 0) {
+      sheet.writeDate(row, 0, lastMonth);
       continue;
     }
-    if (i % 3 === 0) {
-      sheet.writeDate(0, i, thisMoth);
+    if (row % 3 === 0) {
+      sheet.writeDate(row, 0, thisMoth);
       continue;
     }
 
-    sheet.writeDate(0, i, nextMonth);
+    sheet.writeDate(row, 0, nextMonth);
   }
 
-  await workbook.saveToFile(
-    './temp/conditional_format/save-to-file-with-format-date.xlsx',
-  );
+  await workbook.saveToFile(`${path}/save-to-file-with-format-date.xlsx`);
 
-  assert.ok(
-    fs.existsSync(
-      './temp/conditional_format/save-to-file-with-format-date.xlsx',
-    ),
-  );
+  assert.ok(fs.existsSync(`${path}/save-to-file-with-format-date.xlsx`));
 });

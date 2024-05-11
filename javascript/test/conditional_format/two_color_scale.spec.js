@@ -3,6 +3,9 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const { Workbook, ConditionalFormatTwoColorScale } = require('../../src/index');
 const fs = require('fs');
+const findRootDir = require('../util');
+const rootPath = findRootDir(__dirname);
+const path = rootPath + '/temp/conditional_format';
 
 test('save to file with conditional format ("ConditionalFormatTwoColorScale")', async (t) => {
   const workbook = new Workbook();
@@ -50,18 +53,16 @@ test('save to file with conditional format ("ConditionalFormatTwoColorScale")', 
     format: twoColorScaleCustomRangeWithColor,
   });
 
-  for (let i = 2; i <= 11; i++) {
-    sheet.writeNumber(1, i, i);
-    sheet.writeNumber(3, i, i);
-    sheet.writeNumber(5, i, i);
+  for (let row = 2; row <= 11; row++) {
+    sheet.writeNumber(row, 1, row);
+    sheet.writeNumber(row, 3, row);
+    sheet.writeNumber(row, 5, row);
   }
 
   await workbook.saveToFile(
-    './temp/conditional_format/save-to-file-with-format-two-color-scale.xlsx',
+    `${path}/save-to-file-with-format-two-color-scale.xlsx`,
   );
   assert.ok(
-    fs.existsSync(
-      './temp/conditional_format/save-to-file-with-format-two-color-scale.xlsx',
-    ),
+    fs.existsSync(`${path}/save-to-file-with-format-two-color-scale.xlsx`),
   );
 });

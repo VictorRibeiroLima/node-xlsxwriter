@@ -2,7 +2,9 @@
 const { test } = require('node:test');
 const assert = require('node:assert');
 const { Workbook, Link, Format, Color, Border } = require('../src/index');
-
+const findRootDir = require('./util');
+const rootPath = findRootDir(__dirname);
+const path = rootPath + '/temp';
 const fs = require('fs');
 
 test('save to buffer basic', async (t) => {
@@ -14,7 +16,7 @@ test('save to buffer basic', async (t) => {
   sheet.writeLink(3, 1, link);
   const buffer = await workbook.saveToBuffer();
   assert.ok(buffer instanceof Buffer);
-  fs.writeFileSync('./temp/save_to_buffer_basic.xlsx', buffer);
+  fs.writeFileSync(`${path}/save_to_buffer_basic.xlsx`, buffer);
 });
 
 test('save to buffer with format', async (t) => {
@@ -34,7 +36,7 @@ test('save to buffer with format', async (t) => {
   sheet.writeString(1, 1, 'Hello, World!', format);
   const buffer = await workbook.saveToBuffer();
   assert.ok(buffer instanceof Buffer);
-  fs.writeFileSync('./temp/save_to_buffer_with_format.xlsx', buffer);
+  fs.writeFileSync(`${path}/save_to_buffer_with_format.xlsx`, buffer);
 });
 
 test('save to buffer with random values', async (t) => {
@@ -55,7 +57,7 @@ test('save to buffer with random values', async (t) => {
   sheet.writeCell(5, 1, arr);
   const buffer = await workbook.saveToBuffer();
   assert.ok(buffer instanceof Buffer);
-  fs.writeFileSync('./temp/save_to_buffer_with_random_values.xlsx', buffer);
+  fs.writeFileSync(`${path}/save_to_buffer_with_random_values.xlsx`, buffer);
 });
 
 test('save to buffer with multiple sheets', async (t) => {
@@ -66,7 +68,7 @@ test('save to buffer with multiple sheets', async (t) => {
   sheet2.writeString(1, 1, 'Sheet 2');
   const buffer = await workbook.saveToBuffer();
   assert.ok(buffer instanceof Buffer);
-  fs.writeFileSync('./temp/save_to_buffer_with_multiple_sheets.xlsx', buffer);
+  fs.writeFileSync(`${path}/save_to_buffer_with_multiple_sheets.xlsx`, buffer);
 });
 
 test('buffer from json', async (t) => {
@@ -91,7 +93,7 @@ test('buffer from json', async (t) => {
 
   const buffer = await workbook.saveToBuffer();
   assert.ok(buffer instanceof Buffer);
-  fs.writeFileSync('./temp/buffer_from_json.xlsx', buffer);
+  fs.writeFileSync(`${path}/buffer_from_json.xlsx`, buffer);
 });
 
 test('specific buffer', async (t) => {
@@ -186,5 +188,5 @@ test('specific buffer', async (t) => {
 
   const buffer = await workbook.saveToBuffer();
   assert.ok(buffer instanceof Buffer);
-  fs.writeFileSync('./temp/specific_buffer.xlsx', buffer);
+  fs.writeFileSync(`${path}/specific_buffer.xlsx`, buffer);
 });

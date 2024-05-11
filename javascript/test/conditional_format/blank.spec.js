@@ -3,6 +3,9 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const { Workbook, ConditionalFormatBlank, Format } = require('../../src/index');
 const fs = require('fs');
+const findRootDir = require('../util');
+const rootPath = findRootDir(__dirname);
+const path = rootPath + '/temp/conditional_format';
 
 test('save to file with conditional format ("ConditionalFormatBlank")', async (t) => {
   const workbook = new Workbook();
@@ -43,18 +46,12 @@ test('save to file with conditional format ("ConditionalFormatBlank")', async (t
     format: nonBlankFormat,
   });
 
-  for (let i = 0; i <= 12; i++) {
-    if ((i & 1) == 0) {
-      sheet.writeNumber(0, i, i);
+  for (let row = 0; row <= 12; row++) {
+    if ((row & 1) == 0) {
+      sheet.writeNumber(row, 0, row);
     }
   }
 
-  await workbook.saveToFile(
-    './temp/conditional_format/save-to-file-with-format-blank.xlsx',
-  );
-  assert.ok(
-    fs.existsSync(
-      './temp/conditional_format/save-to-file-with-format-blank.xlsx',
-    ),
-  );
+  await workbook.saveToFile(`${path}/save-to-file-with-format-blank.xlsx`);
+  assert.ok(fs.existsSync(`${path}/save-to-file-with-format-blank.xlsx`));
 });

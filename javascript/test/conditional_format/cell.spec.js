@@ -3,6 +3,9 @@ const { test } = require('node:test');
 const assert = require('node:assert');
 const { Workbook, ConditionalFormatCell, Format } = require('../../src/index');
 const fs = require('fs');
+const findRootDir = require('../util');
+const rootPath = findRootDir(__dirname);
+const path = rootPath + '/temp/conditional_format';
 
 test('save to file with conditional format ("ConditionalFormatCell") greaterThanOrEqualTo', async (t) => {
   const workbook = new Workbook();
@@ -28,16 +31,16 @@ test('save to file with conditional format ("ConditionalFormatCell") greaterThan
     format: conditionalFormat,
   });
 
-  for (let i = 0; i <= 12; i++) {
-    sheet.writeNumber(0, i, i);
+  for (let row = 0; row <= 12; row++) {
+    sheet.writeNumber(row, 0, row);
   }
 
   await workbook.saveToFile(
-    './temp/conditional_format/save-to-file-with-format-cell-greater-than-or-equal-to.xlsx',
+    `${path}/save-to-file-with-format-cell-greater-than-or-equal-to.xlsx`,
   );
   assert.ok(
     fs.existsSync(
-      './temp/conditional_format/save-to-file-with-format-cell-greater-than-or-equal-to.xlsx',
+      `${path}/save-to-file-with-format-cell-greater-than-or-equal-to.xlsx`,
     ),
   );
 });
@@ -67,17 +70,15 @@ test('save to file with conditional format ("ConditionalFormatCell") between', a
     format: conditionalFormat,
   });
 
-  for (let i = 0; i <= 12; i++) {
-    sheet.writeNumber(0, i, i);
+  for (let row = 0; row <= 12; row++) {
+    sheet.writeNumber(row, 0, row);
   }
 
   await workbook.saveToFile(
-    './temp/conditional_format/save-to-file-with-format-cell-between.xlsx',
+    `${path}/save-to-file-with-format-cell-between.xlsx`,
   );
   assert.ok(
-    fs.existsSync(
-      './temp/conditional_format/save-to-file-with-format-cell-between.xlsx',
-    ),
+    fs.existsSync(`${path}/save-to-file-with-format-cell-between.xlsx`),
   );
 
   const badConditionalFormat = new ConditionalFormatCell({
@@ -98,7 +99,7 @@ test('save to file with conditional format ("ConditionalFormatCell") between', a
     });
 
     await workbook.saveToFile(
-      './temp/conditional_format/save-to-file-with-format-cell-between.xlsx',
+      `${path}/save-to-file-with-format-cell-between.xlsx`,
     );
   } catch (error) {
     assert.strictEqual(
@@ -140,18 +141,16 @@ test('save to file with conditional format ("ConditionalFormatCell") notBetween'
     format: conditionalFormat,
   });
 
-  for (let i = 0; i <= 12; i++) {
-    sheet.writeDate(0, i, addDays(today, i), dateFormat);
+  for (let row = 0; row <= 12; row++) {
+    sheet.writeDate(row, 0, addDays(today, row), dateFormat);
   }
 
   await workbook.saveToFile(
-    './temp/conditional_format/save-to-file-with-format-cell-not-between.xlsx',
+    `${path}/save-to-file-with-format-cell-not-between.xlsx`,
   );
 
   assert.ok(
-    fs.existsSync(
-      './temp/conditional_format/save-to-file-with-format-cell-not-between.xlsx',
-    ),
+    fs.existsSync(`${path}/save-to-file-with-format-cell-not-between.xlsx`),
   );
 
   const badConditionalFormat = new ConditionalFormatCell({
@@ -173,7 +172,7 @@ test('save to file with conditional format ("ConditionalFormatCell") notBetween'
     });
 
     await workbook.saveToFile(
-      './temp/conditional_format/save-to-file-with-format-cell-not-between.xlsx',
+      `${path}/save-to-file-with-format-cell-not-between.xlsx`,
     );
   } catch (error) {
     assert.strictEqual(error.message, `failed to downcast any to object`);

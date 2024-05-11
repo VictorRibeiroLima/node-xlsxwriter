@@ -26,6 +26,7 @@ impl Border {
     }
 }
 
+#[derive(Clone, Copy)]
 pub struct DiagonalBorder {
     pub border: Border,
     pub d_type: FormatDiagonalBorder,

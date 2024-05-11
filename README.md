@@ -125,6 +125,7 @@ Any help is welcome.
 
 ## Format
 Formats you can and should reuse them, because they are cached internally, so you can save memory and improve performance.
+The same goes for conditional formats.
 
 Example:
 

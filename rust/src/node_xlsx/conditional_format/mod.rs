@@ -6,5 +6,6 @@ pub mod data_bar;
 pub mod date;
 pub mod duplicate;
 pub mod error;
+pub mod formula;
 mod rule;
 pub mod scale;
