@@ -19,6 +19,7 @@ use crate::node_xlsx::conditional_format::{
     duplicate::Duplicate,
     error::Error,
     formula::FormulaFormat,
+    icon::Icon,
     scale::{ThreeColorScale, TwoColorScale},
 };
 
@@ -133,6 +134,10 @@ impl ConditionalFormatSheetValue {
                     conditional_format_map,
                     format_map,
                 )?;
+                id
+            }
+            "iconSet" => {
+                let id = Icon::create_and_set_to_map(cx, format, conditional_format_map)?;
                 id
             }
             _ => {

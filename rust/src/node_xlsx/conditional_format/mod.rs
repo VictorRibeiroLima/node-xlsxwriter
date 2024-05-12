@@ -7,5 +7,6 @@ pub mod date;
 pub mod duplicate;
 pub mod error;
 pub mod formula;
+pub mod icon;
 mod rule;
 pub mod scale;

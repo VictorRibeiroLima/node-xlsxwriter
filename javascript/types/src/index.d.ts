@@ -18,5 +18,7 @@ import { ConditionalFormatDate } from "./models/conditional_format";
 import { ConditionalFormatDuplicate } from "./models/conditional_format";
 import { ConditionalFormatError } from "./models/conditional_format";
 import { ConditionalFormatFormula } from "./models/conditional_format";
-export { colorUtils, Workbook, Sheet, Color, Format, Formula, Link, Border, DiagonalBorder, ArrayFormulaSheetValue, ConditionalFormatTwoColorScale, ConditionalFormatThreeColorScale, ConditionalFormatAverage, ConditionalFormatBlank, ConditionalFormatCell, ConditionalFormatDataBar, ConditionalFormatDate, ConditionalFormatDuplicate, ConditionalFormatError, ConditionalFormatFormula };
+import { ConditionalFormatCustomIcon } from "./models/conditional_format";
+import { ConditionalFormatIconSet } from "./models/conditional_format";
+export { colorUtils, Workbook, Sheet, Color, Format, Formula, Link, Border, DiagonalBorder, ArrayFormulaSheetValue, ConditionalFormatTwoColorScale, ConditionalFormatThreeColorScale, ConditionalFormatAverage, ConditionalFormatBlank, ConditionalFormatCell, ConditionalFormatDataBar, ConditionalFormatDate, ConditionalFormatDuplicate, ConditionalFormatError, ConditionalFormatFormula, ConditionalFormatCustomIcon, ConditionalFormatIconSet };
 //# sourceMappingURL=index.d.ts.map

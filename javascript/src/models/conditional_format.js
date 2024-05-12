@@ -55,7 +55,7 @@ const Formula = require('./formula');
  * )} ConditionalFormatDateRule
  *
  * @typedef {(
- * "treeArrows" |
+ * "threeArrows" |
  * "threeArrowsGray" |
  * "threeFlags" |
  * "threeTrafficLights" |
@@ -919,6 +919,182 @@ class ConditionalFormatFormula extends ConditionalFormat {
   }
 }
 
+/**
+ * @class ConditionalFormatCustomIcon
+ * @classdesc Represents an icon in an Icon Set style conditional format
+ * @property {boolean} [greaterThan = false] - Set the rule to be “greater than” instead of the Excel default of “greater than or equal to”.
+ * @property {ConditionalFormatTypeRule} iconRule - The rule for the icon.
+ * @property {boolean} [noIcon = false] - Turn off the icon in the cell.
+ * @property {ConditionalFormatIconType} [iconType] - The type of icon.
+ * @property {number} [iconTypeIndex] - Index to the icon within the type.
+ */
+class ConditionalFormatCustomIcon {
+  /**
+   * @param {Object} options - The options object
+   * @param {ConditionalFormatTypeRule} options.iconRule - The rule for the icon.
+   * @param {boolean} [options.greaterThan] - Set the rule to be “greater than” instead of the Excel default of “greater than or equal to”.
+   * @param {boolean} [options.noIcon] - Turn off the icon in the cell.
+   * @param {Object} [options.iconType] - The type of icon.
+   * @param {number} options.iconType.index
+   * @param {ConditionalFormatIconType} options.iconType.type - The rule for the icon.
+   */
+  constructor(options) {
+    /**
+     * @type {boolean}
+     * @default false
+     */
+    this.greaterThan = options.greaterThan || false;
+
+    /**
+     * @type {boolean}
+     * @default false
+     */
+    this.noIcon = options.noIcon || false;
+
+    /**
+     * @type {ConditionalFormatIconType|undefined}
+     * @default undefined
+     */
+    this.iconType = options.iconType?.type;
+
+    /**
+     * @type {number|undefined}
+     * @default undefined
+     */
+    this.iconTypeIndex = options.iconType?.index;
+
+    /**
+     * @type {ConditionalFormatTypeRule}
+     */
+    this.iconRule = options.iconRule;
+  }
+
+  /**
+   * @param {boolean} greaterThan
+   */
+  setGreaterThan(greaterThan) {
+    this.greaterThan = greaterThan;
+  }
+
+  /**
+   * @param {boolean} noIcon
+   */
+  setNoIcon(noIcon) {
+    this.noIcon = noIcon;
+  }
+
+  /**
+   * @param {ConditionalFormatIconType} iconType
+   * @param {number} index
+   */
+  setIconType(iconType, index) {
+    this.iconType = iconType;
+    this.iconTypeIndex = index;
+  }
+}
+
+/**
+ * @class ConditionalFormatIconSet
+ * @classdesc Represents a Icon Set style conditional format.
+ * @extends ConditionalFormat
+ * @property {boolean} [reverse=false] - Reverse the order of icons from lowest to highest.
+ * @property {boolean} [showIconsOnly=false] - Show only the icons and not the data in the cells.
+ * @property {ConditionalFormatCustomIcon[]} icons - The icons for the set.
+ * @property {ConditionalFormatIconType} iconType - The type of icon set.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+class ConditionalFormatIconSet extends ConditionalFormat {
+  /**
+   * @param {Object} options - The options object
+   * @param {ConditionalFormatCustomIcon[]} options.icons - The icons for the set.
+   * @param {ConditionalFormatIconType} options.iconType - The type of icon set.
+   * @param {boolean} [options.reverse] - Reverse the order of icons from lowest to highest.
+   * @param {boolean} [options.showIconsOnly] - Show only the icons and not the data in the cells.
+   * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+   * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+   * @throws {Error} When the number of icons does not match the expected number for the icon type.
+   */
+  constructor(options) {
+    super('iconSet', options.multiRange, options.stopIfTrue);
+
+    let expectedIcons = 0;
+    if (options.iconType.indexOf('three') > -1) {
+      expectedIcons = 3;
+    } else if (options.iconType.indexOf('four') > -1) {
+      expectedIcons = 4;
+    } else if (options.iconType.indexOf('five') > -1) {
+      expectedIcons = 5;
+    }
+
+    if (options.icons.length !== expectedIcons) {
+      throw new Error(
+        `Expected ${expectedIcons} icons, but got ${options.icons.length}`,
+      );
+    }
+
+    /**
+     * @type {boolean}
+     * @default false
+     */
+    this.reverse = options.reverse || false;
+
+    /**
+     * @type {boolean}
+     * @default false
+     */
+    this.showIconsOnly = options.showIconsOnly || false;
+
+    /**
+     * @type {ConditionalFormatCustomIcon[]}
+     */
+    this.icons = options.icons;
+
+    /**
+     * @type {ConditionalFormatIconType}
+     */
+    this.iconType = options.iconType;
+  }
+
+  /**
+   * @param {boolean} reverse
+   */
+  setReverse(reverse) {
+    this.reverse = reverse;
+  }
+
+  /**
+   * @param {boolean} showIconsOnly
+   */
+  setShowIconsOnly(showIconsOnly) {
+    this.showIconsOnly = showIconsOnly;
+  }
+
+  /**
+   * @param {ConditionalFormatIconType} iconType
+   * @param {ConditionalFormatCustomIcon[]} icons
+   * @throws {Error} When the number of icons does not match the expected number for the icon type.
+   */
+  setIcons(iconType, icons) {
+    let expectedIcons = 0;
+    if (iconType.indexOf('three') > -1) {
+      expectedIcons = 3;
+    } else if (iconType.indexOf('four') > -1) {
+      expectedIcons = 4;
+    } else if (iconType.indexOf('five') > -1) {
+      expectedIcons = 5;
+    }
+
+    if (icons.length !== expectedIcons) {
+      throw new Error(
+        `Expected ${expectedIcons} icons, but got ${icons.length}`,
+      );
+    }
+    this.iconType = iconType;
+    this.icons = icons;
+  }
+}
+
 module.exports = {
   ConditionalFormat,
   ConditionalFormatTextRule,
@@ -933,4 +1109,6 @@ module.exports = {
   ConditionalFormatDuplicate,
   ConditionalFormatError,
   ConditionalFormatFormula,
+  ConditionalFormatCustomIcon,
+  ConditionalFormatIconSet,
 };
