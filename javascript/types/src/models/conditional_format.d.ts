@@ -21,7 +21,27 @@ export type ConditionalFormatCellRule = {
     optionalValue?: ConditionalFormatValue;
 };
 export type ConditionalFormatTextRuleType = ("contains" | "doesNotContain" | "beginsWith" | "endsWith");
+export type ConditionalFormatTextRule = {
+    /**
+     * - The type of the rule.
+     */
+    type: ConditionalFormatTextRuleType;
+    /**
+     * - The value of the rule.
+     */
+    value: string;
+};
 export type ConditionalFormatTopRuleType = ("top" | "bottom" | "topPercent" | "bottomPercent");
+export type ConditionalFormatTopRule = {
+    /**
+     * - The type of the rule.
+     */
+    type: ConditionalFormatTopRuleType;
+    /**
+     * - The value of the rule.
+     */
+    value: number;
+};
 export type ConditionalFormatClassType = ("twoColorScale" | "threeColorScale" | "average" | "blank" | "cell" | "dataBar" | "date" | "duplicate" | "error" | "formula" | "iconSet" | "text" | "top");
 export type ConditionalFormatTypeRule = {
     /**
@@ -36,68 +56,6 @@ export type ConditionalFormatTypeRule = {
      */
     value: ConditionalFormatValue;
 };
-/**
- * @typedef {(
- * "twoColorScale" |
- * "threeColorScale" |
- * "average" |
- * "blank" |
- * "cell" |
- * "dataBar" |
- * "date" |
- * "duplicate" |
- * "error" |
- * "formula" |
- * "iconSet" |
- * "text" |
- * "top"
- * )} ConditionalFormatClassType
- *
- * @class ConditionalFormat
- * @description Represents a generic conditional format.
- * @abstract
- * @property {number} id - The id of the conditional format.
- * @property {ConditionalFormatType} type - The type of the conditional format.
- * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
- * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
- */
-export class ConditionalFormat {
-    /**
-     * @param {ConditionalFormatClassType} type
-     * @param {string} [multiRange]
-     * @param {boolean} [stopIfTrue]
-     */
-    constructor(type: ConditionalFormatClassType, multiRange?: string, stopIfTrue?: boolean);
-    /**
-     * @type {number}
-     * @default Math.floor(Math.random() * 1000000)
-     */
-    id: number;
-    /**
-     * @type {ConditionalFormatClassType}
-     */
-    type: ConditionalFormatClassType;
-    /**
-     * @type {string|undefined}
-     * @default undefined
-     */
-    multiRange: string | undefined;
-    /**
-     * @type {boolean|undefined}
-     * @default undefined
-     */
-    stopIfTrue: boolean | undefined;
-    /**
-     * @param {string} multiRange
-     * @returns {void}
-     */
-    setMultiRange(multiRange: string): void;
-    /**
-     * @param {boolean} stopIfTrue
-     * @returns {void}
-     */
-    setStopIfTrue(stopIfTrue: boolean): void;
-}
 /**
  * @typedef {(
  * "automatic" |
@@ -197,26 +155,10 @@ export class ConditionalFormat {
  * "endsWith"
  * )} ConditionalFormatTextRuleType
  *
- * @class ConditionalFormatTextRule
- * @classdesc Represents a rule for a conditional format text.
- * @property {ConditionalFormatTextRule} type - The type of the rule.
+ * @typedef {Object} ConditionalFormatTextRule
+ * @property {ConditionalFormatTextRuleType} type - The type of the rule.
  * @property {string} value - The value of the rule.
  */
-export class ConditionalFormatTextRule {
-    /**
-     * @param {ConditionalFormatTextRuleType} type
-     * @param {string} value
-     */
-    constructor(type: ConditionalFormatTextRuleType, value: string);
-    /**
-     * @type {ConditionalFormatTextRuleType}
-     */
-    type: ConditionalFormatTextRuleType;
-    /**
-     * @type {string}
-     */
-    value: string;
-}
 /**
  * @typedef {(
  * "top" |
@@ -225,25 +167,71 @@ export class ConditionalFormatTextRule {
  * "bottomPercent"
  * )} ConditionalFormatTopRuleType
  *
- * @class ConditionalFormatTopRule
- * @classdesc Represents a rule for a conditional format top.
+ * @typedef {Object} ConditionalFormatTopRule
  * @property {ConditionalFormatTopRuleType} type - The type of the rule.
  * @property {number} value - The value of the rule.
  */
-export class ConditionalFormatTopRule {
+/**
+ * @typedef {(
+ * "twoColorScale" |
+ * "threeColorScale" |
+ * "average" |
+ * "blank" |
+ * "cell" |
+ * "dataBar" |
+ * "date" |
+ * "duplicate" |
+ * "error" |
+ * "formula" |
+ * "iconSet" |
+ * "text" |
+ * "top"
+ * )} ConditionalFormatClassType
+ *
+ * @class ConditionalFormat
+ * @description Represents a generic conditional format.
+ * @abstract
+ * @property {number} id - The id of the conditional format.
+ * @property {ConditionalFormatType} type - The type of the conditional format.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+export class ConditionalFormat {
     /**
-     * @param {ConditionalFormatTopRuleType} type
-     * @param {number} value
+     * @param {ConditionalFormatClassType} type
+     * @param {string} [multiRange]
+     * @param {boolean} [stopIfTrue]
      */
-    constructor(type: ConditionalFormatTopRuleType, value: number);
-    /**
-     * @type {ConditionalFormatTopRuleType}
-     */
-    type: ConditionalFormatTopRuleType;
+    constructor(type: ConditionalFormatClassType, multiRange?: string, stopIfTrue?: boolean);
     /**
      * @type {number}
+     * @default Math.floor(Math.random() * 1000000)
      */
-    value: number;
+    id: number;
+    /**
+     * @type {ConditionalFormatClassType}
+     */
+    type: ConditionalFormatClassType;
+    /**
+     * @type {string|undefined}
+     * @default undefined
+     */
+    multiRange: string | undefined;
+    /**
+     * @type {boolean|undefined}
+     * @default undefined
+     */
+    stopIfTrue: boolean | undefined;
+    /**
+     * @param {string} multiRange
+     * @returns {void}
+     */
+    setMultiRange(multiRange: string): void;
+    /**
+     * @param {boolean} stopIfTrue
+     * @returns {void}
+     */
+    setStopIfTrue(stopIfTrue: boolean): void;
 }
 /**
  * @typedef {Object} ConditionalFormatTypeRule
@@ -951,6 +939,88 @@ export class ConditionalFormatIconSet extends ConditionalFormat {
      * @throws {Error} When the number of icons does not match the expected number for the icon type.
      */
     setIcons(iconType: ConditionalFormatIconType, icons: ConditionalFormatCustomIcon[]): void;
+}
+/**
+ * @class ConditionalFormatText
+ * @classdesc Represents a Text style conditional format.
+ * @extends ConditionalFormat
+ * @property {ConditionalFormatTextRule} rule - The rule for the text.
+ * @property {Format} [format] - The format for the text.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+export class ConditionalFormatText extends ConditionalFormat {
+    /**
+     * @param {Object} options - The options object
+     * @param {ConditionalFormatTextRule} options.rule - The rule for the text.
+     * @param {Format} [options.format] - The format for the text.
+     * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+     * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+     */
+    constructor(options: {
+        rule: ConditionalFormatTextRule;
+        format?: Format;
+        multiRange?: string;
+        stopIfTrue?: boolean;
+    });
+    /**
+     * @type {ConditionalFormatTextRule}
+     */
+    rule: ConditionalFormatTextRule;
+    /**
+     * @type {Format|undefined}
+     * @default undefined
+     */
+    format: Format | undefined;
+    /**
+     * @param {ConditionalFormatTextRule} rule
+     */
+    setRule(rule: ConditionalFormatTextRule): void;
+    /**
+     * @param {Format} format
+     */
+    setFormat(format: Format): void;
+}
+/**
+ * @class ConditionalFormatTop
+ * @classdesc Represents a Top style conditional format.
+ * @extends ConditionalFormat
+ * @property {ConditionalFormatTopRule} rule - The rule for the top values.
+ * @property {Format} [format] - The format for the top values.
+ * @property {string} [multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+ * @property {boolean} [stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+ */
+export class ConditionalFormatTop extends ConditionalFormat {
+    /**
+     * @param {Object} options - The options object
+     * @param {ConditionalFormatTopRule} options.rule - The rule for the top values.
+     * @param {Format} [options.format] - The format for the top values.
+     * @param {string} [options.multiRange] - Is used to extend a conditional format over non-contiguous ranges like "B3:D6 I3:K6 B9:D12 I9:K12"
+     * @param {boolean} [options.stopIfTrue] - Is used to set the “Stop if true” feature of a conditional formatting rule when more than one rule is applied to a cell or a range of cells. When this parameter is set then subsequent rules are not evaluated if the current rule is true.
+     */
+    constructor(options: {
+        rule: ConditionalFormatTopRule;
+        format?: Format;
+        multiRange?: string;
+        stopIfTrue?: boolean;
+    });
+    /**
+     * @type {ConditionalFormatTopRule}
+     */
+    rule: ConditionalFormatTopRule;
+    /**
+     * @type {Format|undefined}
+     * @default undefined
+     */
+    format: Format | undefined;
+    /**
+     * @param {ConditionalFormatTopRule} rule
+     */
+    setRule(rule: ConditionalFormatTopRule): void;
+    /**
+     * @param {Format} format
+     */
+    setFormat(format: Format): void;
 }
 import Color = require("./color");
 import Format = require("./format");

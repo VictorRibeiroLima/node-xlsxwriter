@@ -21,6 +21,8 @@ use crate::node_xlsx::conditional_format::{
     formula::FormulaFormat,
     icon::Icon,
     scale::{ThreeColorScale, TwoColorScale},
+    text::Text,
+    top::Top,
 };
 
 pub struct ConditionalFormatSheetValue {
@@ -138,6 +140,16 @@ impl ConditionalFormatSheetValue {
             }
             "iconSet" => {
                 let id = Icon::create_and_set_to_map(cx, format, conditional_format_map)?;
+                id
+            }
+            "text" => {
+                let id =
+                    Text::create_and_set_to_map(cx, format, conditional_format_map, format_map)?;
+                id
+            }
+            "top" => {
+                let id =
+                    Top::create_and_set_to_map(cx, format, conditional_format_map, format_map)?;
                 id
             }
             _ => {

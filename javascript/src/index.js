@@ -20,6 +20,8 @@ const {
   ConditionalFormatFormula,
   ConditionalFormatCustomIcon,
   ConditionalFormatIconSet,
+  ConditionalFormatText,
+  ConditionalFormatTop,
 } = require('./models/conditional_format');
 
 const { colorUtils } = require('./utils');
@@ -47,4 +49,6 @@ module.exports = {
   ConditionalFormatFormula,
   ConditionalFormatCustomIcon,
   ConditionalFormatIconSet,
+  ConditionalFormatText,
+  ConditionalFormatTop,
 };

@@ -14,11 +14,11 @@ use rust_xlsxwriter::{
 use super::{c_type::NodeXlsxConditionalFormatType, rule::NodeXlsxFormatTypeRule};
 
 struct CustomIcon {
-    pub greater_than: bool,
-    pub no_icon: bool,
-    pub i_type: Option<ConditionalFormatIconType>,
-    pub i_type_index: Option<u8>,
-    pub rule: Option<NodeXlsxFormatTypeRule>,
+    greater_than: bool,
+    no_icon: bool,
+    i_type: Option<ConditionalFormatIconType>,
+    i_type_index: Option<u8>,
+    rule: Option<NodeXlsxFormatTypeRule>,
 }
 
 impl CustomIcon {
@@ -88,12 +88,12 @@ impl Into<ConditionalFormatCustomIcon> for CustomIcon {
 }
 
 pub struct Icon {
-    pub reverse: bool,
-    pub show_icons_only: bool,
+    reverse: bool,
+    show_icons_only: bool,
     icons: Vec<CustomIcon>,
-    pub i_type: ConditionalFormatIconType,
-    pub multi_range: Option<String>,
-    pub stop_if_true: Option<bool>,
+    i_type: ConditionalFormatIconType,
+    multi_range: Option<String>,
+    stop_if_true: Option<bool>,
 }
 
 impl Icon {

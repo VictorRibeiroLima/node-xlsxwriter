@@ -10,3 +10,5 @@ pub mod formula;
 pub mod icon;
 mod rule;
 pub mod scale;
+pub mod text;
+pub mod top;
