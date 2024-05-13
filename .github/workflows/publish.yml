@@ -152,12 +152,18 @@ jobs:
 
       - name: Build native
         run: |
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          nvm use ${{ matrix.node_version }}
           npm run release:native
         shell: alpine.sh --root {0}
 
       - name: Package the asset
         run: |
-            npx node-pre-gyp package
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          nvm use ${{ matrix.node_version }}
+          npx node-pre-gyp package
         shell: alpine.sh --root {0}
 
       - name: Upload to Github releases
