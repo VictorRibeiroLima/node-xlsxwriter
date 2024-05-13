@@ -9,7 +9,7 @@ jobs:
     name: nodejs-npm
     runs-on: ubuntu-latest
     # Prevent a situation where native build fails and an npm package is uploaded.
-    needs: [nodejs-github-native]
+    needs: [nodejs-github-native, nodejs-github-native-musl]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -90,6 +90,68 @@ jobs:
       - name: Package the asset
         # This will make a node-pre-gyp package.
         run: npx node-pre-gyp package
+      - name: Upload to Github releases
+        # Use bash, even on Windows to make find available
+        shell: bash
+        # A release need to be created before upload
+        run: gh release upload ${{ env.RELEASE_VERSION }} "$(find ./build -name *.tar.gz)" --clobber
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+
+  nodejs-github-native-musl:
+    name: nodejs-${{ matrix.node_version }}-x86_64-unknown-linux-musl-${{ matrix.system.os }}
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        node_version:
+          - 16
+          - 18
+          - 20
+        system:
+          - os: ubuntu-20.04
+            target: x86_64-unknown-linux-musl
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - name: Set release version
+        # Set release version in all three os, the commented run should suffice for linux and mac.
+        run: python3 -c "import os; tag = os.environ['GITHUB_REF'].split('/')[-1]; f = open(os.environ['GITHUB_ENV'], 'a'); f.write('RELEASE_VERSION='+tag); f.close();"
+        # run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node_version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install modules
+        run: npm i
+
+      - name: Tweak package.json
+        # This will update the package version to tag version. So artifacts uploaded to Github release will be named correctly.
+        run: python3 -c "import os; import json; p = json.load(open('package.json')); p['version'] = os.environ['RELEASE_VERSION']; json.dump(p, open('package.json', 'w'), indent=2, ensure_ascii=False);"
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          target: ${{ matrix.system.target }}
+          override: true
+
+      - name: Setup latest Alpine Linux
+        uses: jirutka/setup-alpine@v1
+
+      - name: Build native
+        run: |
+          npm run release:native
+        shell: alpine.sh --root {0}
+
+      - name: Package the asset
+        run: |
+            npx node-pre-gyp package
+        shell: alpine.sh --root {0}
+
       - name: Upload to Github releases
         # Use bash, even on Windows to make find available
         shell: bash
