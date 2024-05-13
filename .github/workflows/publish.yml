@@ -133,6 +133,7 @@ jobs:
 
       - name: Install npm
         run: |
+          nvm use ${{ matrix.node_version }}
           apk add npm
         shell: alpine.sh --root {0}
 
@@ -143,6 +144,7 @@ jobs:
 
       - name: Install modules
         run: | 
+          nvm use ${{ matrix.node_version }}
           npm i
         shell: alpine.sh --root {0}
 
@@ -152,18 +154,12 @@ jobs:
 
       - name: Build native
         run: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           nvm use ${{ matrix.node_version }}
-          node -v
-          npm -v
           npm run release:native
         shell: alpine.sh --root {0}
 
       - name: Package the asset
         run: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           nvm use ${{ matrix.node_version }}
           node -v
           npm -v
