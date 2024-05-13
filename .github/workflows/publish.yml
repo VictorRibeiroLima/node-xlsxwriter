@@ -121,7 +121,12 @@ jobs:
       - name: Setup latest Alpine Linux
         uses: jirutka/setup-alpine@v1
 
-      - name: Install Node.js with NVM
+      - name: install cargo
+        run: |
+          apk add cargo
+        shell: alpine.sh --root {0}
+
+      - name: Build native
         run: |
           apk add curl bash
           mkdir -p "$HOME/.nvm"
@@ -129,40 +134,10 @@ jobs:
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           nvm install ${{ matrix.node_version }}
-        shell: alpine.sh --root {0}
-
-      - name: Install npm
-        run: |
           nvm use ${{ matrix.node_version }}
           apk add npm
-        shell: alpine.sh --root {0}
-
-      - name: install cargo
-        run: |
-          apk add cargo
-        shell: alpine.sh --root {0}
-
-      - name: Install modules
-        run: | 
-          nvm use ${{ matrix.node_version }}
           npm i
-        shell: alpine.sh --root {0}
-
-      - name: Tweak package.json
-        # This will update the package version to tag version. So artifacts uploaded to Github release will be named correctly.
-        run: python3 -c "import os; import json; p = json.load(open('package.json')); p['version'] = os.environ['RELEASE_VERSION']; json.dump(p, open('package.json', 'w'), indent=2, ensure_ascii=False);"
-
-      - name: Build native
-        run: |
-          nvm use ${{ matrix.node_version }}
           npm run release:native
-        shell: alpine.sh --root {0}
-
-      - name: Package the asset
-        run: |
-          nvm use ${{ matrix.node_version }}
-          node -v
-          npm -v
           npx node-pre-gyp package
         shell: alpine.sh --root {0}
 
