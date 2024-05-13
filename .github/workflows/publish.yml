@@ -119,9 +119,18 @@ jobs:
       - name: Setup latest Alpine Linux
         uses: jirutka/setup-alpine@v1
 
-      - name: install npm
+      - name: Install Node.js with NVM
         run: |
-          apk add --no-cache nodejs=${{ matrix.node_version }} npm
+          apk add curl bash
+          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+          nvm install ${{ matrix.node_version }}
+        shell: alpine.sh --root {0}
+
+      - name: Install npm
+        run: |
+          apk add npm
         shell: alpine.sh --root {0}
 
       - name: install cargo
