@@ -155,6 +155,8 @@ jobs:
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           nvm use ${{ matrix.node_version }}
+          node -v
+          npm -v
           npm run release:native
         shell: alpine.sh --root {0}
 
@@ -163,6 +165,8 @@ jobs:
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
           nvm use ${{ matrix.node_version }}
+          node -v
+          npm -v
           npx node-pre-gyp package
         shell: alpine.sh --root {0}
 
