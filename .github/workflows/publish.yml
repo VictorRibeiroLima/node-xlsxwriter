@@ -142,6 +142,11 @@ jobs:
       - name: Setup latest Alpine Linux
         uses: jirutka/setup-alpine@v1
 
+      - name: install npm
+        run: |
+          apk add npm
+        shell: alpine.sh --root {0}
+
       - name: Build native
         run: |
           npm run release:native
