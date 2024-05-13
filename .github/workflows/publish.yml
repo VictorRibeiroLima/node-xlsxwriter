@@ -120,25 +120,6 @@ jobs:
         run: python3 -c "import os; tag = os.environ['GITHUB_REF'].split('/')[-1]; f = open(os.environ['GITHUB_ENV'], 'a'); f.write('RELEASE_VERSION='+tag); f.close();"
         # run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node_version }}
-          registry-url: 'https://registry.npmjs.org'
-
-      - name: Install modules
-        run: npm i
-
-      - name: Tweak package.json
-        # This will update the package version to tag version. So artifacts uploaded to Github release will be named correctly.
-        run: python3 -c "import os; import json; p = json.load(open('package.json')); p['version'] = os.environ['RELEASE_VERSION']; json.dump(p, open('package.json', 'w'), indent=2, ensure_ascii=False);"
-
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          target: ${{ matrix.system.target }}
-          override: true
-
       - name: Setup latest Alpine Linux
         uses: jirutka/setup-alpine@v1
 
@@ -146,6 +127,20 @@ jobs:
         run: |
           apk add npm
         shell: alpine.sh --root {0}
+
+      - name: install cargo
+        run: |
+          apk add cargo
+        shell: alpine.sh --root {0}
+
+      - name: Install modules
+        run: | 
+          npm i
+        shell: alpine.sh --root {0}
+
+      - name: Tweak package.json
+        # This will update the package version to tag version. So artifacts uploaded to Github release will be named correctly.
+        run: python3 -c "import os; import json; p = json.load(open('package.json')); p['version'] = os.environ['RELEASE_VERSION']; json.dump(p, open('package.json', 'w'), indent=2, ensure_ascii=False);"
 
       - name: Build native
         run: |
