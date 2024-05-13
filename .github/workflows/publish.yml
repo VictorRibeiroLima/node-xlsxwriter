@@ -121,7 +121,8 @@ jobs:
 
       - name: install npm
         run: |
-          echo "http://dl-cdn.alpinelinux.org/alpine/${{matrix.branch}}/main" >> /etc/apk/repositories
+          echo "http://dl-cdn.alpinelinux.org/alpine/${{matrix.branch}}/main" > /etc/apk/repositories
+          apk update
           apk add --no-cache nodejs npm
         shell: alpine.sh --root {0}
 
