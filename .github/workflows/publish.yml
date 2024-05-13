@@ -133,12 +133,7 @@ jobs:
           curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          nvm install ${{ matrix.node_version }}
-          nvm use ${{ matrix.node_version }}
-          apk add npm
-          npm i
-          npm run release:native
-          npx node-pre-gyp package
+          nvm install ${{ matrix.node_version }} && nvm use ${{ matrix.node_version }} && npm i && npm run release:native && npx node-pre-gyp package
         shell: alpine.sh --root {0}
 
       - name: Upload to Github releases
