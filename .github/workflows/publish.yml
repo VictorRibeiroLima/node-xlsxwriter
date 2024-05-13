@@ -51,8 +51,6 @@ jobs:
             target: x86_64-unknown-linux-gnu
           - os: windows-2022
             target: x86_64-pc-windows-msvc
-          - os: ubuntu-20.04
-            target: x86_64-unknown-linux-musl
           # Would like to have aarch64 support, but actions does not provide these yet.
           # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
     steps:
@@ -129,12 +127,14 @@ jobs:
       - name: install npm
         run: |
           echo "http://dl-cdn.alpinelinux.org/alpine/${{matrix.branch}}/community" > /etc/apk/repositories
+          apk update
           apk add npm
         shell: alpine.sh --root {0}
 
       - name: install cargo
         run: |
           echo "https://dl-cdn.alpinelinux.org/alpine/edge/main/" > /etc/apk/repositories
+          apk update
           apk add cargo
         shell: alpine.sh --root {0}
 
