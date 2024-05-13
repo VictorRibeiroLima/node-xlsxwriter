@@ -32,11 +32,7 @@ jobs:
         # add an install script in package.json so users who `npm i` this package
         # will trigger the node-pre-gyp to pull the os and arch specific binary.
         run: python3 -c "import os; import json; p = json.load(open('package.json')); p['scripts']['install'] = 'node-pre-gyp install'; p['version'] = os.environ['RELEASE_VERSION']; json.dump(p, open('package.json', 'w'), indent=2, ensure_ascii=False);"
-      - name: Publish to npm
-        # `--access public` is used to publish to my account's scope.
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
 
   nodejs-github-native:
     name: nodejs-${{ matrix.node_version }}-${{ matrix.system.target }}-${{ matrix.system.os }}
@@ -55,6 +51,8 @@ jobs:
             target: x86_64-unknown-linux-gnu
           - os: windows-2022
             target: x86_64-pc-windows-msvc
+          - os: ubuntu-20.04
+            target: x86_64-unknown-linux-musl
           # Would like to have aarch64 support, but actions does not provide these yet.
           # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
     steps:
@@ -121,19 +119,34 @@ jobs:
       - name: Setup latest Alpine Linux
         uses: jirutka/setup-alpine@v1
 
+      - name: install npm
+        run: |
+          apk update
+          apk add --no-cache nodejs=${{ matrix.node_version }} npm
+        shell: alpine.sh --root {0}
+
       - name: install cargo
         run: |
           apk add cargo
         shell: alpine.sh --root {0}
 
+      - name: Install modules
+        run: | 
+          npm i
+        shell: alpine.sh --root {0}
+
+      - name: Tweak package.json
+        # This will update the package version to tag version. So artifacts uploaded to Github release will be named correctly.
+        run: python3 -c "import os; import json; p = json.load(open('package.json')); p['version'] = os.environ['RELEASE_VERSION']; json.dump(p, open('package.json', 'w'), indent=2, ensure_ascii=False);"
+
       - name: Build native
         run: |
-          apk add curl bash
-          mkdir -p "$HOME/.nvm"
-          curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-          nvm install ${{ matrix.node_version }} && nvm use ${{ matrix.node_version }} && npm i && npm run release:native && npx node-pre-gyp package
+          npm run release:native
+        shell: alpine.sh --root {0}
+
+      - name: Package the asset
+        run: |
+            npx node-pre-gyp package
         shell: alpine.sh --root {0}
 
       - name: Upload to Github releases
