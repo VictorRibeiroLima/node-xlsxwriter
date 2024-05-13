@@ -135,6 +135,7 @@ jobs:
         run: |
           echo "https://dl-cdn.alpinelinux.org/alpine/edge/main/" > /etc/apk/repositories
           apk update
+          apk upgrade
           apk add cargo
         shell: alpine.sh --root {0}
 
