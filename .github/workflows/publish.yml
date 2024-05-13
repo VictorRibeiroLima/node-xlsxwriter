@@ -55,6 +55,8 @@ jobs:
             target: x86_64-unknown-linux-gnu
           - os: windows-2022
             target: x86_64-pc-windows-msvc
+          - os: ubuntu-20.04
+            target: x86_64-unknown-linux-musl
           # Would like to have aarch64 support, but actions does not provide these yet.
           # https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners
     steps:
