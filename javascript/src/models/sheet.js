@@ -7,6 +7,20 @@ const Formula = require('./formula');
 const { ConditionalFormat } = require('./conditional_format');
 
 /**
+ * @typedef {Object} SizeConfig
+ * @property {number} value - The value of the size
+ * @property {"auto"|"px"} [unit] - The unit of the size
+ */
+
+/**
+ * @typedef {Object} RowCellConfig
+ * @property {number} index - The index of the row/column, 0-based
+ * @property {Format} [format] - The format of the cell (will be overwritten by the cell format)
+ * @property {SizeConfig} [size] - The height/width of the row/column
+ * @property {boolean} [hidden] - Whether the row is hidden
+ */
+
+/**
  * @class ConditionalFormatSheetValue
  * @classdesc Represents the values of a conditional format sheet.
  * @property {number} firstRow - The first row of the range
@@ -117,6 +131,8 @@ class ArrayFormulaSheetValue {
  * @property {Cell[]} cells - The cells in the sheet
  * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
  * @property {ArrayFormulaSheetValue[]} arrayFormulas - The array formulas of the sheet
+ * @property {RowCellConfig[]} rowConfigs - The rows of the sheet
+ * @property {RowCellConfig[]} columnConfigs - The columns of the sheet
  */
 class Sheet {
   /**
@@ -145,6 +161,39 @@ class Sheet {
      * @type {ArrayFormulaSheetValue[]}
      */
     this.arrayFormulas = [];
+
+    /**
+     * The rows of the sheet
+     * @type {RowCellConfig[]}
+     * @default []
+     * */
+    this.rowConfigs = [];
+
+    /**
+     * The columns of the sheet
+     * @type {RowCellConfig[]}
+     * @default []
+     * */
+    this.columnConfigs = [];
+  }
+
+  /**
+   * Adds a row configuration to the sheet.
+   * Rows are the first ones to be processed,so if any value overlaps with the columns it will be overwritten
+   * @param {RowCellConfig} config - The configuration of the row
+   * @returns {void}
+   */
+  addRowConfig(config) {
+    this.rowConfigs.push(config);
+  }
+
+  /**
+   * Adds a column configuration to the sheet
+   * @param {RowCellConfig} config - The configuration of the column
+   * @returns {void}
+   */
+  addColumnConfig(config) {
+    this.columnConfigs.push(config);
   }
 
   /**

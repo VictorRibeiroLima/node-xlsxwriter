@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use super::{types::NodeXlsxTypes, util::create_format};
+
 use neon::{
     context::{Context, FunctionContext},
     handle::Handle,
@@ -80,5 +81,64 @@ impl NodeXlsxCell {
             cell_type: cel_type,
             format,
         })
+    }
+
+    pub fn write_to_sheet(
+        self,
+        worksheet: &mut rust_xlsxwriter::Worksheet,
+        format_map: &HashMap<u32, rust_xlsxwriter::Format>,
+    ) -> Result<(), rust_xlsxwriter::XlsxError> {
+        match self.cell_type {
+            NodeXlsxTypes::String(value) | NodeXlsxTypes::Unknown(value) => {
+                if let Some(format) = self.format {
+                    let format = format_map.get(&format).unwrap();
+                    worksheet.write_string_with_format(self.row, self.col, &value, format)?;
+                } else {
+                    worksheet.write_string(self.row, self.col, &value)?;
+                }
+            }
+            NodeXlsxTypes::Number(value) => {
+                if let Some(format) = self.format {
+                    let format = format_map.get(&format).unwrap();
+                    worksheet.write_number_with_format(self.row, self.col, value, format)?;
+                } else {
+                    worksheet.write_number(self.row, self.col, value)?;
+                }
+            }
+            NodeXlsxTypes::Link(value) => {
+                if let Some(format) = self.format {
+                    let format = format_map.get(&format).unwrap();
+                    worksheet.write_url_with_format(self.row, self.col, value, format)?;
+                } else {
+                    worksheet.write_url(self.row, self.col, value)?;
+                }
+            }
+            NodeXlsxTypes::Date(value) => {
+                if let Some(format) = self.format {
+                    let format = format_map.get(&format).unwrap();
+                    worksheet.write_datetime_with_format(self.row, self.col, value, format)?;
+                } else {
+                    worksheet.write_datetime(self.row, self.col, value)?;
+                }
+            }
+            NodeXlsxTypes::Formula((value, dynamic)) => {
+                let has_format = self.format.is_some();
+                if dynamic && !has_format {
+                    worksheet.write_dynamic_formula(self.row, self.col, value)?;
+                } else if dynamic && has_format {
+                    let format = self.format.unwrap();
+                    let format = format_map.get(&format).unwrap();
+                    worksheet
+                        .write_dynamic_formula_with_format(self.row, self.col, value, format)?;
+                } else if !dynamic && !has_format {
+                    worksheet.write_formula(self.row, self.col, value)?;
+                } else {
+                    let format = self.format.unwrap();
+                    let format = format_map.get(&format).unwrap();
+                    worksheet.write_formula_with_format(self.row, self.col, value, format)?;
+                }
+            }
+        }
+        return Ok(());
     }
 }

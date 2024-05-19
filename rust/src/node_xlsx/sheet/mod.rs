@@ -1,5 +1,6 @@
 mod array_formula_value;
 mod conditional_format_value;
+mod config;
 
 use std::collections::HashMap;
 
@@ -14,19 +15,18 @@ use rust_xlsxwriter::{Format, Worksheet, XlsxError};
 
 use self::{
     array_formula_value::ArrayFormulaSheetValue,
-    conditional_format_value::ConditionalFormatSheetValue,
+    conditional_format_value::ConditionalFormatSheetValue, config::RowColumnConfig,
 };
 
-use super::{
-    cell::NodeXlsxCell, conditional_format::c_type::NodeXlsxConditionalFormatType,
-    types::NodeXlsxTypes,
-};
+use super::{cell::NodeXlsxCell, conditional_format::c_type::NodeXlsxConditionalFormatType};
 
 pub struct NodeXlsxSheet {
     name: String,
     cells: Vec<NodeXlsxCell>,
     conditional_formats: Vec<ConditionalFormatSheetValue>,
     array_formulas: Vec<ArrayFormulaSheetValue>,
+    row_config: Vec<RowColumnConfig>,
+    column_config: Vec<RowColumnConfig>,
 
     format_map: HashMap<u32, Format>,
     conditional_format_map: HashMap<u32, NodeXlsxConditionalFormatType>,
@@ -51,6 +51,18 @@ impl NodeXlsxSheet {
         let mut inner_conditional_formats = vec![];
         let mut format_map = HashMap::new();
         let mut conditional_format_map = HashMap::new();
+
+        let row_config: Handle<JsArray> = obj.get(cx, "rowConfigs")?;
+        let row_config =
+            RowColumnConfig::from_js_array(cx, row_config, config::Type::ROW, &mut format_map)?;
+
+        let column_config: Handle<JsArray> = obj.get(cx, "columnConfigs")?;
+        let column_config = RowColumnConfig::from_js_array(
+            cx,
+            column_config,
+            config::Type::COLUMN,
+            &mut format_map,
+        )?;
 
         for formula in array_formulas {
             let formula = formula.downcast_or_throw::<JsObject, FunctionContext>(cx)?;
@@ -84,6 +96,8 @@ impl NodeXlsxSheet {
             array_formulas: inner_formulas,
             format_map,
             conditional_format_map,
+            row_config,
+            column_config,
         });
     }
 }
@@ -95,6 +109,12 @@ impl TryInto<Worksheet> for NodeXlsxSheet {
         let conditional_format_map = self.conditional_format_map;
         let mut worksheet = Worksheet::new();
         worksheet.set_name(&self.name)?;
+        for rc in self.row_config {
+            rc.write_to_sheet(&mut worksheet, &format_map)?;
+        }
+        for cc in self.column_config {
+            cc.write_to_sheet(&mut worksheet, &format_map)?;
+        }
         for cf in self.conditional_formats {
             cf.set_conditional_format(&mut worksheet, &conditional_format_map)?;
         }
@@ -147,57 +167,7 @@ impl TryInto<Worksheet> for NodeXlsxSheet {
             }
         }
         for cell in self.cells {
-            match cell.cell_type {
-                NodeXlsxTypes::String(value) | NodeXlsxTypes::Unknown(value) => {
-                    if let Some(format) = cell.format {
-                        let format = format_map.get(&format).unwrap();
-                        worksheet.write_string_with_format(cell.row, cell.col, &value, format)?;
-                    } else {
-                        worksheet.write_string(cell.row, cell.col, &value)?;
-                    }
-                }
-                NodeXlsxTypes::Number(value) => {
-                    if let Some(format) = cell.format {
-                        let format = format_map.get(&format).unwrap();
-                        worksheet.write_number_with_format(cell.row, cell.col, value, format)?;
-                    } else {
-                        worksheet.write_number(cell.row, cell.col, value)?;
-                    }
-                }
-                NodeXlsxTypes::Link(value) => {
-                    if let Some(format) = cell.format {
-                        let format = format_map.get(&format).unwrap();
-                        worksheet.write_url_with_format(cell.row, cell.col, value, format)?;
-                    } else {
-                        worksheet.write_url(cell.row, cell.col, value)?;
-                    }
-                }
-                NodeXlsxTypes::Date(value) => {
-                    if let Some(format) = cell.format {
-                        let format = format_map.get(&format).unwrap();
-                        worksheet.write_datetime_with_format(cell.row, cell.col, value, format)?;
-                    } else {
-                        worksheet.write_datetime(cell.row, cell.col, value)?;
-                    }
-                }
-                NodeXlsxTypes::Formula((value, dynamic)) => {
-                    let has_format = cell.format.is_some();
-                    if dynamic && !has_format {
-                        worksheet.write_dynamic_formula(cell.row, cell.col, value)?;
-                    } else if dynamic && has_format {
-                        let format = cell.format.unwrap();
-                        let format = format_map.get(&format).unwrap();
-                        worksheet
-                            .write_dynamic_formula_with_format(cell.row, cell.col, value, format)?;
-                    } else if !dynamic && !has_format {
-                        worksheet.write_formula(cell.row, cell.col, value)?;
-                    } else {
-                        let format = cell.format.unwrap();
-                        let format = format_map.get(&format).unwrap();
-                        worksheet.write_formula_with_format(cell.row, cell.col, value, format)?;
-                    }
-                }
-            }
+            cell.write_to_sheet(&mut worksheet, &format_map)?;
         }
         return Ok(worksheet);
     }

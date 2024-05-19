@@ -1,3 +1,31 @@
+export type SizeConfig = {
+    /**
+     * - The value of the size
+     */
+    value: number;
+    /**
+     * - The unit of the size
+     */
+    unit?: "auto" | "px";
+};
+export type RowCellConfig = {
+    /**
+     * - The index of the row/column, 0-based
+     */
+    index: number;
+    /**
+     * - The format of the cell (will be overwritten by the cell format)
+     */
+    format?: Format;
+    /**
+     * - The height/width of the row/column
+     */
+    size?: SizeConfig;
+    /**
+     * - Whether the row is hidden
+     */
+    hidden?: boolean;
+};
 /**
  *
  * @class Sheet
@@ -6,6 +34,8 @@
  * @property {Cell[]} cells - The cells in the sheet
  * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
  * @property {ArrayFormulaSheetValue[]} arrayFormulas - The array formulas of the sheet
+ * @property {RowCellConfig[]} rowConfigs - The rows of the sheet
+ * @property {RowCellConfig[]} columnConfigs - The columns of the sheet
  */
 export class Sheet {
     /**
@@ -32,6 +62,31 @@ export class Sheet {
      * @type {ArrayFormulaSheetValue[]}
      */
     arrayFormulas: ArrayFormulaSheetValue[];
+    /**
+     * The rows of the sheet
+     * @type {RowCellConfig[]}
+     * @default []
+     * */
+    rowConfigs: RowCellConfig[];
+    /**
+     * The columns of the sheet
+     * @type {RowCellConfig[]}
+     * @default []
+     * */
+    columnConfigs: RowCellConfig[];
+    /**
+     * Adds a row configuration to the sheet.
+     * Rows are the first ones to be processed,so if any value overlaps with the columns it will be overwritten
+     * @param {RowCellConfig} config - The configuration of the row
+     * @returns {void}
+     */
+    addRowConfig(config: RowCellConfig): void;
+    /**
+     * Adds a column configuration to the sheet
+     * @param {RowCellConfig} config - The configuration of the column
+     * @returns {void}
+     */
+    addColumnConfig(config: RowCellConfig): void;
     /**
      * Adds a conditional format to the sheet
      * @param {Object} opts - The options for the conditional format
@@ -226,7 +281,20 @@ export class ArrayFormulaSheetValue {
      */
     format: Format | undefined;
 }
+import Format = require("./format");
 import Cell = require("./cell");
+/**
+ * @typedef {Object} SizeConfig
+ * @property {number} value - The value of the size
+ * @property {"auto"|"px"} [unit] - The unit of the size
+ */
+/**
+ * @typedef {Object} RowCellConfig
+ * @property {number} index - The index of the row/column, 0-based
+ * @property {Format} [format] - The format of the cell (will be overwritten by the cell format)
+ * @property {SizeConfig} [size] - The height/width of the row/column
+ * @property {boolean} [hidden] - Whether the row is hidden
+ */
 /**
  * @class ConditionalFormatSheetValue
  * @classdesc Represents the values of a conditional format sheet.
@@ -274,7 +342,6 @@ declare class ConditionalFormatSheetValue {
 }
 import { ConditionalFormat } from "./conditional_format";
 import Formula = require("./formula");
-import Format = require("./format");
 import Link = require("./link");
 export {};
 //# sourceMappingURL=sheet.d.ts.map

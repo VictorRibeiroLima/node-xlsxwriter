@@ -10,6 +10,31 @@ const fs = require('fs');
 test('save to buffer basic', async (t) => {
   const workbook = new Workbook();
   const sheet = workbook.addSheet();
+  sheet.addRowConfig({
+    index: 1,
+    size: {
+      value: 20,
+    },
+  });
+  sheet.addRowConfig({
+    index: 2,
+    size: {
+      value: 30,
+    },
+  });
+  sheet.addRowConfig({
+    index: 3,
+    size: {
+      value: 40,
+    },
+  });
+
+  sheet.addColumnConfig({
+    index: 1,
+    size: {
+      value: 30,
+    },
+  });
   const link = new Link('http://example.com', 'Example', 'tooltip');
   sheet.writeString(1, 1, 'Hello, World!');
   sheet.writeNumber(2, 1, 42);
