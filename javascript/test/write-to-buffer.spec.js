@@ -56,6 +56,36 @@ test('save to buffer with format', async (t) => {
     fontScheme: 'minor',
     fontName: 'Arial',
   });
+  const format2 = new Format({
+    align: 'center',
+    bold: true,
+    backgroundColor: new Color({ red: 0, green: 255, blue: 0 }),
+    fontSize: 16,
+    underline: 'double',
+    fontScheme: 'minor',
+    fontName: 'Arial',
+  });
+  sheet.addRowConfig({
+    index: 1,
+    size: {
+      value: 30,
+    },
+    format: format2,
+  });
+  sheet.addRowConfig({
+    index: 2,
+    size: {
+      value: 30,
+    },
+    format: format2,
+  });
+
+  sheet.addColumnConfig({
+    index: 1,
+    size: {
+      value: 30,
+    },
+  });
 
   format.setBorder(new Border('thin', new Color()));
   sheet.writeString(1, 1, 'Hello, World!', format);

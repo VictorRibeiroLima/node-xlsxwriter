@@ -20,6 +20,18 @@ for typescript/Es6
 
 const workbook = new Workbook();
 const sheet = new Sheet('SomeSheet');
+sheet.addColumnConfig({
+  index: 0,
+  size: {
+    value: 30,
+  },
+});
+sheet.addColumnConfig({
+  index: 1,
+  size: {
+    value: 30,
+  },
+});
 const format = new Format({
   align: 'center',
   bold: true,
