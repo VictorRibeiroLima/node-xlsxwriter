@@ -1,6 +1,7 @@
 mod array_formula_value;
 mod conditional_format_value;
 mod config;
+mod table_value;
 
 use std::collections::HashMap;
 
@@ -12,6 +13,7 @@ use neon::{
     types::{JsArray, JsObject, JsString, JsValue},
 };
 use rust_xlsxwriter::{Format, Worksheet, XlsxError};
+use table_value::NodeXlsxTableValue;
 
 use self::{
     array_formula_value::ArrayFormulaSheetValue,
@@ -27,6 +29,7 @@ pub struct NodeXlsxSheet {
     array_formulas: Vec<ArrayFormulaSheetValue>,
     row_config: Vec<RowColumnConfig>,
     column_config: Vec<RowColumnConfig>,
+    tables: Vec<NodeXlsxTableValue>,
 
     format_map: HashMap<u32, Format>,
     conditional_format_map: HashMap<u32, NodeXlsxConditionalFormatType>,
@@ -46,9 +49,13 @@ impl NodeXlsxSheet {
         let array_formulas: Handle<JsArray> = obj.get(cx, "arrayFormulas")?;
         let array_formulas: Vec<Handle<JsValue>> = array_formulas.to_vec(cx)?;
 
+        let tables: Handle<JsArray> = obj.get(cx, "tables")?;
+        let tables: Vec<Handle<JsValue>> = tables.to_vec(cx)?;
+
         let mut inner_cells = vec![];
         let mut inner_formulas = vec![];
         let mut inner_conditional_formats = vec![];
+        let mut inner_tables = vec![];
         let mut format_map = HashMap::new();
         let mut conditional_format_map = HashMap::new();
 
@@ -89,6 +96,12 @@ impl NodeXlsxSheet {
             inner_conditional_formats.push(conditional_format);
         }
 
+        for table in tables {
+            let table = table.downcast_or_throw::<JsObject, FunctionContext>(cx)?;
+            let table = NodeXlsxTableValue::from_js_object(cx, table, &mut format_map)?;
+            inner_tables.push(table);
+        }
+
         return Ok(Self {
             name,
             cells: inner_cells,
@@ -98,6 +111,7 @@ impl NodeXlsxSheet {
             conditional_format_map,
             row_config,
             column_config,
+            tables: inner_tables,
         });
     }
 }
@@ -112,12 +126,15 @@ impl TryInto<Worksheet> for NodeXlsxSheet {
         for rc in self.row_config {
             rc.write_to_sheet(&mut worksheet, &format_map)?;
         }
+
         for cc in self.column_config {
             cc.write_to_sheet(&mut worksheet, &format_map)?;
         }
+
         for cf in self.conditional_formats {
             cf.set_conditional_format(&mut worksheet, &conditional_format_map)?;
         }
+
         for af in self.array_formulas {
             let first_row = af.first_row;
             let last_row = af.last_row;
@@ -166,8 +183,18 @@ impl TryInto<Worksheet> for NodeXlsxSheet {
                 )?;
             }
         }
+
         for cell in self.cells {
             cell.write_to_sheet(&mut worksheet, &format_map)?;
+        }
+
+        for table in self.tables {
+            let first_row = table.first_row;
+            let last_row = table.last_row;
+            let first_column = table.first_column;
+            let last_column = table.last_column;
+            let table = table.table;
+            worksheet.add_table(first_row, first_column, last_row, last_column, &table)?;
         }
         return Ok(worksheet);
     }

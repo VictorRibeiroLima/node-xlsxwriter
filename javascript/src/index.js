@@ -26,6 +26,8 @@ const {
 
 const { colorUtils } = require('./utils');
 
+const { Table, TableFunction, TableColumn } = require('./models/table');
+
 module.exports = {
   colorUtils,
   Workbook,
@@ -51,4 +53,7 @@ module.exports = {
   ConditionalFormatIconSet,
   ConditionalFormatText,
   ConditionalFormatTop,
+  Table,
+  TableFunction,
+  TableColumn,
 };
