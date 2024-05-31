@@ -4,6 +4,7 @@ const Cell = require('./cell');
 const Format = require('./format');
 const Link = require('./link');
 const Formula = require('./formula');
+const { Table } = require('./table');
 const { ConditionalFormat } = require('./conditional_format');
 
 /**
@@ -64,6 +65,52 @@ class ConditionalFormatSheetValue {
      * @type {ConditionalFormat}
      */
     this.format = format;
+  }
+}
+
+/**
+ * @class TableSheetValue
+ * @classdesc Represents the values of a table sheet.
+ * @property {number} firstRow - The first row of the range
+ * @property {number} lastRow - The last row of the range
+ * @property {number} firstColumn - The first column of the range
+ * @property {number} lastColumn - The last column of the range
+ * @property {Table} table - The table of the range
+ */
+class TableSheetValue {
+  /**
+   * @param {number} firstRow - The first row of the range
+   * @param {number} lastRow - The last row of the range
+   * @param {number} firstColumn - The first column of the range
+   * @param {number} lastColumn - The last column of the range
+   * @param {Table} table - The table of the range
+   */
+  constructor(firstRow, lastRow, firstColumn, lastColumn, table) {
+    /**
+     * The first row of the range
+     * @type {number}
+     */
+    this.firstRow = firstRow;
+    /**
+     * The last row of the range
+     * @type {number}
+     */
+    this.lastRow = lastRow;
+    /**
+     * The first column of the range
+     * @type {number}
+     */
+    this.firstColumn = firstColumn;
+    /**
+     * The last column of the range
+     * @type {number}
+     */
+    this.lastColumn = lastColumn;
+    /**
+     * The table of the range
+     * @type {Table}
+     */
+    this.table = table;
   }
 }
 
@@ -131,6 +178,7 @@ class ArrayFormulaSheetValue {
  * @property {Cell[]} cells - The cells in the sheet
  * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
  * @property {ArrayFormulaSheetValue[]} arrayFormulas - The array formulas of the sheet
+ * @property {TableSheetValue[]} tables - The tables of the sheet
  * @property {RowCellConfig[]} rowConfigs - The rows of the sheet
  * @property {RowCellConfig[]} columnConfigs - The columns of the sheet
  */
@@ -175,6 +223,13 @@ class Sheet {
      * @default []
      * */
     this.columnConfigs = [];
+
+    /**
+     * The tables of the sheet
+     * @type {TableSheetValue[]}
+     * @default []
+     * */
+    this.tables = [];
   }
 
   /**
@@ -230,6 +285,32 @@ class Sheet {
   addArrayFormula(opts) {
     const arrayFormula = new ArrayFormulaSheetValue(opts);
     this.arrayFormulas.push(arrayFormula);
+  }
+
+  /**
+   * Adds a table to the sheet
+   * @param {Object} opts - The options for the table
+   * @param {number} opts.firstRow - The first row of the range
+   * @param {number} opts.lastRow - The last row of the range
+   * @param {number} opts.firstColumn - The first column of the range
+   * @param {number} opts.lastColumn - The last column of the range
+   * @param {Table} opts.table - The table of the range
+   * @throws {Error} - Invalid table range
+   * @returns {void}
+   */
+  addTable(opts) {
+    const { firstRow, lastRow, firstColumn, lastColumn, table } = opts;
+    if (firstRow > lastRow || firstColumn > lastColumn) {
+      throw new Error('Invalid table range');
+    }
+    const tableSheetValue = new TableSheetValue(
+      firstRow,
+      lastRow,
+      firstColumn,
+      lastColumn,
+      table,
+    );
+    this.tables.push(tableSheetValue);
   }
 
   /**

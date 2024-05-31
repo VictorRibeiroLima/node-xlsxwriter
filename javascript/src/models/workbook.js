@@ -52,7 +52,7 @@ class Workbook {
    * @throws {Error} The index is out of range
    */
   worksheetFromIndex(index) {
-    return this.sheets[index].worksheet;
+    return this.sheets[index];
   }
 
   /**
@@ -61,7 +61,7 @@ class Workbook {
    * @returns {Sheet|undefined} The sheet
    */
   worksheetFromName(name) {
-    return this.sheets.find((sheet) => sheet.name === name).worksheet;
+    return this.sheets.find((sheet) => sheet.name === name);
   }
 
   /**

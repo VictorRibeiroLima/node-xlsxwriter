@@ -34,6 +34,7 @@ export type RowCellConfig = {
  * @property {Cell[]} cells - The cells in the sheet
  * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
  * @property {ArrayFormulaSheetValue[]} arrayFormulas - The array formulas of the sheet
+ * @property {TableSheetValue[]} tables - The tables of the sheet
  * @property {RowCellConfig[]} rowConfigs - The rows of the sheet
  * @property {RowCellConfig[]} columnConfigs - The columns of the sheet
  */
@@ -74,6 +75,12 @@ export class Sheet {
      * @default []
      * */
     columnConfigs: RowCellConfig[];
+    /**
+     * The tables of the sheet
+     * @type {TableSheetValue[]}
+     * @default []
+     * */
+    tables: TableSheetValue[];
     /**
      * Adds a row configuration to the sheet.
      * Rows are the first ones to be processed,so if any value overlaps with the columns it will be overwritten
@@ -120,6 +127,24 @@ export class Sheet {
         lastColumn: number;
         formula: Formula;
         format?: Format;
+    }): void;
+    /**
+     * Adds a table to the sheet
+     * @param {Object} opts - The options for the table
+     * @param {number} opts.firstRow - The first row of the range
+     * @param {number} opts.lastRow - The last row of the range
+     * @param {number} opts.firstColumn - The first column of the range
+     * @param {number} opts.lastColumn - The last column of the range
+     * @param {Table} opts.table - The table of the range
+     * @throws {Error} - Invalid table range
+     * @returns {void}
+     */
+    addTable(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstColumn: number;
+        lastColumn: number;
+        table: Table;
     }): void;
     /**
      * Writes a cell to the sheet
@@ -340,8 +365,53 @@ declare class ConditionalFormatSheetValue {
      */
     format: ConditionalFormat;
 }
+/**
+ * @class TableSheetValue
+ * @classdesc Represents the values of a table sheet.
+ * @property {number} firstRow - The first row of the range
+ * @property {number} lastRow - The last row of the range
+ * @property {number} firstColumn - The first column of the range
+ * @property {number} lastColumn - The last column of the range
+ * @property {Table} table - The table of the range
+ */
+declare class TableSheetValue {
+    /**
+     * @param {number} firstRow - The first row of the range
+     * @param {number} lastRow - The last row of the range
+     * @param {number} firstColumn - The first column of the range
+     * @param {number} lastColumn - The last column of the range
+     * @param {Table} table - The table of the range
+     */
+    constructor(firstRow: number, lastRow: number, firstColumn: number, lastColumn: number, table: Table);
+    /**
+     * The first row of the range
+     * @type {number}
+     */
+    firstRow: number;
+    /**
+     * The last row of the range
+     * @type {number}
+     */
+    lastRow: number;
+    /**
+     * The first column of the range
+     * @type {number}
+     */
+    firstColumn: number;
+    /**
+     * The last column of the range
+     * @type {number}
+     */
+    lastColumn: number;
+    /**
+     * The table of the range
+     * @type {Table}
+     */
+    table: Table;
+}
 import { ConditionalFormat } from "./conditional_format";
 import Formula = require("./formula");
+import { Table } from "./table";
 import Link = require("./link");
 export {};
 //# sourceMappingURL=sheet.d.ts.map

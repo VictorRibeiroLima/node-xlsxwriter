@@ -17,6 +17,7 @@ mod conditional_format;
 mod error;
 mod format;
 mod sheet;
+mod table;
 mod types;
 mod util;
 
