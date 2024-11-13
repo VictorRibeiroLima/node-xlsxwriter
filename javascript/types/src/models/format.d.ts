@@ -444,17 +444,17 @@ declare class Format {
 declare namespace Format {
     export { FormatAlign, FormatPattern, FormatUnderline };
 }
+import Color = require("./color");
+import { Border } from "./border";
+import { DiagonalBorder } from "./border";
 /**
  * - The alignment of the cell
  */
 type FormatAlign = ("general" | "left" | "center" | "right" | "fill" | "justify" | "centerAcross" | "distributed" | "top" | "bottom" | "verticalCenter" | "verticalJustify" | "verticalDistributed");
-import Color = require("./color");
-import { Border } from "./border";
 /**
  * - The pattern of the cell
  */
 type FormatPattern = ("none" | "solid" | "mediumGray" | "darkGray" | "lightGray" | "darkHorizontal" | "darkVertical" | "darkDown" | "darkUp" | "darkGrid" | "darkTrellis" | "lightHorizontal" | "lightVertical" | "lightDown" | "lightUp" | "lightGrid" | "lightTrellis" | "gray125" | "gray0625");
-import { DiagonalBorder } from "./border";
 /**
  * - The underline style
  */

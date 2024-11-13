@@ -58,9 +58,9 @@ declare class Cell {
 declare namespace Cell {
     export { CellValue, CellType };
 }
+import Format = require("./format");
 type CellValue = (number | string | Link | Formula);
 type CellType = ("number" | "string" | "link" | "date" | "formula");
-import Format = require("./format");
 import Link = require("./link");
 import Formula = require("./formula");
 //# sourceMappingURL=cell.d.ts.map

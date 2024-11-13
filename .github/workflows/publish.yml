@@ -49,6 +49,7 @@ jobs:
           - 16
           - 18
           - 20
+          - 22
         system:
           - os: macos-11
             target: x86_64-apple-darwin
