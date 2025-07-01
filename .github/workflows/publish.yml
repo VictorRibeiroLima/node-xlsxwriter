@@ -106,8 +106,8 @@ jobs:
       fail-fast: false
       matrix:
         branch:
-          - v3.22
-          - v3.19
+          - v3.22 #Node 22
+          - v3.20 #Node 20
           - v3.18
           - v3.16
         system:
