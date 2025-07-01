@@ -1,6 +1,6 @@
 {
   "name": "node-xlsxwriter",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "node-xlsxwriter is a Node.js wrapper for the Rust library rust_xlsxwriter",
   "main": "./javascript/src/index.js",
   "author": "Victor Ribeiro de Lima",
