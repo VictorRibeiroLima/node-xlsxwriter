@@ -130,12 +130,14 @@ jobs:
       - name: install nodejs
         run: |
           apk update
+          apk upgrade
           apk add --no-cache nodejs
         shell: alpine.sh --root {0}
 
       - name: install npm
         run: |
           apk update
+          apk upgrade
           apk add npm
         shell: alpine.sh --root {0}
 
