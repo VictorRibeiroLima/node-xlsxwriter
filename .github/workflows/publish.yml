@@ -101,7 +101,7 @@ jobs:
 
   nodejs-github-native-musl:
     name: musl-branch-${{ matrix.branch }}-x86_64-unknown-linux-musl-${{ matrix.system.os }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
