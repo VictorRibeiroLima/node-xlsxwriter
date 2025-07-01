@@ -134,13 +134,6 @@ jobs:
           apk add --no-cache nodejs
         shell: alpine.sh --root {0}
 
-      - name: install npm
-        run: |
-          apk update
-          apk upgrade
-          apk add npm
-        shell: alpine.sh --root {0}
-
       - name: install cargo
         run: |
           echo "https://dl-cdn.alpinelinux.org/alpine/edge/main/" > /etc/apk/repositories
