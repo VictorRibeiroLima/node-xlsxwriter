@@ -107,7 +107,7 @@ jobs:
       matrix:
         branch:
           - v3.22 #Node 22
-          - v3.19 #Node 20
+          #- v3.19 #Node 20 not working for some reason (Error relocating /usr/bin/node: _ZN3ada7unicode10to_unicodeB5cxx11ESt17basic_string_viewIcSt11char_traitsIcEE: symbol not found)
           - v3.18
           - v3.16
         system:
