@@ -1,4 +1,5 @@
 mod array_formula_value;
+
 mod conditional_format_value;
 mod config;
 mod table_value;
@@ -58,6 +59,7 @@ impl NodeXlsxSheet {
         let mut inner_tables = vec![];
         let mut format_map = HashMap::new();
         let mut conditional_format_map = HashMap::new();
+        let mut merged_cells = vec![]; // This will hold the merged cell ranges to validate against when creating cells
 
         let row_config: Handle<JsArray> = obj.get(cx, "rowConfigs")?;
         let row_config =
@@ -80,7 +82,7 @@ impl NodeXlsxSheet {
         for cell in cells {
             let cell = cell.downcast_or_throw::<JsObject, FunctionContext>(cx)?;
 
-            let cell = NodeXlsxCell::from_js_object(cx, cell, &mut format_map)?;
+            let cell = NodeXlsxCell::from_js_object(cx, cell, &mut format_map, &mut merged_cells)?;
             inner_cells.push(cell);
         }
 

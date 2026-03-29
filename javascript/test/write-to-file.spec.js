@@ -47,3 +47,21 @@ test('save to file basic sync', (t) => {
   workbook.saveToFileSync(`${path}/save_to_file_basic_sync.xlsx`);
   assert.ok(fs.existsSync(`${path}/save_to_file_basic_sync.xlsx`));
 });
+
+test('save to file merged cells', async (t) => {
+  const workbook = new Workbook();
+  const sheet = workbook.addSheet();
+  sheet.writeMergedString({
+    firstCol: 1,
+    firstRow: 1,
+    lastCol: 3,
+    lastRow: 3,
+    value: 'Merged Cells',
+    format: new Format({
+      align: 'center',
+      bold: true,
+    }),
+  });
+  await workbook.saveToFile(`${path}/save_to_file_merged_cells.xlsx`);
+  assert.ok(fs.existsSync(`${path}/save_to_file_merged_cells.xlsx`));
+});

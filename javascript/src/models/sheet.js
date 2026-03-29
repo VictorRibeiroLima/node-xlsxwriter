@@ -1,6 +1,7 @@
 // @ts-check
 
 const Cell = require('./cell');
+const MergedCell = require('./merged_cell');
 const Format = require('./format');
 const Link = require('./link');
 const Formula = require('./formula');
@@ -175,7 +176,7 @@ class ArrayFormulaSheetValue {
  * @class Sheet
  * @classdesc A sheet is a collection of cells.
  * @property {string} name - The name of the sheet
- * @property {Cell[]} cells - The cells in the sheet
+ * @property {Array.<Cell|MergedCell>} cells - The cells in the sheet
  * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
  * @property {ArrayFormulaSheetValue[]} arrayFormulas - The array formulas of the sheet
  * @property {TableSheetValue[]} tables - The tables of the sheet
@@ -194,7 +195,7 @@ class Sheet {
     this.name = name;
     /**
      * The cells in the sheet
-     * @type {Cell[]}
+     * @type {Array.<Cell|MergedCell>}
      */
     this.cells = [];
 
@@ -343,6 +344,63 @@ class Sheet {
   }
 
   /**
+   * Writes a merged cell to the sheet
+   * @param {Object} opts - The options for the merged cell
+   * @param {number} opts.firstRow - The first row of the merged cell
+   * @param {number} opts.lastRow - The last row of the merged cell
+   * @param {number} opts.firstCol - The first column of the merged cell
+   * @param {number} opts.lastCol - The last column of the merged cell
+   * @param {string|number|Link|Date|Formula|any} opts.value - The value of the merged cell.
+   * @param {Format} opts.format - The format of the merged cell
+   * @param {("number"|"string"|"link"|"date"|"formula")} [opts.cellType] - The type of the merged cell(if not provider .toString() will be used)
+   * @returns {void}
+   * @throws {Error} - firstCol > 65_535 or firstCol < 0
+   * @throws {Error} - lastCol > 65_535 or lastCol < 0
+   * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+   * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+   * @throws {Error} - firstCol > lastCol
+   * @throws {Error} - firstRow > lastRow
+   * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+   */
+  writeMergedCell(opts) {
+    const { firstRow, lastRow, firstCol, lastCol, value, cellType, format } =
+      opts;
+    if (firstCol > 65_535 || firstCol < 0) {
+      throw new Error('Invalid first column index');
+    }
+    if (lastCol > 65_535 || lastCol < 0) {
+      throw new Error('Invalid last column index');
+    }
+    if (firstRow > 1_048_577 || firstRow < 0) {
+      throw new Error('Invalid first row index');
+    }
+    if (lastRow > 1_048_577 || lastRow < 0) {
+      throw new Error('Invalid last row index');
+    }
+    if (firstCol > lastCol) {
+      throw new Error('First column index cannot be greater than last column index');
+    }
+    if (firstRow > lastRow) {
+      throw new Error('First row index cannot be greater than last row index');
+    }
+    if (firstCol === lastCol && firstRow === lastRow) {
+      throw new Error('First column index and first row index cannot be equal to last column index and last row index');
+    }
+
+    const mergedCell = new MergedCell({
+      firstRow,
+      lastRow,
+      firstCol,
+      lastCol,
+      value,
+      cellType,
+      format,
+    });
+    this.cells.push(mergedCell);
+  }
+
+
+  /**
    * writes a string value to a cell
    * @param {number} row - the cell row
    * @param {number} col - the cell col
@@ -354,6 +412,37 @@ class Sheet {
    */
   writeString(row, col, value, format) {
     this.writeCell(row, col, value, 'string', format);
+  }
+
+  /**
+   * writes a string value to a merged cell
+   * @param {Object} opts - The options for the merged cell
+   * @param {number} opts.firstRow - The first row of the merged cell
+   * @param {number} opts.lastRow - The last row of the merged cell
+   * @param {number} opts.firstCol - The first column of the merged cell
+   * @param {number} opts.lastCol - The last column of the merged cell
+   * @param {string} opts.value - The value of the merged cell.
+   * @param {Format} opts.format - The format of the merged cell
+   * @returns {void}
+   * @throws {Error} - firstCol > 65_535 or firstCol < 0
+   * @throws {Error} - lastCol > 65_535 or lastCol < 0
+   * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+   * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+   * @throws {Error} - firstCol > lastCol
+   * @throws {Error} - firstRow > lastRow
+   * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+   */
+  writeMergedString(opts) {
+    const { firstRow, lastRow, firstCol, lastCol, value, format } = opts;
+    this.writeMergedCell({
+      firstRow,
+      lastRow,
+      firstCol,
+      lastCol,
+      value,
+      cellType: 'string',
+      format,
+    });
   }
 
   /**
@@ -375,6 +464,49 @@ class Sheet {
   }
 
   /**
+   * writes a number value to a merged cell
+   * @param {Object} opts - The options for the merged cell
+   * @param {number} opts.firstRow - The first row of the merged cell
+   * @param {number} opts.lastRow - The last row of the merged cell
+   * @param {number} opts.firstCol - The first column of the merged cell
+   * @param {number} opts.lastCol - The last column of the merged cell
+   * @param {number} opts.value - The value of the merged cell.
+   * @param {Format} opts.format - The format of the merged cell
+   * @returns {void}
+   * @throws {Error} - firstCol > 65_535 or firstCol < 0
+   * @throws {Error} - lastCol > 65_535 or lastCol < 0
+   * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+   * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+   * @throws {Error} - firstCol > lastCol
+   * @throws {Error} - firstRow > lastRow
+   * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+   */
+  writeMergedNumber(opts) {
+    const { firstRow, lastRow, firstCol, lastCol, value, format } = opts;
+    if (!isNaN(value)) {
+      this.writeMergedCell({
+        firstRow,
+        lastRow,
+        firstCol,
+        lastCol,
+        value,
+        cellType: 'number',
+        format,
+      });
+      return;
+    }
+    this.writeMergedCell({
+      firstRow,
+      lastRow,
+      firstCol,
+      lastCol,
+      value,
+      cellType: 'string',
+      format,
+    });
+  }
+
+  /**
    * writes a link value to a cell
    * @param {number} row - the cell row
    * @param {number} col - the cell col
@@ -387,6 +519,38 @@ class Sheet {
   writeLink(row, col, value, format) {
     this.writeCell(row, col, value, 'link', format);
   }
+
+  /**
+   * writes a link value to a merged cell
+   * @param {Object} opts - The options for the merged cell
+   * @param {number} opts.firstRow - The first row of the merged cell
+   * @param {number} opts.lastRow - The last row of the merged cell
+   * @param {number} opts.firstCol - The first column of the merged cell
+   * @param {number} opts.lastCol - The last column of the merged cell
+   * @param {Link} opts.value - The value of the merged cell.
+   * @param {Format} opts.format - The format of the merged cell
+   * @returns {void}
+   * @throws {Error} - firstCol > 65_535 or firstCol < 0
+   * @throws {Error} - lastCol > 65_535 or lastCol < 0
+   * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+   * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+   * @throws {Error} - firstCol > lastCol
+   * @throws {Error} - firstRow > lastRow
+   * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+   */
+  writeMergedLink(opts) {
+    const { firstRow, lastRow, firstCol, lastCol, value, format } = opts;
+    this.writeMergedCell({
+      firstRow,
+      lastRow,
+      firstCol,
+      lastCol,
+      value,
+      cellType: 'link',
+      format,
+    });
+  }
+
 
   /**
    * writes a date value to a cell
@@ -403,6 +567,38 @@ class Sheet {
   }
 
   /**
+   * writes a date value to a merged cell
+   * @param {Object} opts - The options for the merged cell
+   * @param {number} opts.firstRow - The first row of the merged cell
+   * @param {number} opts.lastRow - The last row of the merged cell
+   * @param {number} opts.firstCol - The first column of the merged cell
+   * @param {number} opts.lastCol - The last column of the merged cell
+   * @param {Date} opts.value - The value of the merged cell.
+   * @param {Format} opts.format - The format of the merged cell
+   * @returns {void}
+   * @throws {Error} - firstCol > 65_535 or firstCol < 0
+   * @throws {Error} - lastCol > 65_535 or lastCol < 0
+   * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+   * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+   * @throws {Error} - firstCol > lastCol
+   * @throws {Error} - firstRow > lastRow
+   * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+   */
+  writeMergedDate(opts) {
+    const { firstRow, lastRow, firstCol, lastCol, value, format } = opts;
+    this.writeMergedCell({
+      firstRow,
+      lastRow,
+      firstCol,
+      lastCol,
+      value,
+      cellType: 'date',
+      format,
+    });
+  }
+
+
+  /**
    * writes a formula value to a cell
    * @param {number} row - the cell row
    * @param {number} col - the cell col
@@ -412,6 +608,37 @@ class Sheet {
    */
   writeFormula(row, col, value, format) {
     this.writeCell(row, col, value, 'formula', format);
+  }
+
+  /**
+   * writes a formula value to a merged cell
+   * @param {Object} opts - The options for the merged cell
+   * @param {number} opts.firstRow - The first row of the merged cell
+   * @param {number} opts.lastRow - The last row of the merged cell
+   * @param {number} opts.firstCol - The first column of the merged cell
+   * @param {number} opts.lastCol - The last column of the merged cell
+   * @param {Formula} opts.value - The value of the merged cell.
+   * @param {Format} opts.format - The format of the merged cell
+   * @returns {void}
+   * @throws {Error} - firstCol > 65_535 or firstCol < 0
+   * @throws {Error} - lastCol > 65_535 or lastCol < 0
+   * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+   * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+   * @throws {Error} - firstCol > lastCol
+   * @throws {Error} - firstRow > lastRow
+   * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+   */
+  writeMergedFormula(opts) {
+    const { firstRow, lastRow, firstCol, lastCol, value, format } = opts;
+    this.writeMergedCell({
+      firstRow,
+      lastRow,
+      firstCol,
+      lastCol,
+      value,
+      cellType: 'formula',
+      format,
+    });
   }
 
   /**

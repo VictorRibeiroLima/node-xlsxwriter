@@ -10,6 +10,7 @@ export = Cell;
  * @property {number} col - The column index of the cell
  * @property {number} row - The row index of the cell
  * @property {CellValue} value - The value of the cell
+ * @property {false} merged - Whether the cell is part of a merged cell
  * @property {CellType} [celType] - The type of the cell.
  * @property {Format} [format] - The format of the cell
  */
