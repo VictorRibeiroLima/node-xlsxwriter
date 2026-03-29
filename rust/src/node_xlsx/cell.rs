@@ -1,5 +1,7 @@
 use std::collections::HashMap;
 
+use crate::node_xlsx::cell_range::CellRange;
+
 use super::{types::NodeXlsxTypes, util::create_format};
 
 use neon::{
@@ -7,17 +9,53 @@ use neon::{
     handle::Handle,
     object::Object,
     result::NeonResult,
-    types::{JsNumber, JsObject, JsString, JsValue},
+    types::{JsBoolean, JsNumber, JsObject, JsString, JsValue},
 };
 
-pub struct NodeXlsxCell {
+pub enum NodeXlsxCell {
+    Simple(SimpleCell),
+    Merged(MergedCell),
+}
+
+impl NodeXlsxCell {
+    pub fn from_js_object(
+        cx: &mut FunctionContext,
+        obj: Handle<JsObject>,
+        format_map: &mut HashMap<u32, rust_xlsxwriter::Format>,
+        merged_cells: &mut Vec<CellRange>,
+    ) -> NeonResult<Self> {
+        let cell_type: Handle<JsBoolean> = obj
+            .get_opt(cx, "merged")?
+            .unwrap_or_else(|| cx.boolean(false));
+        if cell_type.value(cx) {
+            let cell = MergedCell::from_js_object(cx, obj, format_map, merged_cells)?;
+            Ok(Self::Merged(cell))
+        } else {
+            let cell = SimpleCell::from_js_object(cx, obj, format_map)?;
+            Ok(Self::Simple(cell))
+        }
+    }
+
+    pub fn write_to_sheet(
+        self,
+        worksheet: &mut rust_xlsxwriter::Worksheet,
+        format_map: &HashMap<u32, rust_xlsxwriter::Format>,
+    ) -> Result<(), rust_xlsxwriter::XlsxError> {
+        match self {
+            Self::Simple(cell) => cell.write_to_sheet(worksheet, format_map),
+            Self::Merged(cell) => cell.write_to_sheet(worksheet, format_map),
+        }
+    }
+}
+
+pub struct SimpleCell {
     pub col: u16,
     pub row: u32,
     pub cell_type: NodeXlsxTypes,
     pub format: Option<u32>,
 }
 
-impl NodeXlsxCell {
+impl SimpleCell {
     pub fn from_js_object(
         cx: &mut FunctionContext,
         obj: Handle<JsObject>,
@@ -140,5 +178,213 @@ impl NodeXlsxCell {
             }
         }
         return Ok(());
+    }
+}
+
+pub struct MergedCell {
+    pub range: CellRange,
+    pub cell_type: NodeXlsxTypes,
+    pub format: u32,
+}
+
+impl MergedCell {
+    pub fn from_js_object(
+        cx: &mut FunctionContext,
+        obj: Handle<JsObject>,
+        format_map: &mut HashMap<u32, rust_xlsxwriter::Format>,
+        merged_cells: &mut Vec<CellRange>,
+    ) -> NeonResult<Self> {
+        let result = Self::inner_from_js_object(cx, &obj, format_map, merged_cells);
+        match result {
+            Ok(cell) => Ok(cell),
+            Err(error) => {
+                let error = format!("Error parsing cell: {:?} with error:\n  {}", obj, error);
+                let js_string = cx.string(error);
+                cx.throw(js_string)
+            }
+        }
+    }
+
+    pub fn write_to_sheet(
+        self,
+        worksheet: &mut rust_xlsxwriter::Worksheet,
+        format_map: &HashMap<u32, rust_xlsxwriter::Format>,
+    ) -> Result<(), rust_xlsxwriter::XlsxError> {
+        match self.cell_type {
+            NodeXlsxTypes::String(value) | NodeXlsxTypes::Unknown(value) => {
+                let format = format_map.get(&self.format).unwrap();
+                worksheet.merge_range(
+                    self.range.start_row,
+                    self.range.start_col as u16,
+                    self.range.end_row,
+                    self.range.end_col as u16,
+                    &value,
+                    format,
+                )?;
+            }
+            NodeXlsxTypes::Date(value) => {
+                let format = format_map.get(&self.format).unwrap();
+                worksheet.merge_range(
+                    self.range.start_row,
+                    self.range.start_col as u16,
+                    self.range.end_row,
+                    self.range.end_col as u16,
+                    "",
+                    format,
+                )?;
+                worksheet.write_datetime_with_format(
+                    self.range.start_row,
+                    self.range.start_col as u16,
+                    value,
+                    format,
+                )?;
+            }
+            NodeXlsxTypes::Number(value) => {
+                let format = format_map.get(&self.format).unwrap();
+                worksheet.merge_range(
+                    self.range.start_row,
+                    self.range.start_col as u16,
+                    self.range.end_row,
+                    self.range.end_col as u16,
+                    "",
+                    format,
+                )?;
+                worksheet.write_number_with_format(
+                    self.range.start_row,
+                    self.range.start_col as u16,
+                    value,
+                    format,
+                )?;
+            }
+            NodeXlsxTypes::Link(value) => {
+                let format = format_map.get(&self.format).unwrap();
+                worksheet.merge_range(
+                    self.range.start_row,
+                    self.range.start_col as u16,
+                    self.range.end_row,
+                    self.range.end_col as u16,
+                    "",
+                    format,
+                )?;
+                worksheet.write_url_with_format(
+                    self.range.start_row,
+                    self.range.start_col as u16,
+                    value,
+                    format,
+                )?;
+            }
+            NodeXlsxTypes::Formula((value, dynamic)) => {
+                let format = format_map.get(&self.format).unwrap();
+                worksheet.merge_range(
+                    self.range.start_row,
+                    self.range.start_col as u16,
+                    self.range.end_row,
+                    self.range.end_col as u16,
+                    "",
+                    format,
+                )?;
+                if dynamic {
+                    worksheet.write_dynamic_formula_with_format(
+                        self.range.start_row,
+                        self.range.start_col as u16,
+                        value,
+                        format,
+                    )?;
+                } else {
+                    worksheet.write_formula_with_format(
+                        self.range.start_row,
+                        self.range.start_col as u16,
+                        value,
+                        format,
+                    )?;
+                }
+            }
+        }
+        Ok(())
+    }
+
+    fn inner_from_js_object(
+        cx: &mut FunctionContext,
+        obj: &Handle<JsObject>,
+        format_map: &mut HashMap<u32, rust_xlsxwriter::Format>,
+        merged_cells: &mut Vec<CellRange>,
+    ) -> NeonResult<Self> {
+        let first_row: Handle<JsNumber> = obj.get(cx, "firstRow")?;
+        let first_row = first_row.value(cx);
+        if first_row < 0.0 || first_row >= 1_048_577.0 {
+            let error = format!("Row with illegal number {}", first_row.to_string());
+            let js_string = cx.string(error);
+            return cx.throw(js_string);
+        }
+        let first_row = first_row as u32;
+
+        let last_row: Handle<JsNumber> = obj.get(cx, "lastRow")?;
+        let last_row = last_row.value(cx);
+        if last_row < 0.0 || last_row >= 1_048_577.0 {
+            let error = format!("Row with illegal number {}", last_row.to_string());
+            let js_string = cx.string(error);
+            return cx.throw(js_string);
+        }
+        let last_row = last_row as u32;
+
+        let first_col: Handle<JsNumber> = obj.get(cx, "firstCol")?;
+        let first_col = first_col.value(cx);
+        if first_col < 0.0 || first_col >= 16_384.0 {
+            let error = format!("Column with illegal number {}", first_col.to_string());
+            let js_string = cx.string(error);
+            return cx.throw(js_string);
+        }
+        let first_col = first_col as u32;
+
+        let last_col: Handle<JsNumber> = obj.get(cx, "lastCol")?;
+        let last_col = last_col.value(cx);
+        if last_col < 0.0 || last_col >= 16_384.0 {
+            let error = format!("Column with illegal number {}", last_col.to_string());
+            let js_string = cx.string(error);
+            return cx.throw(js_string);
+        }
+        let last_col = last_col as u32;
+
+        let range = CellRange::new(first_row, last_row, first_col, last_col);
+        let range = match range {
+            Ok(range) => range,
+            Err(error) => {
+                let js_string = cx.string(error);
+                return cx.throw(js_string);
+            }
+        };
+
+        //Check if the new merged cell overlaps with any existing merged cells
+        for existing_range in merged_cells.iter() {
+            if range.overlaps(existing_range) {
+                let error = format!(
+                    "Merged cell range overlaps with existing merged cell range: {:?}",
+                    existing_range
+                );
+                let js_string = cx.string(error);
+                return cx.throw(js_string);
+            }
+        }
+        merged_cells.push(range);
+
+        let cel_type: Option<Handle<JsString>> = obj.get_opt(cx, "cellType")?;
+        let value: Handle<JsValue> = obj.get(cx, "value")?;
+        let cel_type = NodeXlsxTypes::from_js_string(cx, cel_type, value)?;
+
+        let format: Option<Handle<JsObject>> = obj.get_opt(cx, "format")?;
+
+        let format = match format {
+            Some(format) => create_format(cx, format, format_map)?,
+            None => {
+                let js_string = cx.string("Merged cells must have a format");
+                return cx.throw(js_string);
+            }
+        };
+
+        Ok(Self {
+            range,
+            cell_type: cel_type,
+            format,
+        })
     }
 }

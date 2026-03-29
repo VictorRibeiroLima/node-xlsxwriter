@@ -29,7 +29,7 @@ impl NodeXlsxConditionalFormatType {
         last_row: u32,
         first_column: u16,
         last_column: u16,
-    ) -> Result<&mut Worksheet, XlsxError> {
+    ) -> Result<&'a mut Worksheet, XlsxError> {
         match self {
             NodeXlsxConditionalFormatType::TwoColorScale(cf) => {
                 worksheet.add_conditional_format(first_row, first_column, last_row, last_column, cf)

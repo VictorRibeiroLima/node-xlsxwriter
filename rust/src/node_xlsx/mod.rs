@@ -12,6 +12,7 @@ use self::{error::NodeXlsxError, sheet::NodeXlsxSheet};
 
 mod border;
 mod cell;
+mod cell_range;
 mod color;
 mod conditional_format;
 mod error;

@@ -31,7 +31,7 @@ export type RowCellConfig = {
  * @class Sheet
  * @classdesc A sheet is a collection of cells.
  * @property {string} name - The name of the sheet
- * @property {Cell[]} cells - The cells in the sheet
+ * @property {Array.<Cell|MergedCell>} cells - The cells in the sheet
  * @property {ConditionalFormatSheetValue[]} conditionalFormats - The conditional format values of the sheet
  * @property {ArrayFormulaSheetValue[]} arrayFormulas - The array formulas of the sheet
  * @property {TableSheetValue[]} tables - The tables of the sheet
@@ -50,9 +50,9 @@ export class Sheet {
     name: string;
     /**
      * The cells in the sheet
-     * @type {Cell[]}
+     * @type {Array.<Cell|MergedCell>}
      */
-    cells: Cell[];
+    cells: Array<Cell | MergedCell>;
     /**
      * The conditional format values of the sheet
      * @type {ConditionalFormatSheetValue[]}
@@ -160,6 +160,34 @@ export class Sheet {
      */
     writeCell(row: number, col: number, value: string | number | Link | Date | Formula | any, cellType?: ("number" | "string" | "link" | "date" | "formula"), format?: Format): void;
     /**
+     * Writes a merged cell to the sheet
+     * @param {Object} opts - The options for the merged cell
+     * @param {number} opts.firstRow - The first row of the merged cell
+     * @param {number} opts.lastRow - The last row of the merged cell
+     * @param {number} opts.firstCol - The first column of the merged cell
+     * @param {number} opts.lastCol - The last column of the merged cell
+     * @param {string|number|Link|Date|Formula|any} opts.value - The value of the merged cell.
+     * @param {Format} opts.format - The format of the merged cell
+     * @param {("number"|"string"|"link"|"date"|"formula")} [opts.cellType] - The type of the merged cell(if not provider .toString() will be used)
+     * @returns {void}
+     * @throws {Error} - firstCol > 65_535 or firstCol < 0
+     * @throws {Error} - lastCol > 65_535 or lastCol < 0
+     * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+     * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+     * @throws {Error} - firstCol > lastCol
+     * @throws {Error} - firstRow > lastRow
+     * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+     */
+    writeMergedCell(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstCol: number;
+        lastCol: number;
+        value: string | number | Link | Date | Formula | any;
+        format: Format;
+        cellType?: ("number" | "string" | "link" | "date" | "formula");
+    }): void;
+    /**
      * writes a string value to a cell
      * @param {number} row - the cell row
      * @param {number} col - the cell col
@@ -170,6 +198,32 @@ export class Sheet {
      * @throws {Error} - row > 1_048_577 or row < 0
      */
     writeString(row: number, col: number, value: string, format?: Format): void;
+    /**
+     * writes a string value to a merged cell
+     * @param {Object} opts - The options for the merged cell
+     * @param {number} opts.firstRow - The first row of the merged cell
+     * @param {number} opts.lastRow - The last row of the merged cell
+     * @param {number} opts.firstCol - The first column of the merged cell
+     * @param {number} opts.lastCol - The last column of the merged cell
+     * @param {string} opts.value - The value of the merged cell.
+     * @param {Format} opts.format - The format of the merged cell
+     * @returns {void}
+     * @throws {Error} - firstCol > 65_535 or firstCol < 0
+     * @throws {Error} - lastCol > 65_535 or lastCol < 0
+     * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+     * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+     * @throws {Error} - firstCol > lastCol
+     * @throws {Error} - firstRow > lastRow
+     * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+     */
+    writeMergedString(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstCol: number;
+        lastCol: number;
+        value: string;
+        format: Format;
+    }): void;
     /**
      * writes a number value to a cell
      * @param {number} row - the cell row
@@ -182,6 +236,32 @@ export class Sheet {
      */
     writeNumber(row: number, col: number, value: number, format?: Format): void;
     /**
+     * writes a number value to a merged cell
+     * @param {Object} opts - The options for the merged cell
+     * @param {number} opts.firstRow - The first row of the merged cell
+     * @param {number} opts.lastRow - The last row of the merged cell
+     * @param {number} opts.firstCol - The first column of the merged cell
+     * @param {number} opts.lastCol - The last column of the merged cell
+     * @param {number} opts.value - The value of the merged cell.
+     * @param {Format} opts.format - The format of the merged cell
+     * @returns {void}
+     * @throws {Error} - firstCol > 65_535 or firstCol < 0
+     * @throws {Error} - lastCol > 65_535 or lastCol < 0
+     * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+     * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+     * @throws {Error} - firstCol > lastCol
+     * @throws {Error} - firstRow > lastRow
+     * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+     */
+    writeMergedNumber(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstCol: number;
+        lastCol: number;
+        value: number;
+        format: Format;
+    }): void;
+    /**
      * writes a link value to a cell
      * @param {number} row - the cell row
      * @param {number} col - the cell col
@@ -192,6 +272,32 @@ export class Sheet {
      * @throws {Error} - row > 1_048_577 or row < 0
      */
     writeLink(row: number, col: number, value: Link, format?: Format): void;
+    /**
+     * writes a link value to a merged cell
+     * @param {Object} opts - The options for the merged cell
+     * @param {number} opts.firstRow - The first row of the merged cell
+     * @param {number} opts.lastRow - The last row of the merged cell
+     * @param {number} opts.firstCol - The first column of the merged cell
+     * @param {number} opts.lastCol - The last column of the merged cell
+     * @param {Link} opts.value - The value of the merged cell.
+     * @param {Format} opts.format - The format of the merged cell
+     * @returns {void}
+     * @throws {Error} - firstCol > 65_535 or firstCol < 0
+     * @throws {Error} - lastCol > 65_535 or lastCol < 0
+     * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+     * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+     * @throws {Error} - firstCol > lastCol
+     * @throws {Error} - firstRow > lastRow
+     * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+     */
+    writeMergedLink(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstCol: number;
+        lastCol: number;
+        value: Link;
+        format: Format;
+    }): void;
     /**
      * writes a date value to a cell
      * @param {number} row - the cell row
@@ -204,6 +310,32 @@ export class Sheet {
      */
     writeDate(row: number, col: number, value: Date, format?: Format): void;
     /**
+     * writes a date value to a merged cell
+     * @param {Object} opts - The options for the merged cell
+     * @param {number} opts.firstRow - The first row of the merged cell
+     * @param {number} opts.lastRow - The last row of the merged cell
+     * @param {number} opts.firstCol - The first column of the merged cell
+     * @param {number} opts.lastCol - The last column of the merged cell
+     * @param {Date} opts.value - The value of the merged cell.
+     * @param {Format} opts.format - The format of the merged cell
+     * @returns {void}
+     * @throws {Error} - firstCol > 65_535 or firstCol < 0
+     * @throws {Error} - lastCol > 65_535 or lastCol < 0
+     * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+     * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+     * @throws {Error} - firstCol > lastCol
+     * @throws {Error} - firstRow > lastRow
+     * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+     */
+    writeMergedDate(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstCol: number;
+        lastCol: number;
+        value: Date;
+        format: Format;
+    }): void;
+    /**
      * writes a formula value to a cell
      * @param {number} row - the cell row
      * @param {number} col - the cell col
@@ -212,6 +344,32 @@ export class Sheet {
      * @returns {void}
      */
     writeFormula(row: number, col: number, value: Formula, format?: Format): void;
+    /**
+     * writes a formula value to a merged cell
+     * @param {Object} opts - The options for the merged cell
+     * @param {number} opts.firstRow - The first row of the merged cell
+     * @param {number} opts.lastRow - The last row of the merged cell
+     * @param {number} opts.firstCol - The first column of the merged cell
+     * @param {number} opts.lastCol - The last column of the merged cell
+     * @param {Formula} opts.value - The value of the merged cell.
+     * @param {Format} opts.format - The format of the merged cell
+     * @returns {void}
+     * @throws {Error} - firstCol > 65_535 or firstCol < 0
+     * @throws {Error} - lastCol > 65_535 or lastCol < 0
+     * @throws {Error} - firstRow > 1_048_577 or firstRow < 0
+     * @throws {Error} - lastRow > 1_048_577 or lastRow < 0
+     * @throws {Error} - firstCol > lastCol
+     * @throws {Error} - firstRow > lastRow
+     * @throws {Error} - firstCol === lastCol && firstRow === lastRow
+     */
+    writeMergedFormula(opts: {
+        firstRow: number;
+        lastRow: number;
+        firstCol: number;
+        lastCol: number;
+        value: Formula;
+        format: Format;
+    }): void;
     /**
      *
      * @typedef {Object} FormatOptions
@@ -308,6 +466,7 @@ export class ArrayFormulaSheetValue {
 }
 import Format = require("./format");
 import Cell = require("./cell");
+import MergedCell = require("./merged_cell");
 /**
  * @typedef {Object} SizeConfig
  * @property {number} value - The value of the size

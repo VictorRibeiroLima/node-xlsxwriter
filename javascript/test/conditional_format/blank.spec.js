@@ -47,7 +47,7 @@ test('save to file with conditional format ("ConditionalFormatBlank")', async (t
   });
 
   for (let row = 0; row <= 12; row++) {
-    if ((row & 1) == 0) {
+    if ((row & 1) === 0) {
       sheet.writeNumber(row, 0, row);
     }
   }
