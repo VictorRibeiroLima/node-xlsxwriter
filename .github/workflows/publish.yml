@@ -3,7 +3,11 @@ name: package and publish to npm
 on:
   push:
     tags:
-      - '*'
+      - "*"
+
+permissions:
+  id-token: write
+  contents: read
 jobs:
   nodejs-npm:
     name: nodejs-npm
@@ -11,7 +15,7 @@ jobs:
     # Prevent a situation where native build fails and an npm package is uploaded.
     needs: [nodejs-github-native, nodejs-github-native-musl]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.release.tag_name }}
       - name: Set release version
@@ -19,11 +23,11 @@ jobs:
         run: python3 -c "import os; tag = os.environ['GITHUB_REF'].split('/')[-1]; f = open(os.environ['GITHUB_ENV'], 'a'); f.write('RELEASE_VERSION='+tag); f.close();"
         # run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
 
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node_version }}
           # Url is important! This makes NODE_AUTH_TOKEN accessible to npm publish.
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
       - name: Install modules
         run: npm i
 
@@ -35,8 +39,6 @@ jobs:
       - name: Publish to npm
         # `--access public` is used to publish to my account's scope.
         run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
   nodejs-github-native:
     name: nodejs-${{ matrix.node_version }}-${{ matrix.system.target }}-${{ matrix.system.os }}
@@ -72,7 +74,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node_version }}
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
       - name: Install modules
         run: npm i
       - name: Tweak package.json
