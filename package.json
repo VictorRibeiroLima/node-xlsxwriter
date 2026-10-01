@@ -1,6 +1,6 @@
 {
   "name": "node-xlsxwriter",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "description": "node-xlsxwriter is a Node.js wrapper for the Rust library rust_xlsxwriter",
   "main": "./javascript/src/index.js",
   "author": "Victor Ribeiro de Lima",
@@ -38,7 +38,7 @@
     "url": "git+https://github.com/VictorRibeiroLima/node-xlsxwriter.git"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "@mapbox/node-pre-gyp": "1.0.11"
